@@ -1,8 +1,6 @@
 package com.example.demo;
 
 import com.example.demo.dao.DishDAO;
-import com.example.demo.dao.impl.DishDAOImpl;
-import com.example.demo.entity.Dish;
 import com.example.demo.sercurity.UrlAuthenSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -32,10 +28,7 @@ public class DemoApplication extends WebSecurityConfigurerAdapter implements Web
     public static void main(String[] args) {
 
         SpringApplication.run(DemoApplication.class, args);
-        DishDAO dishDAO = new DishDAOImpl();
-        Dish dish = dishDAO.getAllDish("2");
 
-        System.out.println(dish.toString());
     }
 
     @Bean

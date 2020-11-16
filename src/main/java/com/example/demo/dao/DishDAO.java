@@ -1,12 +1,21 @@
 package com.example.demo.dao;
 
-import com.example.demo.entity.Dish;
+import com.example.demo.entity.DishEntity;
 
 import java.util.List;
 
 public interface DishDAO {
-    Dish getAllDish(String dishName);
+    DishEntity searchDishByName(String dishName);
+    List<DishEntity> getAllDish();
+    List<DishEntity> getAllDishByType(String type);
+    List<String> getAllTypeDish();
 
-    List<String> getAllDishID();
-    void print();
+    Boolean checkExistDish(String dishName);
+
+
+    void addDish(DishEntity dishEntity);
+    void deleteDish(int idDish);
+    void update(DishEntity dishEntity);
+
+
 }

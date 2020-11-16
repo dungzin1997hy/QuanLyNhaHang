@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "monan")
-public class Dish {
+public class DishEntity {
 
     @Id
     @Column (name = "id")
@@ -31,11 +31,24 @@ public class Dish {
     @Column (name = "description")
     private String description;
 
-    public Dish(String name, Float price, String type, String unit, String description) {
+    public DishEntity(String name, Float price, String type, String unit, String description) {
         this.name = name;
         this.price = price;
         this.type = type;
         this.unit = unit;
         this.description = description;
+    }
+
+    public DishEntity(int id, String name, Float price, String type, String unit, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.type = type;
+        this.unit = unit;
+        this.description = description;
+    }
+
+    public DishEntity(int id) {
+        this.id = id;
     }
 }

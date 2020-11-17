@@ -12,9 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "khachhang")
-public class CustomerEntity {
-
+@Table(name = "nguyenlieu")
+public class MaterialEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +22,15 @@ public class CustomerEntity {
     @Column (name = "name")
     private String name;
 
-    @Column (name = "phoneNumber")
-    private String phoneNumber;
+    @Column (name = "price")
+    private Float price;
 
-    @Column (name = "email")
-    private String email;
+    @Column (name = "type")
+    private String type;
 
-    public CustomerEntity(String name, String phoneNumber, String email) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
+    @Column (name = "unit")
+    private String unit;
 
+    @Column (name = "description")
+    private String description;
 }
-

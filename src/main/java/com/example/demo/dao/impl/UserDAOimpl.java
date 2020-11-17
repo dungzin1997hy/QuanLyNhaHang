@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -31,6 +32,14 @@ public class UserDAOimpl implements UserDAO {
         }
     }
 
+
+    @Override
+    public List<UserEntity> getAllUser(){
+        String sql = "SELECT u FROM UserEntity u";
+        Query query = entityManager.createQuery(sql);
+        List<UserEntity> userEntities = query.getResultList();
+        return userEntities;
+    }
     @Override
     public void addUser(User user) {
 //        String sql = "INSERT INTO thanhvien (MaKH,MaThang,SoDienCu,SoDienMoi,Status) VALUES ('" + user.getUsername() + "', '" + dienKe.getMaThang() + "', '" + dienKe.getSoDienCu() + "', '" + dienKe.getSoDienMoi() + "', '" + dienKe.getStatus() + "')";

@@ -54,7 +54,7 @@ public class StaffDAOImpl implements StaffDAO {
     }
 
     @Override
-    public void updateCustomer(StaffEntity staffEntity) {
+    public void updateStaff(StaffEntity staffEntity) {
 
     }
 }

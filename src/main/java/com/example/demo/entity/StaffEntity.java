@@ -33,5 +33,12 @@ public class StaffEntity {
     @Column (name = "role")
     private String role;
 
-
+    public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd, String role) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.cmnd = cmnd;
+        this.role = role;
+    }
 }

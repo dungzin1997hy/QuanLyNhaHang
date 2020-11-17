@@ -14,5 +14,5 @@ public interface StaffDAO {
 
     void addStaff(StaffEntity staffEntity);
     void deleteStaff(int idStaff);
-    void updateCustomer(StaffEntity staffEntity);
+    void updateStaff(StaffEntity staffEntity);
 }

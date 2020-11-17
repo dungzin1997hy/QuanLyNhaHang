@@ -58,7 +58,7 @@ public class DishController {
                                        @RequestParam("price") float price,
                                        @RequestParam("type") String type,
                                        @RequestParam("unit") String unit,
-                                       @RequestParam("abc") String des) {
+                                       @RequestParam("devices") String des) {
         if (dishDAO.checkExistDish(nameDish) == true) return new ApiResponse<>(false, "", "Tên món ăn đã tồn tại");
         DishEntity dishEntity = new DishEntity(nameDish,price,type,unit,"");
         dishDAO.addDish(dishEntity);

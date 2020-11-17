@@ -22,7 +22,7 @@ public class DishDAOImpl implements DishDAO {
     @Override
     public DishEntity searchDishByName(String dishName) {
         try {
-            String hql = "SELECT u FROM DishEntity u WHERE u.name = :dishName";
+            String hql = "SELECT u FROM DishEntity u WHERE u.name LIKE %"+dishName+"%";
             Query query = entityManager.createQuery(hql);
             query.setParameter("dishName", dishName);
             return (DishEntity) query.getSingleResult();

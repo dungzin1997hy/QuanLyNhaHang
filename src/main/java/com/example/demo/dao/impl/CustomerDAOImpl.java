@@ -82,7 +82,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public void deleteCustomer(int idCustomer) {
-        String sql = "delete from CustomerEntity b where b.id=:id";
+        String sql = "delete from CustomerEntity b where b.id="+idCustomer;
         Query query = entityManager.createQuery(sql);
         query.executeUpdate();
     }

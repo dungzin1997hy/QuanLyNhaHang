@@ -4,7 +4,6 @@ package com.example.demo.controller;
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.CustomerDAO;
 import com.example.demo.entity.CustomerEntity;
-import com.example.demo.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

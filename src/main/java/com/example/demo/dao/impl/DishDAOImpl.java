@@ -89,7 +89,7 @@ public class DishDAOImpl implements DishDAO {
 
     @Override
     public void deleteDish(int idDish) {
-        String sql ="delete from DishEntity b where b.id=:id";
+        String sql ="delete from DishEntity b where b.id="+idDish;
         Query query = entityManager.createQuery(sql);
         query.executeUpdate();
     }

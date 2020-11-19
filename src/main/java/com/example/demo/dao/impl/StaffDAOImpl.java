@@ -3,6 +3,7 @@ package com.example.demo.dao.impl;
 import com.example.demo.dao.StaffDAO;
 import com.example.demo.entity.CustomerEntity;
 import com.example.demo.entity.StaffEntity;
+import com.example.demo.entity.TableEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,26 +36,46 @@ public class StaffDAOImpl implements StaffDAO {
 
     @Override
     public List<StaffEntity> getAllStaff() {
+        try {
+            String sql = "SELECT u FROM StaffEntity u";
+            Query query = entityManager.createQuery(sql);
+            List<StaffEntity> staffEntities = query.getResultList();
+            return staffEntities;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public Boolean checkExistStaff(String phoneNumber) {
-        return null;
+        try {
+            String sql = "SELECT u.phoneNumber FROM StaffEntity u";
+            Query query = entityManager.createQuery(sql);
+            List<String> phoneNumbers = query.getResultList();
+            if (phoneNumbers.contains(phoneNumber)) {
+                return true;
+            } else return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     @Override
     public void addStaff(StaffEntity staffEntity) {
-
+        entityManager.persist(staffEntity);
     }
 
     @Override
     public void deleteStaff(int idStaff) {
-
+        String sql ="delete from DishEntity b where b.id="+idStaff;
+        Query query = entityManager.createQuery(sql);
+        query.executeUpdate();
     }
 
     @Override
     public void updateStaff(StaffEntity staffEntity) {
-
+        entityManager.merge(staffEntity);
     }
 }

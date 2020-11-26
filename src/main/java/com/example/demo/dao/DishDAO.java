@@ -9,6 +9,7 @@ public interface DishDAO {
     List<DishEntity> getAllDish();
     List<DishEntity> getAllDishByType(String type);
     List<String> getAllTypeDish();
+    public List<DishEntity> getListDishByName(String dishName);
 
     Boolean checkExistDish(String dishName);
 

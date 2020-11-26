@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +29,9 @@ public class CustomerEntity {
 
     @Column (name = "email")
     private String email;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private List<UsedDishEntity> usedDishEntities;
 
     public CustomerEntity(String name, String phoneNumber, String email) {
         this.name = name;

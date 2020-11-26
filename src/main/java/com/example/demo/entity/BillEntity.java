@@ -19,20 +19,10 @@ public class BillEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "tableid")
-//    private TableEntity tableEntity;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "staffid")
-//    private StaffEntity staffEntity;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "customerid")
-//    private CustomerEntity customerEntity;
+    @ManyToOne
+    @JoinColumn(name = "staffid")
+    private StaffEntity staffEntity;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "billEntity")
-    private List<UsedDishEntity> usedDishEntities;
 
     @Column(name = "total")
     private int total;

@@ -2,9 +2,9 @@ package com.example.demo.dao.impl;
 
 import com.example.demo.dao.DishDAO;
 import com.example.demo.entity.DishEntity;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -22,7 +22,7 @@ public class DishDAOImpl implements DishDAO {
     @Override
     public DishEntity searchDishByName(String dishName) {
         try {
-            String hql = "SELECT u FROM DishEntity u WHERE u.name LIKE %"+dishName+"%";
+            String hql = "SELECT u FROM DishEntity u WHERE u.name =:dishName";
             Query query = entityManager.createQuery(hql);
             query.setParameter("dishName", dishName);
             return (DishEntity) query.getSingleResult();
@@ -30,6 +30,8 @@ public class DishDAOImpl implements DishDAO {
             return null;
         }
     }
+
+
 
     @Override
     public List<DishEntity> getAllDish() {
@@ -80,6 +82,20 @@ public class DishDAOImpl implements DishDAO {
         Query query = entityManager.createQuery(sql);
         List<String> types = query.getResultList();
         return types;
+    }
+
+    @Override
+    public List<DishEntity> getListDishByName(String nameDish) {
+        try {
+            String sql = "SELECT u FROM DishEntity u WHERE u.name LIKE CONCAT('%',:name,'%')";
+            Query query = entityManager.createQuery(sql);
+            query.setParameter("name", nameDish);
+            List<DishEntity> dishEntities = query.getResultList();
+            return dishEntities;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "monan")
 public class DishEntity {
@@ -30,6 +31,10 @@ public class DishEntity {
     private String unit;
     @Column (name = "description")
     private String description;
+
+    @Transient
+    @OneToOne(mappedBy = "dishEntity")
+    private UsedDishEntity usedDishEntity;
 
     public DishEntity(String name, Float price, String type, String unit, String description) {
         this.name = name;

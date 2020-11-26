@@ -56,20 +56,34 @@
                                 <i class="icon-plus-circle2"></i><span class="ml-1 mr-1">Thêm Món Ăn</span>
                             </button>
                         </div>
-                        <form id="form_search_customer">
+                        <form id="form_search_dish">
                             <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
                                  style="margin-left: auto; margin-right: 60px">
-                                <label class="mr-2 mb-0" for="customer_ID_search">Tìm:</label>
+                                <label class="mr-2 mb-0" for="dish_name_search">Tìm:</label>
                                 <div style="position: relative">
                                     <input type="text" class="form-control text-dark flex-1 wmin-xl-100 border-bottom-1"
                                            placeholder="Tên món ăn"
                                            style="text-align: center"
-                                           id="customer_ID_search" name="customer_ID_search">
+                                           id="dish_name_search" name="dish_name_search">
                                     <label class="error"></label>
                                 </div>
                                 <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
                                         style="padding: 4px 4px 0 3px; border-radius: 10px"><i
                                         class="icon-search4 mb-1"></i></button>
+                            </div>
+                            <div style="width: 75%; height: 27px">
+                                <span>
+                                    Tìm theo loại:
+                                </span>
+                                <select  id="selectSearch"
+                                        class="selectSearch filterInput mt-2 ml-1" name="selectSearch"
+                                        onchange="searchByType()">
+                                    <option value="Tất cả">Tất cả</option>
+                                    <option value="Đồ xào">Đồ xào</option>
+                                    <option value="Đồ chiên">Đồ chiên</option>
+                                    <option value="Đồ tráng miệng">Đồ tráng miệng</option>
+                                    <option value="Đồ uống">Đồ uống</option>
+                                </select>
                             </div>
                         </form>
                     </div>
@@ -189,18 +203,18 @@
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Loại
                                     <select id="type_edit">
-                                        <option value="1">Đồ xào</option>
-                                        <option value="2">Đồ chiên</option>
-                                        <option value="3">Đồ uống</option>
-                                        <option value="4">Đồ tráng miệng</option>
+                                        <option value="Đồ xào">Đồ xào</option>
+                                        <option value="Đồ chiên">Đồ chiên</option>
+                                        <option value="Đồ uống">Đồ uống</option>
+                                        <option value="Đồ tráng miệng">Đồ tráng miệng</option>
                                     </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Đơn vị <select id="unit_edit">
-                                    <option value="1">Đĩa</option>
-                                    <option value="2">Bát</option>
-                                    <option value="3">Cốc</option>
-                                    <option value="4">Chai</option>
+                                    <option value="Đĩa">Đĩa</option>
+                                    <option value="Bát">Bát</option>
+                                    <option value="Cốc">Cốc</option>
+                                    <option value="Chai">Chai</option>
                                 </select>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Chi tiết<input id="devices_edits" name="devices_add"

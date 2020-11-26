@@ -4,6 +4,8 @@ package com.example.demo.controller;
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.DishDAO;
 import com.example.demo.entity.DishEntity;
+import com.example.demo.model.Dish;
+import com.example.demo.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ public class DishController {
     @Autowired
     public DishDAO dishDAO;
 
+    @Autowired
+    public DishService dishService;
 
     @PostMapping("/getAllDish")
     @ResponseBody
@@ -25,12 +29,18 @@ public class DishController {
     }
 
     @PostMapping("/searchDishByName")
-    @ResponseBody
     public ApiResponse<DishEntity> searchDishByName(@RequestParam("nameDish") String nameDish) {
         DishEntity dishEntity = dishDAO.searchDishByName(nameDish);
         if (dishEntity != null) {
             return new ApiResponse<>(true, dishEntity, "");
         } else return new ApiResponse<>(false, new DishEntity(), "Món ăn không tồn tại");
+    }
+    @PostMapping("/searchListDishByName")
+    public ApiResponse<List<DishEntity>> searchListDishByName(@RequestParam("nameDish") String nameDish) {
+        List<DishEntity> dishEntities = dishDAO.getListDishByName(nameDish);
+        if (dishEntities.size() >0 ) {
+            return new ApiResponse<>(true, dishEntities, "");
+        } else return new ApiResponse<>(false, null, "Món ăn không tồn tại");
     }
 
     @PostMapping("/searchDishByType")

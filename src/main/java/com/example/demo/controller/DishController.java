@@ -5,10 +5,7 @@ import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.DishDAO;
 import com.example.demo.entity.DishEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,7 @@ public class DishController {
 
     @Autowired
     public DishDAO dishDAO;
+
 
     @PostMapping("/getAllDish")
     @ResponseBody
@@ -54,11 +52,11 @@ public class DishController {
 
     @PostMapping("/addDish")
     @ResponseBody
-    public ApiResponse<String> addDish(@RequestParam("nameDish") String nameDish,
-                                       @RequestParam("price") float price,
-                                       @RequestParam("type") String type,
-                                       @RequestParam("unit") String unit,
-                                       @RequestParam("devices") String des) {
+    public ApiResponse<String> addDish(@RequestParam("nameDish_add") String nameDish,
+                                       @RequestParam("price_add") float price,
+                                       @RequestParam("type_add") String type,
+                                       @RequestParam("unit_add") String unit,
+                                       @RequestParam("devices_add") String des) {
         if (dishDAO.checkExistDish(nameDish) == true) return new ApiResponse<>(false, "", "Tên món ăn đã tồn tại");
         DishEntity dishEntity = new DishEntity(nameDish,price,type,unit,"");
         dishDAO.addDish(dishEntity);
@@ -67,19 +65,19 @@ public class DishController {
 
     @PostMapping("/deleteDish")
     @ResponseBody
-    public ApiResponse<String> deleteDish(@RequestParam("idDish") int idDish){
-        DishEntity dishEntity = new DishEntity(idDish);
-        dishDAO.deleteDish(idDish);
+    public ApiResponse<String> deleteDish(@RequestParam("idDish") String idDish){
+        int iddish = Integer.parseInt(idDish);
+        dishDAO.deleteDish(iddish);
         return new ApiResponse<>(true,"Xoá món ăn thành công","");
     }
 
     @PostMapping("/updateDish")
-    public ApiResponse<String> updateDish(@RequestParam("idDish") int idDish,
-                                          @RequestParam("nameDish") String nameDish,
-                                          @RequestParam("price") float price,
-                                          @RequestParam("type") String type,
-                                          @RequestParam("unit") String unit,
-                                          @RequestParam("des")String description){
+    public ApiResponse<String> updateDish(@RequestParam("idDish_edit") int idDish,
+                                          @RequestParam("nameDish_edit") String nameDish,
+                                          @RequestParam("price_edit") float price,
+                                          @RequestParam("type_edit") String type,
+                                          @RequestParam("unit_edit") String unit,
+                                          @RequestParam("devices_edit")String description){
         DishEntity dishEntity = new DishEntity(idDish,nameDish,price,type,unit,description);
         dishDAO.update(dishEntity);
         return new ApiResponse<>(true,"Cập nhật món ăn thành công", "");

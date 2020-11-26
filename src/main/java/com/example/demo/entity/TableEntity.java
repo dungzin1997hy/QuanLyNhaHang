@@ -28,6 +28,7 @@ public class TableEntity {
     @Column (name = "status")
     private String status;
 
+
     public TableEntity(String name, String type, String status) {
         this.name = name;
         this.type = type;

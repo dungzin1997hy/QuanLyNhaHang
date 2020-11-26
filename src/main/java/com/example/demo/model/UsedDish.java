@@ -12,4 +12,5 @@ public class UsedDish {
     private int id;
     private int amount;
     private DishEntity dishEntity;
+    private String time;
 }

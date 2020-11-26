@@ -33,6 +33,10 @@ public class StaffEntity {
     @Column (name = "role")
     private String role;
 
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "userid")
+//    private UserEntity userEntity;
+
     public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd, String role) {
         this.id = id;
         this.name = name;

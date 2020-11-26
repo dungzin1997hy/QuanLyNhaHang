@@ -29,7 +29,7 @@
 }
 
 
-.overlay_bang_khach_hang {
+.overlay_bang_mon_an {
     position: fixed;
     top: 0;
     right: 0;
@@ -40,7 +40,7 @@
     display: none;
     animation: fadeIn linear 0.5s;
 }
-.nav__add-customer{
+.nav__add-dish{
     position: fixed;
     top: 0;
     left: 0;
@@ -52,7 +52,7 @@
     /*transform: translateX(100%);*/
     display: none;
 }
-.nav__edit-customer{
+.nav__edit-dish{
     position: fixed;
     top: 0;
     left: 0;

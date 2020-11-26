@@ -13,6 +13,12 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping("/dishManager")
+    public  String dishManager(){
+        return "dishManager";
+    }
+
+
     @GetMapping("/loginError")
     public String login(HttpServletRequest request, Model model) {
         String errorMessage = "Sai username hoặc password";

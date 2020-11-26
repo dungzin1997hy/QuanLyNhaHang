@@ -27,9 +27,9 @@ public class UserEntity {
     @Column(name = "role")
     private String role;
 
-    @OneToOne
-    @JoinColumn(name = "staff_id")
-    private StaffEntity staffEntity;
+//    @OneToOne(mappedBy = "userEntity")
+//    @JoinColumn(name = "staff_id")
+//    private StaffEntity staffEntity;
 
     public int getId() {
         return id;

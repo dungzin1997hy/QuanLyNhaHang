@@ -32,7 +32,7 @@ public class DishEntity {
     @Column (name = "description")
     private String description;
 
-    @Transient
+   // @Transient
     @OneToOne(mappedBy = "dishEntity")
     private UsedDishEntity usedDishEntity;
 

@@ -23,23 +23,23 @@ public class DishController {
 
     @PostMapping("/getAllDish")
     @ResponseBody
-    public ApiResponse<List<DishEntity>> getAllDish() {
-        List<DishEntity> list = dishDAO.getAllDish();
+    public ApiResponse<List<Dish>> getAllDish() {
+        List<Dish> list = dishService.getAllDish();
         return new ApiResponse<>(true, list, "");
     }
 
     @PostMapping("/searchDishByName")
-    public ApiResponse<DishEntity> searchDishByName(@RequestParam("nameDish") String nameDish) {
-        DishEntity dishEntity = dishDAO.searchDishByName(nameDish);
-        if (dishEntity != null) {
-            return new ApiResponse<>(true, dishEntity, "");
-        } else return new ApiResponse<>(false, new DishEntity(), "Món ăn không tồn tại");
+    public ApiResponse<Dish> searchDishByName(@RequestParam("nameDish") String nameDish) {
+        Dish dish = dishService.searchDishByName(nameDish);
+        if (dish != null) {
+            return new ApiResponse<>(true, dish, "");
+        } else return new ApiResponse<>(false, new Dish(), "Món ăn không tồn tại");
     }
     @PostMapping("/searchListDishByName")
-    public ApiResponse<List<DishEntity>> searchListDishByName(@RequestParam("nameDish") String nameDish) {
-        List<DishEntity> dishEntities = dishDAO.getListDishByName(nameDish);
-        if (dishEntities.size() >0 ) {
-            return new ApiResponse<>(true, dishEntities, "");
+    public ApiResponse<List<Dish>> searchListDishByName(@RequestParam("nameDish") String nameDish) {
+        List<Dish> dishes = dishService.searchListDishByName(nameDish);
+        if (dishes.size() >0 ) {
+            return new ApiResponse<>(true, dishes, "");
         } else return new ApiResponse<>(false, null, "Món ăn không tồn tại");
     }
 

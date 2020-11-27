@@ -5,6 +5,7 @@ import com.example.demo.entity.DishEntity;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -30,7 +31,6 @@ public class DishDAOImpl implements DishDAO {
             return null;
         }
     }
-
 
 
     @Override
@@ -77,7 +77,7 @@ public class DishDAOImpl implements DishDAO {
     }
 
     @Override
-    public List<String> getAllTypeDish(){
+    public List<String> getAllTypeDish() {
         String sql = "SELECT DISTINCT u.type FROM DishEntity u";
         Query query = entityManager.createQuery(sql);
         List<String> types = query.getResultList();
@@ -87,9 +87,9 @@ public class DishDAOImpl implements DishDAO {
     @Override
     public List<DishEntity> getListDishByName(String nameDish) {
         try {
-            String sql = "SELECT u FROM DishEntity u WHERE u.name LIKE CONCAT('%',:name,'%')";
+            String sql = "SELECT u FROM DishEntity u WHERE u.name LIKE '%" + nameDish + "%'";
             Query query = entityManager.createQuery(sql);
-            query.setParameter("name", nameDish);
+//            query.setParameter("name", nameDish);
             List<DishEntity> dishEntities = query.getResultList();
             return dishEntities;
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class DishDAOImpl implements DishDAO {
 
     @Override
     public void deleteDish(int idDish) {
-        String sql ="delete from DishEntity b where b.id="+idDish;
+        String sql = "delete from DishEntity b where b.id=" + idDish;
         Query query = entityManager.createQuery(sql);
         query.executeUpdate();
     }

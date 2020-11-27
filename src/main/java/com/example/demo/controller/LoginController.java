@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginController {
     @GetMapping({"/login","/"})
     public  String login(){
-        return "login";
+        return "dishManager";
     }
 
     @GetMapping("/dishManager")

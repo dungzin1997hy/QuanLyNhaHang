@@ -33,4 +33,36 @@ public class DishServiceImpl implements DishService {
         }
         return dishes;
     }
+
+    @Override
+    public List<Dish> searchListDishByName(String name) {
+        List<DishEntity> dishEntities = dishDAO.getListDishByName(name);
+        List<Dish> dishes = new ArrayList<>();
+        for(DishEntity dishEntity: dishEntities){
+            Dish dish = new Dish();
+            dish.setId(dishEntity.getId());
+            dish.setName(dishEntity.getName());
+            dish.setPrice(dishEntity.getPrice());
+            dish.setType(dishEntity.getType());
+            dish.setUnit(dishEntity.getUnit());
+            dish.setDescription(dishEntity.getDescription());
+            dishes.add(dish);
+        }
+        return dishes;
+    }
+
+    @Override
+    public Dish searchDishByName(String name) {
+        DishEntity dishEntity = dishDAO.searchDishByName(name);
+        Dish dish = new Dish();
+        dish.setId(dishEntity.getId());
+        dish.setName(dishEntity.getName());
+        dish.setPrice(dishEntity.getPrice());
+        dish.setType(dishEntity.getType());
+        dish.setUnit(dishEntity.getUnit());
+        dish.setDescription(dishEntity.getDescription());
+        return  dish;
+    }
+
+
 }

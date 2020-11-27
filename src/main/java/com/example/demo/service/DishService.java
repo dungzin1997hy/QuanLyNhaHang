@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface DishService {
     List<Dish> getAllDish();
+    List<Dish> searchListDishByName(String name);
+    Dish searchDishByName(String name);
 }

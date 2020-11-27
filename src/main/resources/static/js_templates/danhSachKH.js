@@ -10,7 +10,8 @@ function showDishTable() {
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
-                showTable(data) //console.log(data);
+                showTable(data) ;
+                console.log(data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -257,6 +258,7 @@ $(function () {
                 success: function (data) {
           //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
            //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
+                    console.log(data);
 
                     if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit) {
                         $.ajax({

@@ -149,6 +149,7 @@ function showEditForm() {
         var price = $(this).find('td').eq(2).text();
         $('#price_edit').val(price);
         var type = $(this).find('td').eq(3).text();
+
         //console.log(type);
         if (type.trim() == 'Đồ xào') {
             $('#type_edit').children('option:first').text('Đồ xào');
@@ -203,6 +204,8 @@ function showEditForm() {
             $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
             $('#unit_edit').append('<option value="Cốc">Cốc</option>');
         }
+        var description = $(this).find('td').eq(5).text();
+        $('#devices_edits').val(description);
     });
 
 }

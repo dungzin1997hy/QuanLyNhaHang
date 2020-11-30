@@ -10,14 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginController {
     @GetMapping({"/login","/"})
     public  String login(){
-        return "dishManager";
+        return "admin/dishManager";
     }
 
     @GetMapping("/dishManager")
     public  String dishManager(){
-        return "dishManager";
+        return "admin/dishManager";
     }
 
+    @GetMapping("/tableManager")
+    public String tableManager(){
+        return "admin/tableManager";
+    }
 
     @GetMapping("/loginError")
     public String login(HttpServletRequest request, Model model) {
@@ -25,4 +29,6 @@ public class LoginController {
         model.addAttribute("errorMessage", errorMessage);
         return "login";
     }
+
+
 }

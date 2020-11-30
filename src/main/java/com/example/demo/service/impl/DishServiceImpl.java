@@ -46,6 +46,7 @@ public class DishServiceImpl implements DishService {
             dish.setType(dishEntity.getType());
             dish.setUnit(dishEntity.getUnit());
             dish.setDescription(dishEntity.getDescription());
+            System.out.println(dish.toString());
             dishes.add(dish);
         }
         return dishes;
@@ -61,6 +62,7 @@ public class DishServiceImpl implements DishService {
         dish.setType(dishEntity.getType());
         dish.setUnit(dishEntity.getUnit());
         dish.setDescription(dishEntity.getDescription());
+        System.out.println(dish.toString());
         return  dish;
     }
 

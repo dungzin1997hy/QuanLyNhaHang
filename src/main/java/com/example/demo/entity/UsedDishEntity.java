@@ -23,18 +23,14 @@ public class UsedDishEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
     @ManyToOne
-    @JoinColumn(name = "customerid")
-    private CustomerEntity customerEntity;
+    @JoinColumn(name = "tableId")
+    private TableEntity tableEntity;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dishId", referencedColumnName = "id")
     private DishEntity dishEntity;
-    
-    @ManyToOne
-    @JoinColumn(name = "billid")
-    private BillEntity billEntity;
+
 
     @Column(name ="amount")
     private int amount;

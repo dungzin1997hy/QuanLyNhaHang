@@ -1,11 +1,9 @@
 package com.example.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,12 +24,20 @@ public class TableEntity {
     private String type;
 
     @Column (name = "status")
+
     private String status;
 
+    @Column (name="area")
+    private String area;
 
-    public TableEntity(String name, String type, String status) {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
+    private List<UsedDishEntity> usedDishEntities;
+
+
+    public TableEntity(String name, String type,String status, String area) {
         this.name = name;
         this.type = type;
-        this.status = status;
+        this.status = "free";
+        this.area = area;
     }
 }

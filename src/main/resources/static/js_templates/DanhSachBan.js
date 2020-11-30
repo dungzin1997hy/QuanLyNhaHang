@@ -1,15 +1,16 @@
 //Show user list
-function showDishTable() {
+function showTableTable() {
     console.log("show lại list table");
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-dish').hide();
-    $('.nav__edit-dish').hide();
+    $('.nav__add-table').hide();
+    $('.nav__edit-table').hide();
     $.ajax({
-        url: "/getAllDish",
+        url: "/getAllTable",
         type: "POST",
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
+
                 showTable(data);
                 console.log(data);
             }
@@ -19,9 +20,9 @@ function showDishTable() {
     });
 }
 
-function showAddFormDish() {
+function showAddFormTable() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__add-dish').show();
+    $('.nav__add-table').show();
 }
 
 
@@ -30,93 +31,45 @@ jQuery.validator.addMethod("checkChar", function (value, element, param) {
 });
 
 // tìm kiếm món ăn = tên
-$(function () {
-    $("#form_search_dish").validate({
-        submitHandler: function () {
-            var nameDish = $("#dish_name_search").val().trim();
-            if (nameDish == "") {
-                showDishTable();
-            } else {
-                $.ajax({
-                    url: "/searchListDishByName",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "nameDish": nameDish,
-                    },
-                    success: function (data) {
-                        if(data.success == true) {
-                            swal("Thành công", "Tìm thành công", "success");
-                            $('#dish_name_search').focus();
-                            $('#dish_name_search').val("");
-                            showTable(data);
-                        }
-                        else {
-                            swal("Lỗi",data.errorMessage,"warning");
-                            $('#dish_name_search').val("");
-                            $('#dish_name_search').focus();
-                            showDishTable();
-                        }
-
-                    }, error: function (data) {
-                        swal("Fail", data.responseText, "warning");
-                    }
-                });
-            }
-        }
-    });
-});
 
 //thêm khách hàng
 $(function () {
     $("#add_form").validate({
         rules: {
 
-            nameDish_add: {
+            nameTable_add: {
                 required: true,
-                checkChar: "[a-zA-Z]+",
                 maxlength: 20
             },
-            price_add: {
-                digits: true,
+            type_add: {
                 required: true
-            },
-            devices_add: {
-                maxlength: 50
             }
         },
         messages: {
             nameDish_add: {
                 required: "Vui lòng nhập tên món ăn",
-                checkChar: "Vui lòng chỉ nhập kí tự chữ",
-                maxlength: "Tên món ăn quá dài"
+
+                maxlength: "Tên bàn quá dài"
             },
-            price_add: {
+            type_add: {
                 required: "Vui lòng nhập giá",
                 digits: "Vui lòng chỉ nhập số"
-            },
-
-            devices_add: {
-
-                maxlength: "Nhỏ hơn 50 kí tự"
-            },
+            }
         },
         submitHandler: function () {
-            var nameDish_add = $('#nameDish_add').val().trim();
-            var price_add = $('#price_add').val().trim();
+            var nameTable_add = $('#nameTable_add').val().trim();
             var type_add = $("#type_add option:selected").text().trim();
-            var unit_add = $('#unit_add option:selected').text().trim();
-            var devices_add = $('#devices_add').val().trim();
+            var area_add = $('#area_add option:selected').text().trim();
+
+
 
             $.ajax({
-                url: "/addDish",
+                url: "/addTable",
                 type: "POST",
                 data: {
-                    "nameDish_add": nameDish_add,
-                    "price_add": price_add,
+                    "nameTable_add": nameTable_add,
                     "type_add": type_add,
-                    "unit_add": unit_add,
-                    "devices_add": devices_add
+                    "area_add": area_add
                 },
                 success: function (data) {
                     $('.nav__add-dish').hide();
@@ -124,10 +77,10 @@ $(function () {
 
                     if (data.success == true) {
                         swal("Thành công", data.data, "success");
-                        showDishTable();
+                        showTableTable();
                     } else {
                         swal("Lỗi", data.errorMessage, "warning");
-                        showDishTable();
+                        showTableTable();
                     }
                 }, error: function (data) {
                     swal("Fail", data.errorMessage, "warning");
@@ -138,7 +91,7 @@ $(function () {
 });
 
 // Nav form edit
-function showEditForm() {
+function showEditTableForm() {
     $('.overlay_bang_mon_an').show();
     $('.nav__edit-dish').show();
     $('#bang_mon_an').find('tr').click(function () {
@@ -259,8 +212,8 @@ $(function () {
                     "nameDish": nameDishEdit,
                 },
                 success: function (data) {
-          //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
-           //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
+                    //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
+                    //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
                     console.log(data);
 
                     if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit) {
@@ -282,7 +235,7 @@ $(function () {
                                 swal("Thành công", data.data, "success");
                                 showDishTable();
                             }, error: function (data) {
-                               // console.log("lỗi không cập nhật dc data");
+                                // console.log("lỗi không cập nhật dc data");
                                 swal("Lỗi", data.errorMessage, "warning");
                             }
                         });
@@ -300,16 +253,16 @@ $(function () {
     });
 });
 
-function searchByType() {
-    var selectItem = $("#selectSearch").val();
+function searchTableByType() {
+    var selectItem = $("#selectSearchTable").val();
     if (selectItem == 'Tất cả') {
-        showDishTable();
+        showTableTable();
     } else {
         $.ajax({
-            url : "/searchDishByType",
+            url : "/searchTableByType",
             type : "POST",
             data: {
-                "typeDish" : selectItem
+                "type" : selectItem
             },
             success: function (data) {
                 showTable(data);
@@ -323,14 +276,14 @@ function searchByType() {
 
 }
 
-function deleteDish() {
-    $('#bang_mon_an').find('tr').click(function () {
-        var idDish = $(this).find('td').eq(0).text();
-        $("#idDish_delete").text(idDish);
-        var idDishDelete = $("#idDish_delete").text();
+function deleteTable() {
+    $('#bang_ban').find('tr').click(function () {
+        var idTable = $(this).find('td').eq(0).text();
+        $("#idTable_delete").text(idTable);
+        var idTableDelete = $("#idTable_delete").text();
         swal({
                 title: "Xác nhận !!!",
-                text: "Bạn có chắc xoá món ăn này không ?",
+                text: "Bạn có chắc xoá bàn này không ?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -342,16 +295,15 @@ function deleteDish() {
             function (isConfirm) {
                 if (isConfirm) {
                     $.ajax({
-                        url: "/deleteDish",
+                        url: "/deleteTable",
                         type: "POST",
                         data: {
-                            "idDish": idDishDelete
+                            "idTable": idTableDelete
                         },
                         success: function (data) {
                             swal("Done", data.data, "success");
                             showDishTable();
                         }, error: function () {
-
                             swal("Lỗi", "Không xóa được", "warning");
                         }
                     });
@@ -362,8 +314,8 @@ function deleteDish() {
 
 function closeEditForm() {
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-dish').hide();
-    $('.nav__edit-dish').hide();
+    $('.nav__add-table').hide();
+    $('.nav__edit-table').hide();
     resetAddForm();
 }
 
@@ -373,25 +325,20 @@ function showTable(data) {
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
-            if (row.description == null) {
-                var string = "";
-            } else string = row.description;
             contentString = contentString
                 + '<tr role="row" class="odd">'
-                + '<td id="idDish">' + row.id + '</td>'
+                + '<td id="idTable">' + row.id + '</td>'
                 + '<td>' + row.name + '</td>'
-                + '<td>' + row.price + '</td>'
                 + '<td>' + row.type + '</td>'
-                + '<td>' + row.unit + '</td>'
-                + '<td>' + string + '</td>'
+                + '<td>' + row.area + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditTableForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
                 '<a data-toggle="tooltip" title="Remove"><button onclick="deleteDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 + '</tr>';
         }
     }
-    $("#soMonAn").html(data.data.length);
-    $("#bang_mon_an").html(contentString);
+    $("#soBan").html(data.data.length);
+    $("#bang_ban").html(contentString);
 }
 
 function resetAddForm() {

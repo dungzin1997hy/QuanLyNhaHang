@@ -52,7 +52,31 @@
     /*transform: translateX(100%);*/
     display: none;
 }
+.nav__add-table{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width:600px;
+    max-width: 100%;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
 .nav__edit-dish{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width:600px;
+    max-width: 100%;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
+.nav__edit-table{
     position: fixed;
     top: 0;
     left: 0;

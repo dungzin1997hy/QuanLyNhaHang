@@ -9,6 +9,7 @@ public interface TableDAO {
     List<TableEntity> searchTableByType(String Type);
 
     List<TableEntity> getAllTable();
+    List<TableEntity> getTableByArea(String area);
 
     Boolean checkExistTable(String tableName);
 

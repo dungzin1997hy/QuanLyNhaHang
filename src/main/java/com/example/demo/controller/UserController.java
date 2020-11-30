@@ -16,10 +16,8 @@ public class UserController {
     @Autowired
     public UserDAO userDao;
 
-    @GetMapping("/trangchu")
-    public String dashboard() {
-        return "layout/trangchu";
-    }
+
+
 
     @PostMapping("/getAllUser")
     public ApiResponse<List<UserEntity>> getAllUser(){

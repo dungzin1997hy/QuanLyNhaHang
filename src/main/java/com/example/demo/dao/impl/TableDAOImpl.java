@@ -19,7 +19,7 @@ public class TableDAOImpl implements TableDAO {
     private EntityManager entityManager;
     @Override
     public List<TableEntity> searchTableByType(String Type) {
-        String sql ="SELECT u FROM TableEntity u WHERE u.type="+Type;
+        String sql ="SELECT u FROM TableEntity u WHERE u.type='"+Type+"'";
         Query query = entityManager.createQuery(sql);
         List<TableEntity> tableEntities = query.getResultList();
         return tableEntities;
@@ -28,7 +28,7 @@ public class TableDAOImpl implements TableDAO {
     @Override
     public List<TableEntity> getAllTable() {
         try {
-            String sql = "SELECT u FROM TableEntity u";
+            String sql = "SELECT u FROM TableEntity u order by u.type asc";
             Query query = entityManager.createQuery(sql);
             List<TableEntity> tableEntities = query.getResultList();
             return tableEntities;
@@ -36,6 +36,19 @@ public class TableDAOImpl implements TableDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<TableEntity> getTableByArea(String area) {
+        try{
+            String sql ="SELECT u FROM TableEntity u WHERE u.area="+area;
+            Query query = entityManager.createQuery(sql);
+            List<TableEntity> tableEntities = query.getResultList();
+            return tableEntities;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

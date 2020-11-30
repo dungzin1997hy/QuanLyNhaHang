@@ -56,4 +56,19 @@ public class DishEntity {
     public DishEntity(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        if(this == null){
+            return "null";
+        }
+        return "DishEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", type='" + type + '\'' +
+                ", unit='" + unit + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

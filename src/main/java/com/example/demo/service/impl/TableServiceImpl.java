@@ -65,5 +65,19 @@ public class TableServiceImpl implements TableService {
         return tables;
     }
 
+    @Override
+    public Table getTableByName(String name) {
+        TableEntity tableEntity = tableDAO.getTableByName(name);
+        Table table = new Table();
+        table.setId(tableEntity.getId());
+        table.setName(tableEntity.getName());
+        table.setStatus(tableEntity.getStatus());
+        table.setType(tableEntity.getType());
+        table.setArea(tableEntity.getArea());
+        return table;
+
+
+    }
+
 
 }

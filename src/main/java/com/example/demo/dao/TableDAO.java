@@ -11,6 +11,7 @@ public interface TableDAO {
     List<TableEntity> getAllTable();
     List<TableEntity> getTableByArea(String area);
 
+    TableEntity getTableByName(String name);
     Boolean checkExistTable(String tableName);
 
     void addTable(TableEntity tableEntity);

@@ -46,21 +46,18 @@ $(function () {
             }
         },
         messages: {
-            nameDish_add: {
+            nameTable_add: {
                 required: "Vui lòng nhập tên món ăn",
-
                 maxlength: "Tên bàn quá dài"
             },
             type_add: {
-                required: "Vui lòng nhập giá",
-                digits: "Vui lòng chỉ nhập số"
+                required: "Vui lòng nhập giá"
             }
         },
         submitHandler: function () {
             var nameTable_add = $('#nameTable_add').val().trim();
             var type_add = $("#type_add option:selected").text().trim();
             var area_add = $('#area_add option:selected').text().trim();
-
 
 
             $.ajax({
@@ -72,7 +69,7 @@ $(function () {
                     "area_add": area_add
                 },
                 success: function (data) {
-                    $('.nav__add-dish').hide();
+                    $('.nav__add-table').hide();
                     resetAddForm();
 
                     if (data.success == true) {
@@ -93,72 +90,59 @@ $(function () {
 // Nav form edit
 function showEditTableForm() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__edit-dish').show();
-    $('#bang_mon_an').find('tr').click(function () {
-        var idDish = $(this).find('td').eq(0).text();
-        $('#idDish_edit').val(idDish);
-        var nameDish = $(this).find('td').eq(1).text();
-        $('#nameDish_edit').val(nameDish);
-        var price = $(this).find('td').eq(2).text();
-        $('#price_edit').val(price);
-        var type = $(this).find('td').eq(3).text();
+    $('.nav__edit-table').show();
+    $('#bang_ban').find('tr').click(function () {
+        var idTable = $(this).find('td').eq(0).text();
+        $('#idTable_edit').val(idTable);
+        var name = $(this).find('td').eq(1).text();
+        $('#nameTable_edit').val(name);
+
+        var type = $(this).find('td').eq(2).text();
 
         //console.log(type);
-        if (type.trim() == 'Đồ xào') {
-            $('#type_edit').children('option:first').text('Đồ xào');
-        }
-        if (type.trim() == 'Đồ chiên') {
+        if (type.trim() == '2 người') {
             $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
+            $('#type_edit').append('<option value="2 người">2 người</option>');
+
+            $('#type_edit').append('<option value="4 người">4 người</option>');
+            $('#type_edit').append('<option value="6 người">6 người</option>');
         }
-        if (type.trim() == 'Đồ uống') {
+        if (type.trim() == '4 người') {
             $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
+            $('#type_edit').append('<option value="4 người">4 người</option>');
+            $('#type_edit').append('<option value="2 người">2 người</option>');
+            $('#type_edit').append('<option value="6 người">6 người</option>');
         }
-        if (type.trim() == 'Đồ tráng miệng') {
+        if (type.trim() == '6 người') {
             $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
+            $('#type_edit').append('<option value="6 người">6 người</option>');
+            $('#type_edit').append('<option value="2 người">2 người</option>');
+            $('#type_edit').append('<option value="4 người">4 người</option>');
+        }
+        var area = $(this).find('td').eq(3).text();
+
+        if (area.trim() == 'A') {
+            $('#area_edit').empty();
+            $('#area_edit').append('<option value="A">A</option>');
+
+            $('#area_edit').append('<option value="B">B</option>');
+            $('#area_edit').append('<option value="C">C</option>');
+        }
+        if (area.trim() == 'B') {
+            $('#area_edit').empty();
+            $('#area_edit').append('<option value="B">B</option>');
+            $('#area_edit').append('<option value="A">A</option>');
+            $('#area_edit').append('<option value="C">C</option>');
+
+        }
+        if (area.trim() == 'C') {
+            $('#area_edit').empty();
+            $('#area_edit').append('<option value="C">C</option>');
+            $('#area_edit').append('<option value="A">A</option>');
+            $('#area_edit').append('<option value="B">B</option>');
+
         }
 
-        var unit = $(this).find('td').eq(4).text();
-
-        if (unit.trim() == 'Đĩa') {
-            $('#unit_edit').children('option:first').text('Đĩa');
-        }
-        if (unit.trim() == 'Bát') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Cốc') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Chai') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-        }
-        var description = $(this).find('td').eq(5).text();
-        $('#devices_edits').val(description);
     });
 
 }
@@ -167,81 +151,59 @@ function showEditTableForm() {
 $(function () {
     $("#edit_form").validate({
         rules: {
-            nameDish_add: {
+            nameTable_edit: {
                 required: true,
-                checkChar: "[a-zA-Z]+",
                 maxlength: 20
-            },
-            price_add: {
-                digits: true,
-                required: true
-            },
-            devices_add: {
-                maxlength: 50
             }
         },
         messages: {
-            nameDish_add: {
-                required: "Vui lòng nhập tên món ăn",
-                checkChar: "Vui lòng chỉ nhập kí tự chữ",
+            nameTable_edit: {
+                required: "Vui lòng nhập tên bàn",
                 maxlength: "Tên món ăn quá dài"
-            },
-            price_add: {
-                required: "Vui lòng nhập giá",
-                digits: "Vui lòng chỉ nhập số"
-            },
-
-            devices_add: {
-
-                maxlength: "Nhỏ hơn 50 kí tự"
             }
         },
         submitHandler: function () {
-            var idDishEdit = $('#idDish_edit').val().trim();
-            var nameDishEdit = $('#nameDish_edit').val().trim();
-            var priceEdit = $('#price_edit').val().trim();
+            var idTable = $('#idTable_edit').val().trim();
+            var nameTable = $('#nameTable_edit').val().trim();
             var typeEdit = $('#type_edit option:selected').val().trim();
-            var unitEdit = $('#unit_edit option:selected').val().trim();
-            var devices_edits = $('#devices_edits').val().trim();
+            var areaEdit = $('#area_edit option:selected').val().trim();
 
             $.ajax({
-                url: "/searchDishByName",
+                url: "/getTableByName",
                 type: "POST",
                 dataType: "json",
                 data: {
-                    "nameDish": nameDishEdit,
+                    "name": nameTable,
                 },
                 success: function (data) {
                     //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
                     //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
                     console.log(data);
 
-                    if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit) {
+                    if (data.data.id != idTable || data.data.name != nameTable || data.data.type != typeEdit || data.data.area != areaEdit) {
                         $.ajax({
-                            url: "/updateDish",
+                            url: "/updateTable",
                             type: "POST",
                             data: {
-                                "idDish_edit": idDishEdit,
-                                "nameDish_edit": nameDishEdit,
-                                "price_edit": priceEdit,
+                                "idTable": idTable,
+                                "nameTable_edit": nameTable,
                                 "type_edit": typeEdit,
-                                "unit_edit": unitEdit,
-                                "devices_edit": devices_edits
+                                "area_edit": areaEdit
                             },
                             success: function (data) {
 
                                 $('.nav__edit-dish').hide();
                                 $('.overlay_bang_mon_an').hide();
                                 swal("Thành công", data.data, "success");
-                                showDishTable();
+                                showTableTable();
                             }, error: function (data) {
                                 // console.log("lỗi không cập nhật dc data");
                                 swal("Lỗi", data.errorMessage, "warning");
                             }
                         });
                     } else {
-                        $('.nav__edit-customer').hide();
-                        $('.overlay_bang_khach_hang').hide();
+                        $('.nav__edit-table').hide();
+                        $('.overlay_bang_mon_an').hide();
                         console.log("khong cap nhat");
                         swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
                     }
@@ -259,10 +221,10 @@ function searchTableByType() {
         showTableTable();
     } else {
         $.ajax({
-            url : "/searchTableByType",
-            type : "POST",
+            url: "/searchTableByType",
+            type: "POST",
             data: {
-                "type" : selectItem
+                "type": selectItem
             },
             success: function (data) {
                 showTable(data);
@@ -302,7 +264,7 @@ function deleteTable() {
                         },
                         success: function (data) {
                             swal("Done", data.data, "success");
-                            showDishTable();
+                            showTableTable();
                         }, error: function () {
                             swal("Lỗi", "Không xóa được", "warning");
                         }
@@ -333,7 +295,7 @@ function showTable(data) {
                 + '<td>' + row.area + '</td>'
                 + '<td>' +
                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditTableForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
-                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteTable()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 + '</tr>';
         }
     }
@@ -342,9 +304,15 @@ function showTable(data) {
 }
 
 function resetAddForm() {
-    $("#nameDish_add").val("");
-    $("#price_add").val("");
-    $("#type_add").val("");
-    $("#unit_add").val("");
-    $("#devices_add").val("");
+    $("#nameTable_add").val("");
+
+
+    $('#type_add').empty();
+    $('#type_add').append('<option value="2 người">2 người</option>');
+    $('#type_add').append('<option value="4 người">4 người</option>');
+    $('#type_add').append('<option value="6 người">6 người</option>');
+    $('#area_add').empty();
+    $('#area_add').append('<option value="A">A</option>');
+    $('#area_add').append('<option value="B">B</option>');
+    $('#area_add').append('<option value="C">C</option>');
 }

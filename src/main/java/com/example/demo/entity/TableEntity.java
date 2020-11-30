@@ -40,4 +40,14 @@ public class TableEntity {
         this.status = "free";
         this.area = area;
     }
+
+
+
+    public TableEntity(int id, String name, String type, String status, String area) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.status = status;
+        this.area = area;
+    }
 }

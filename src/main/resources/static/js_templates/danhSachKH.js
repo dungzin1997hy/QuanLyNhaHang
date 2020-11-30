@@ -152,7 +152,12 @@ function showEditForm() {
 
         //console.log(type);
         if (type.trim() == 'Đồ xào') {
-            $('#type_edit').children('option:first').text('Đồ xào');
+            $('#type_edit').empty();
+            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
+
+            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
+            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
+            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
         }
         if (type.trim() == 'Đồ chiên') {
             $('#type_edit').empty();
@@ -179,7 +184,12 @@ function showEditForm() {
         var unit = $(this).find('td').eq(4).text();
 
         if (unit.trim() == 'Đĩa') {
-            $('#unit_edit').children('option:first').text('Đĩa');
+            $('#unit_edit').empty();
+            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
+
+            $('#unit_edit').append('<option value="Bát">Bát</option>');
+            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
+            $('#unit_edit').append('<option value="Chai">Chai</option>');
         }
         if (unit.trim() == 'Bát') {
             $('#unit_edit').empty();
@@ -214,31 +224,31 @@ function showEditForm() {
 $(function () {
     $("#edit_form").validate({
         rules: {
-            nameDish_add: {
+            nameDish_edit: {
                 required: true,
                 checkChar: "[a-zA-Z]+",
                 maxlength: 20
             },
-            price_add: {
+            price_edit: {
                 digits: true,
                 required: true
             },
-            devices_add: {
+            devices_edit: {
                 maxlength: 50
             }
         },
         messages: {
-            nameDish_add: {
+            nameDish_edit: {
                 required: "Vui lòng nhập tên món ăn",
                 checkChar: "Vui lòng chỉ nhập kí tự chữ",
                 maxlength: "Tên món ăn quá dài"
             },
-            price_add: {
+            price_edit: {
                 required: "Vui lòng nhập giá",
                 digits: "Vui lòng chỉ nhập số"
             },
 
-            devices_add: {
+            devices_edit: {
 
                 maxlength: "Nhỏ hơn 50 kí tự"
             }
@@ -287,8 +297,8 @@ $(function () {
                             }
                         });
                     } else {
-                        $('.nav__edit-customer').hide();
-                        $('.overlay_bang_khach_hang').hide();
+                        $('.nav__edit-dish').hide();
+                        $('.overlay_bang_mon_an').hide();
                         console.log("khong cap nhat");
                         swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
                     }
@@ -397,7 +407,15 @@ function showTable(data) {
 function resetAddForm() {
     $("#nameDish_add").val("");
     $("#price_add").val("");
-    $("#type_add").val("");
-    $("#unit_add").val("");
+    $('#type_add').empty();
+    $('#type_add').append('<option value="Đồ xào">Đồ xào</option>');
+    $('#type_add').append('<option value="Đồ chiên">Đồ chiên</option>');
+    $('#type_add').append('<option value="Đồ uống">Đồ uống</option>');
+    $('#type_add').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
+    $('#unit_add').empty();
+    $('#unit_add').append('<option value="Bát">Bát</option>');
+    $('#unit_add').append('<option value="Đĩa">Đĩa</option>');
+    $('#unit_add').append('<option value="Cốc">Cốc</option>');
+    $('#unit_add').append('<option value="Chai">Chai</option>');
     $("#devices_add").val("");
 }

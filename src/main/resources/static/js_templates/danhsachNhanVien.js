@@ -1,11 +1,11 @@
 //Show user list
-function showTableTable() {
+function showStaffTable() {
     console.log("show lại list table");
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-table').hide();
-    $('.nav__edit-table').hide();
+    $('.nav__add-staff').hide();
+    $('.nav__edit-staff').hide();
     $.ajax({
-        url: "/getAllTable",
+        url: "/getAllStaff",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -20,9 +20,9 @@ function showTableTable() {
     });
 }
 
-function showAddFormTable() {
+function showAddFormStaff() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__add-table').show();
+    $('.nav__add-staff').show();
 }
 
 
@@ -30,54 +30,136 @@ jQuery.validator.addMethod("checkChar", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));
 });
 
-// tìm kiếm món ăn = tên
+// tìm kiếm nhân viên bằng tên
+$(function () {
+    $("#form_search_staff").validate({
+        submitHandler: function () {
+            var name = $("#staff_name_search").val().trim();
+            if (name == "") {
+                showStaffTable();
+            } else {
+                $.ajax({
+                    url: "/searchStaffByName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "staffName": name,
+                    },
+                    success: function (data) {
+                        if(data.success == true) {
+                            swal("Thành công", "Tìm thành công", "success");
+                            $('#staff_name_search').focus();
+                            $('#staff_name_search').val("");
+                            showTable(data);
+                        }
+                        else {
+                            swal("Lỗi",data.errorMessage,"warning");
+                            $('#staff_name_search').val("");
+                            $('#staff_name_search').focus();
+                            showStaffTable();
+                        }
 
+                    }, error: function (data) {
+                        swal("Fail", data.responseText, "warning");
+                    }
+                });
+            }
+        }
+    });
+});
 //thêm khách hàng
 $(function () {
     $("#add_form").validate({
         rules: {
-
-            nameTable_add: {
+            nameStaff_add: {
                 required: true,
-                maxlength: 20
+                checkChar: "[a-zA-Z]+",
+                maxlength: 50
             },
-            type_add: {
+            phoneNumber_add: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            cmnd_add: {
+                required: true,
+                digits: true,
+            },
+            role_add: {
+                required: true,
+                maxlength: 100
+            },
+            email_add: {
+                required: true,
+                email: true,
+                maxlength: 45
+            },
+            address_add: {
                 required: true
             }
+
         },
         messages: {
-            nameTable_add: {
-                required: "Vui lòng nhập tên món ăn",
-                maxlength: "Tên bàn quá dài"
+            nameStaff_add: {
+                required: "Vui lòng nhập tên nhân viên",
+                checkChar: "Vui lòng chỉ nhập giá trị chữ",
+                maxlength: "Bạn nhập quá dài"
             },
-            type_add: {
-                required: "Vui lòng nhập giá"
+            phoneNumber_add: {
+                required: "Vui lòng nhập số điện thoại",
+                minlength: "Chỉ nhập 10 chữ số",
+                maxlength: "Chỉ nhập 10 chữ số"
+            },
+            cmnd_add: {
+                required: "Vui lòng nhập số CMND",
+            },
+            role_add: {
+                required: true,
+                maxlength: 100
+            },
+            email_add: {
+                required: "Vui lòng nhập gmail",
+                email: "Nhập sai định dạng gmail",
+                maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
+            },
+            address_add: {
+                required: "Vui lòng nhập địa chỉ"
             }
+
         },
         submitHandler: function () {
-            var nameTable_add = $('#nameTable_add').val().trim();
-            var type_add = $("#type_add option:selected").text().trim();
-            var area_add = $('#area_add option:selected').text().trim();
-
-
+            var nameStaff_add = $('#nameStaff_add').val().trim();
+            var phoneNumber_add = $('#phoneNumber_add').val().trim();
+            var cmnd_add = $('#cmnd_add').val().trim();
+            var email_add = $('#email_add').val().trim();
+            var address_add = $('#address_add').val().trim();
+            var role = $("#role_add option:selected").text().trim();
+            var username_add = $('#username_add').val().trim();
+            var password_add = $('#password_add').val().trim();
+            console.log(username_add + " " + password_add);
             $.ajax({
-                url: "/addTable",
+                url: "/addStaff",
                 type: "POST",
                 data: {
-                    "nameTable_add": nameTable_add,
-                    "type_add": type_add,
-                    "area_add": area_add
+                    "nameStaff_add": nameStaff_add,
+                    "phoneNumber_add": phoneNumber_add,
+                    "cmnd_add": cmnd_add,
+                    "email_add": email_add,
+                    "role": role,
+                    "address_add": address_add,
+                    "username_add": username_add,
+                    "password_add": password_add
                 },
                 success: function (data) {
-                    $('.nav__add-table').hide();
+                    $('.nav__add-staff').hide();
                     resetAddForm();
 
                     if (data.success == true) {
-                        swal("Thành công", data.data, "success");
-                        showTableTable();
+                        swal("Thêm thành công", data.data, "success");
+                        showStaffTable();
                     } else {
                         swal("Lỗi", data.errorMessage, "warning");
-                        showTableTable();
+                        showStaffTable();
                     }
                 }, error: function (data) {
                     swal("Fail", data.errorMessage, "warning");
@@ -88,16 +170,16 @@ $(function () {
 });
 
 // Nav form edit
-function showEditTableForm() {
+function showEditStaffForm() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__edit-table').show();
+    $('.nav__edit-').show();
     $('#bang_ban').find('tr').click(function () {
-        var idTable = $(this).find('td').eq(1).text();
+        var idTable = $(this).find('td').eq(0).text();
         $('#idTable_edit').val(idTable);
-        var name = $(this).find('td').eq(2).text();
+        var name = $(this).find('td').eq(1).text();
         $('#nameTable_edit').val(name);
 
-        var type = $(this).find('td').eq(3).text();
+        var type = $(this).find('td').eq(2).text();
 
         //console.log(type);
         if (type.trim() == '2 người') {
@@ -119,7 +201,7 @@ function showEditTableForm() {
             $('#type_edit').append('<option value="2 người">2 người</option>');
             $('#type_edit').append('<option value="4 người">4 người</option>');
         }
-        var area = $(this).find('td').eq(4).text();
+        var area = $(this).find('td').eq(3).text();
 
         if (area.trim() == 'A') {
             $('#area_edit').empty();
@@ -238,12 +320,13 @@ function searchTableByType() {
 
 }
 
-function deleteTable() {
-    $('#bang_ban').find('tr').click(function () {
+function deleteStaff() {
+    $('#bang_nhan_vien').find('tr').click(function () {
         var idTable = $(this).find('td').eq(1).text();
-        $("#idTable_delete").text(idTable);
         console.log(idTable);
-        var idTableDelete = $("#idTable_delete").text();
+        $("#idStaff_delete").text(idTable);
+        var idTableDelete = $("#idStaff_delete").text();
+
         swal({
                 title: "Xác nhận !!!",
                 text: "Bạn có chắc xoá bàn này không ?",
@@ -258,14 +341,16 @@ function deleteTable() {
             function (isConfirm) {
                 if (isConfirm) {
                     $.ajax({
-                        url: "/deleteTable",
+                        url: "/deleteStaff",
                         type: "POST",
                         data: {
-                            "idTable": idTableDelete
+                            "idStaff": idTableDelete
                         },
                         success: function (data) {
-                            swal("Done", data.data, "success");
-                            showTableTable();
+                            if (data.success == true) {
+                                swal("Done", data.data, "success");
+                                showStaffTable();
+                            } else swal("Lỗi", "Không xóa được", "warning");
                         }, error: function () {
                             swal("Lỗi", "Không xóa được", "warning");
                         }
@@ -277,8 +362,8 @@ function deleteTable() {
 
 function closeEditForm() {
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-table').hide();
-    $('.nav__edit-table').hide();
+    $('.nav__add-staff').hide();
+    $('.nav__edit-staff').hide();
     resetAddForm();
 }
 
@@ -290,31 +375,32 @@ function showTable(data) {
             var row = data.data[i];
             contentString = contentString
                 + '<tr role="row" class="odd">'
-                + '<td>' + (i+1) + '</td>'
-                + '<td id="idTable" style="display: none">' + row.id + '</td>'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td id="idStaff" style="display: none">' + row.id + '</td>'
                 + '<td>' + row.name + '</td>'
-                + '<td>' + row.type + '</td>'
-                + '<td>' + row.area + '</td>'
+                + '<td>' + row.phoneNumber + '</td>'
+                + '<td>' + row.cmnd + '</td>'
+                + '<td>' + row.email + '</td>'
+                + '<td>' + row.address + '</td>'
+                + '<td>' + row.role.role + '</td>'
+                + '<td>' + row.user.username + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditTableForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
-                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteTable()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditStaffForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteStaff()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 + '</tr>';
         }
     }
     $("#soBan").html(data.data.length);
-    $("#bang_ban").html(contentString);
+    $("#bang_nhan_vien").html(contentString);
 }
 
 function resetAddForm() {
-    $("#nameTable_add").val("");
-
-
-    $('#type_add').empty();
-    $('#type_add').append('<option value="2 người">2 người</option>');
-    $('#type_add').append('<option value="4 người">4 người</option>');
-    $('#type_add').append('<option value="6 người">6 người</option>');
-    $('#area_add').empty();
-    $('#area_add').append('<option value="A">A</option>');
-    $('#area_add').append('<option value="B">B</option>');
-    $('#area_add').append('<option value="C">C</option>');
+    $('#nameStaff_add').val("");
+    $('#phoneNumber_add').val("");
+    $('#cmnd_add').val("");
+    $('#email_add').val("");
+    $('#address_add').val("");
+    // $("#role_add option:selected").text().trim();
+    $('#username_add').val("");
+    $('#password_add').val("");
 }

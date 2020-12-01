@@ -31,18 +31,45 @@ public class StaffEntity {
     @Column (name="cmnd")
     private String cmnd;
 
-    @Column (name = "role")
-    private String role;
+    @Column (name="address")
+    private String address;
+
+    @ManyToOne
+    @JoinColumn(name="roleId")
+    private RoleEntity roleEntity;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private UserEntity userEntity;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "staffEntity")
     private List<BillEntity> billEntities;
 
-    public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd, String role) {
+    public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.cmnd = cmnd;
-        this.role = role;
+    }
+
+    public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd, String address, RoleEntity roleEntity) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.cmnd = cmnd;
+        this.address = address;
+        this.roleEntity = roleEntity;
+
+    }
+
+    public StaffEntity(String name, String phoneNumber, String email, String cmnd, String address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.cmnd = cmnd;
+        this.address = address;
+
     }
 }

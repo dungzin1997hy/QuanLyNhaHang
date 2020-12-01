@@ -142,13 +142,13 @@ function showEditForm() {
     $('.overlay_bang_mon_an').show();
     $('.nav__edit-dish').show();
     $('#bang_mon_an').find('tr').click(function () {
-        var idDish = $(this).find('td').eq(0).text();
+        var idDish = $(this).find('td').eq(1).text();
         $('#idDish_edit').val(idDish);
-        var nameDish = $(this).find('td').eq(1).text();
+        var nameDish = $(this).find('td').eq(2).text();
         $('#nameDish_edit').val(nameDish);
-        var price = $(this).find('td').eq(2).text();
+        var price = $(this).find('td').eq(3).text();
         $('#price_edit').val(price);
-        var type = $(this).find('td').eq(3).text();
+        var type = $(this).find('td').eq(4).text();
 
         //console.log(type);
         if (type.trim() == 'Đồ xào') {
@@ -181,7 +181,7 @@ function showEditForm() {
             $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
         }
 
-        var unit = $(this).find('td').eq(4).text();
+        var unit = $(this).find('td').eq(5).text();
 
         if (unit.trim() == 'Đĩa') {
             $('#unit_edit').empty();
@@ -214,7 +214,7 @@ function showEditForm() {
             $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
             $('#unit_edit').append('<option value="Cốc">Cốc</option>');
         }
-        var description = $(this).find('td').eq(5).text();
+        var description = $(this).find('td').eq(6).text();
         $('#devices_edits').val(description);
     });
 
@@ -335,7 +335,7 @@ function searchByType() {
 
 function deleteDish() {
     $('#bang_mon_an').find('tr').click(function () {
-        var idDish = $(this).find('td').eq(0).text();
+        var idDish = $(this).find('td').eq(1).text();
         $("#idDish_delete").text(idDish);
         var idDishDelete = $("#idDish_delete").text();
         swal({
@@ -388,7 +388,8 @@ function showTable(data) {
             } else string = row.description;
             contentString = contentString
                 + '<tr role="row" class="odd">'
-                + '<td id="idDish">' + row.id + '</td>'
+                + '<td>' + (i+1) + '</td>'
+                + '<td id="idDish" style="display: none">' + row.id + '</td>'
                 + '<td>' + row.name + '</td>'
                 + '<td>' + row.price + '</td>'
                 + '<td>' + row.type + '</td>'

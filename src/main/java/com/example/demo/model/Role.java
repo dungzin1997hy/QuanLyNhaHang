@@ -1,13 +1,13 @@
 package com.example.demo.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class User {
-    private String username;
+@NoArgsConstructor
+public class Role {
+    private int id;
+    private String role;
 }

@@ -10,4 +10,5 @@ public interface UserDAO {
     UserEntity getByUsername(String username);
     void addUser(User user);
     List<UserEntity> getAllUser();
+    List<String> getAllUsername();
 }

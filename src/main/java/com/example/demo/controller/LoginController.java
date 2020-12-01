@@ -22,6 +22,12 @@ public class LoginController {
     public String tableManager(){
         return "admin/tableManager";
     }
+    @GetMapping("/staffManager")
+    public String staffManager(){
+        return "admin/staffManager";
+    }
+
+
 
     @GetMapping("/loginError")
     public String login(HttpServletRequest request, Model model) {

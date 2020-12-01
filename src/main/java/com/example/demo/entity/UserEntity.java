@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import com.example.demo.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "thanhvien")
 public class UserEntity {
@@ -27,39 +30,19 @@ public class UserEntity {
     @Column(name = "role")
     private String role;
 
-//    @OneToOne(mappedBy = "userEntity")
-//    @JoinColumn(name = "staff_id")
-//    private StaffEntity staffEntity;
+    @OneToOne(mappedBy = "userEntity")
+    private StaffEntity staffEntity;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    public UserEntity(String username, String password) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public User toUser(){
+        User user = new User();
+        user.setUsername(this.username);
+        return user;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+
 }

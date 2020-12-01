@@ -40,6 +40,16 @@ public class UserDAOimpl implements UserDAO {
         List<UserEntity> userEntities = query.getResultList();
         return userEntities;
     }
+
+    @Override
+    public List<String> getAllUsername() {
+        String sql = "SELECT u.username FROM UserEntity u";
+        Query query = entityManager.createQuery(sql);
+        List<String> strings = query.getResultList();
+        return strings;
+    }
+
+
     @Override
     public void addUser(User user) {
 //        String sql = "INSERT INTO thanhvien (MaKH,MaThang,SoDienCu,SoDienMoi,Status) VALUES ('" + user.getUsername() + "', '" + dienKe.getMaThang() + "', '" + dienKe.getSoDienCu() + "', '" + dienKe.getSoDienMoi() + "', '" + dienKe.getStatus() + "')";

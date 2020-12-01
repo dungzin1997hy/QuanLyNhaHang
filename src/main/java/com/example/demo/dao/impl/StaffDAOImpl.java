@@ -23,9 +23,8 @@ public class StaffDAOImpl implements StaffDAO {
     @Override
     public List<StaffEntity> searchStaffByName(String staffName) {
         try {
-            String hql = "SELECT u FROM StaffEntity u WHERE u.name = :staffName";
+            String hql = "SELECT u FROM StaffEntity u WHERE u.name like '%"+staffName+"%'";
             Query query = entityManager.createQuery(hql);
-            query.setParameter("staffName", staffName);
             List<StaffEntity> staffEntities = query.getResultList();
             return staffEntities;
 
@@ -48,12 +47,12 @@ public class StaffDAOImpl implements StaffDAO {
     }
 
     @Override
-    public Boolean checkExistStaff(String phoneNumber) {
+    public Boolean checkExistStaff(String cmnd) {
         try {
-            String sql = "SELECT u.phoneNumber FROM StaffEntity u";
+            String sql = "SELECT u.cmnd FROM StaffEntity u";
             Query query = entityManager.createQuery(sql);
             List<String> phoneNumbers = query.getResultList();
-            if (phoneNumbers.contains(phoneNumber)) {
+            if (phoneNumbers.contains(cmnd)) {
                 return true;
             } else return false;
         } catch (Exception e) {
@@ -69,7 +68,7 @@ public class StaffDAOImpl implements StaffDAO {
 
     @Override
     public void deleteStaff(int idStaff) {
-        String sql ="delete from DishEntity b where b.id="+idStaff;
+        String sql ="delete from StaffEntity b where b.id="+idStaff;
         Query query = entityManager.createQuery(sql);
         query.executeUpdate();
     }

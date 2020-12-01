@@ -47,6 +47,17 @@ public class StaffDAOImpl implements StaffDAO {
     }
 
     @Override
+    public StaffEntity getStaffByName(String nameStaff) {
+        try {
+            String sql = "SELECT u FROM StaffEntity u where u.name = '" + nameStaff + "'";
+            return (StaffEntity) entityManager.createQuery(sql).getSingleResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        }
+
+    @Override
     public Boolean checkExistStaff(String cmnd) {
         try {
             String sql = "SELECT u.cmnd FROM StaffEntity u";

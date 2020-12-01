@@ -40,7 +40,7 @@ public class StaffController {
     }
 
     @PostMapping("/searchStaffByName")
-    public ApiResponse<List<Staff>> getStaffByName(@RequestParam("staffName") String staffName) {
+    public ApiResponse<List<Staff>> searchStaffByName(@RequestParam("staffName") String staffName) {
         List<Staff> staffList = staffService.searchStaffByName(staffName);
         if (staffList.size() > 0) {
             return new ApiResponse<>(true, staffList, "");
@@ -108,6 +108,11 @@ public class StaffController {
             e.printStackTrace();
             return new ApiResponse<>(false,"","Không thêm được nhân viên này");
         }
+    }
+    @PostMapping("/getStaffByName")
+    public ApiResponse<Staff> getStaffByName(@RequestParam("nameStaff") String name){
+        Staff staff = staffService.getStaffByName(name);
+        return new ApiResponse<>(true,staff,"");
     }
 }
 

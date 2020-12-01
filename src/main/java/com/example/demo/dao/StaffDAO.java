@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface StaffDAO {
     List<StaffEntity> searchStaffByName(String nameStaff);
-
     List<StaffEntity> getAllStaff();
+    StaffEntity getStaffByName(String nameStaff);
 
     Boolean checkExistStaff(String phoneNumber);
 

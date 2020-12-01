@@ -63,4 +63,23 @@ public class StaffServiceImpl implements StaffService {
         }
         return staffs;
     }
+
+    @Override
+    public Staff getStaffByName(String name) {
+        StaffEntity staffEntity = staffDAO.getStaffByName(name);
+        Staff staff = new Staff();
+        staff.setId(staffEntity.getId());
+        staff.setName(staffEntity.getName());
+        staff.setEmail(staffEntity.getEmail());
+        staff.setPhoneNumber(staffEntity.getPhoneNumber());
+        staff.setCmnd(staffEntity.getCmnd());
+        staff.setAddress(staffEntity.getAddress());
+        if(staffEntity.getRoleEntity()!= null) {
+            staff.setRole(staffEntity.getRoleEntity().toRole());
+        }
+        User user = new User();
+        user.setUsername(staffEntity.getUserEntity().getUsername());
+        staff.setUser(user);
+        return staff;
+    }
 }

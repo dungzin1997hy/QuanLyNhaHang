@@ -46,14 +46,13 @@ $(function () {
                         "staffName": name,
                     },
                     success: function (data) {
-                        if(data.success == true) {
+                        if (data.success == true) {
                             swal("Thành công", "Tìm thành công", "success");
                             $('#staff_name_search').focus();
                             $('#staff_name_search').val("");
                             showTable(data);
-                        }
-                        else {
-                            swal("Lỗi",data.errorMessage,"warning");
+                        } else {
+                            swal("Lỗi", data.errorMessage, "warning");
                             $('#staff_name_search').val("");
                             $('#staff_name_search').focus();
                             showStaffTable();
@@ -125,7 +124,6 @@ $(function () {
             address_add: {
                 required: "Vui lòng nhập địa chỉ"
             }
-
         },
         submitHandler: function () {
             var nameStaff_add = $('#nameStaff_add').val().trim();
@@ -172,58 +170,26 @@ $(function () {
 // Nav form edit
 function showEditStaffForm() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__edit-').show();
-    $('#bang_ban').find('tr').click(function () {
-        var idTable = $(this).find('td').eq(0).text();
-        $('#idTable_edit').val(idTable);
-        var name = $(this).find('td').eq(1).text();
-        $('#nameTable_edit').val(name);
+    $('.nav__edit-staff').show();
+    $('#bang_nhan_vien').find('tr').click(function () {
+        var idStaff = $(this).find('td').eq(1).text();
+        var name = $(this).find('td').eq(2).text();
+        $('#nameStaff_edit').val(name);
+        var phoneNumber = $(this).find('td').eq(3).text();
+        $('#phoneNumber_edit').val(phoneNumber);
+        var cmnd = $(this).find('td').eq(4).text();
+        $('#cmnd_edit').val(cmnd);
+        var email = $(this).find('td').eq(5).text();
+        $('#email_edit').val(email);
+        var address = $(this).find('td').eq(6).text();
+        $('#address_edit').val(address);
 
-        var type = $(this).find('td').eq(2).text();
+        //xu li chuc vu
 
-        //console.log(type);
-        if (type.trim() == '2 người') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="2 người">2 người</option>');
 
-            $('#type_edit').append('<option value="4 người">4 người</option>');
-            $('#type_edit').append('<option value="6 người">6 người</option>');
-        }
-        if (type.trim() == '4 người') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="4 người">4 người</option>');
-            $('#type_edit').append('<option value="2 người">2 người</option>');
-            $('#type_edit').append('<option value="6 người">6 người</option>');
-        }
-        if (type.trim() == '6 người') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="6 người">6 người</option>');
-            $('#type_edit').append('<option value="2 người">2 người</option>');
-            $('#type_edit').append('<option value="4 người">4 người</option>');
-        }
-        var area = $(this).find('td').eq(3).text();
+        var username = $(this).find('td').eq(8).text();
+        $('#username_edit').val(username);
 
-        if (area.trim() == 'A') {
-            $('#area_edit').empty();
-            $('#area_edit').append('<option value="A">A</option>');
-
-            $('#area_edit').append('<option value="B">B</option>');
-            $('#area_edit').append('<option value="C">C</option>');
-        }
-        if (area.trim() == 'B') {
-            $('#area_edit').empty();
-            $('#area_edit').append('<option value="B">B</option>');
-            $('#area_edit').append('<option value="A">A</option>');
-            $('#area_edit').append('<option value="C">C</option>');
-
-        }
-        if (area.trim() == 'C') {
-            $('#area_edit').empty();
-            $('#area_edit').append('<option value="C">C</option>');
-            $('#area_edit').append('<option value="A">A</option>');
-            $('#area_edit').append('<option value="B">B</option>');
-
-        }
 
     });
 
@@ -233,25 +199,73 @@ function showEditStaffForm() {
 $(function () {
     $("#edit_form").validate({
         rules: {
-            nameTable_edit: {
+            nameStaff_add: {
                 required: true,
-                maxlength: 20
+                checkChar: "[a-zA-Z]+",
+                maxlength: 50
+            },
+            phoneNumber_add: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            cmnd_add: {
+                required: true,
+                digits: true,
+            },
+            role_add: {
+                required: true,
+                maxlength: 100
+            },
+            email_add: {
+                required: true,
+                email: true,
+                maxlength: 45
+            },
+            address_add: {
+                required: true
             }
+
         },
         messages: {
-            nameTable_edit: {
-                required: "Vui lòng nhập tên bàn",
-                maxlength: "Tên món ăn quá dài"
+            nameStaff_add: {
+                required: "Vui lòng nhập tên nhân viên",
+                checkChar: "Vui lòng chỉ nhập giá trị chữ",
+                maxlength: "Bạn nhập quá dài"
+            },
+            phoneNumber_add: {
+                required: "Vui lòng nhập số điện thoại",
+                minlength: "Chỉ nhập 10 chữ số",
+                maxlength: "Chỉ nhập 10 chữ số"
+            },
+            cmnd_add: {
+                required: "Vui lòng nhập số CMND",
+            },
+            role_add: {
+                required: true,
+                maxlength: 100
+            },
+            email_add: {
+                required: "Vui lòng nhập gmail",
+                email: "Nhập sai định dạng gmail",
+                maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
+            },
+            address_add: {
+                required: "Vui lòng nhập địa chỉ"
             }
         },
         submitHandler: function () {
-            var idTable = $('#idTable_edit').val().trim();
-            var nameTable = $('#nameTable_edit').val().trim();
-            var typeEdit = $('#type_edit option:selected').val().trim();
-            var areaEdit = $('#area_edit option:selected').val().trim();
+            var nameStaff_edit = $('#nameStaff_edit').val().trim();
+            var phoneNumber_edit = $('#phoneNumber_edit').val().trim();
+            var cmnd_edit = $('#cmnd_edit').val().trim();
+            var email_edit = $('#email_edit').val().trim();
+            var address_edit = $('#address_edit').val().trim();
+            var role = $("#role_add option:selected").text().trim();
+            var username_edit = $('#username_edit').val().trim();
+            var password_edit = $('#password_edit').val().trim();
 
             $.ajax({
-                url: "/getTableByName",
+                url: "/getStaffByName",
                 type: "POST",
                 dataType: "json",
                 data: {

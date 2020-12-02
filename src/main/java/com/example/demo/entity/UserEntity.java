@@ -33,9 +33,9 @@ public class UserEntity {
     @OneToOne(mappedBy = "userEntity")
     private StaffEntity staffEntity;
 
-    public UserEntity(String username, String password) {
+    public UserEntity(String username, String role) {
         this.username = username;
-        this.password = password;
+        this.role = password;
     }
 
     public User toUser(){
@@ -45,4 +45,16 @@ public class UserEntity {
     }
 
 
+    public UserEntity(int id, String username, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public UserEntity(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }

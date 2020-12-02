@@ -65,21 +65,27 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Staff getStaffByName(String name) {
-        StaffEntity staffEntity = staffDAO.getStaffByName(name);
-        Staff staff = new Staff();
-        staff.setId(staffEntity.getId());
-        staff.setName(staffEntity.getName());
-        staff.setEmail(staffEntity.getEmail());
-        staff.setPhoneNumber(staffEntity.getPhoneNumber());
-        staff.setCmnd(staffEntity.getCmnd());
-        staff.setAddress(staffEntity.getAddress());
-        if(staffEntity.getRoleEntity()!= null) {
-            staff.setRole(staffEntity.getRoleEntity().toRole());
+    public List<Staff> searchStaffByRole(String role) {
+        List<StaffEntity> staffEntities = staffDAO.searchStaffByRole(role);
+        List<Staff> staffs = new ArrayList<>();
+        for(StaffEntity staffEntity : staffEntities){
+            Staff staff = new Staff();
+            staff.setId(staffEntity.getId());
+            staff.setName(staffEntity.getName());
+            staff.setEmail(staffEntity.getEmail());
+            staff.setPhoneNumber(staffEntity.getPhoneNumber());
+            staff.setCmnd(staffEntity.getCmnd());
+            staff.setAddress(staffEntity.getAddress());
+            if(staffEntity.getRoleEntity()!= null) {
+                staff.setRole(staffEntity.getRoleEntity().toRole());
+            }
+            User user = new User();
+            user.setUsername(staffEntity.getUserEntity().getUsername());
+            staff.setUser(user);
+            staffs.add(staff);
         }
-        User user = new User();
-        user.setUsername(staffEntity.getUserEntity().getUsername());
-        staff.setUser(user);
-        return staff;
+        return staffs;
     }
+
+
 }

@@ -1,4 +1,76 @@
 //Show user list
+var Role = new Array(0);
+
+function ready() {
+    $.ajax({
+        url: "/getAllRole",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            if (data.success == true) {
+                // showTable(data);
+                for (var i = 0; i < data.data.length; i++) {
+                    Role.push(data.data[i]);
+                }
+                console.log(Role);
+                searchReady();
+            }
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
+}
+
+function searchReady() {
+    $('#selectSearch').empty();
+    let optEle = document.createElement("option");
+    optEle.text = "Tất cả";
+    optEle.value = 0;
+    selectSearch.add(optEle);
+    for (let optObj of Role) {
+        let optEle = document.createElement("option");
+        optEle.text = optObj.brand;
+        optEle.value = optObj.id;
+        selectSearch.add(optEle);
+        //role_add.add(optEle);
+    }
+
+    for (let optObj of Role) {
+        let optEle = document.createElement("option");
+        optEle.text = optObj.brand;
+        optEle.value = optObj.id;
+        //selectSearch.add(optEle);
+        role_add.add(optEle);
+    }
+
+}
+
+function showDropDownEdit(roleID, roleName) {
+    console.log("roleName: " + roleName + ",  roleID = " + roleID);
+    var RoleTemp = Role.slice();
+    var pos = 0;
+
+    for (var i = 0; i < RoleTemp.length; i++) {
+        if (RoleTemp[i].id == roleID) {
+            pos = i;
+            break;
+        }
+    }
+    var object = new Object();
+    object.id = roleID;
+    object.brand = roleName;
+    RoleTemp.splice(pos, 1);
+    RoleTemp.unshift(object);
+    $('#role_edit').empty();
+    for (let optObj of RoleTemp) {
+        let optEle = document.createElement("option");
+        optEle.text = optObj.brand;
+        optEle.value = optObj.id;
+        role_edit.add(optEle);
+    }
+    RoleTemp = [];
+}
+
 function showStaffTable() {
     console.log("show lại list table");
     $('.overlay_bang_mon_an').hide();
@@ -12,7 +84,6 @@ function showStaffTable() {
             if (data.success == true) {
 
                 showTable(data);
-                console.log(data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -69,35 +140,35 @@ $(function () {
 //thêm khách hàng
 $(function () {
     $("#add_form").validate({
-        rules: {
-            nameStaff_add: {
-                required: true,
-                checkChar: "[a-zA-Z]+",
-                maxlength: 50
-            },
-            phoneNumber_add: {
-                required: true,
-                minlength: 10,
-                maxlength: 10
-            },
-            cmnd_add: {
-                required: true,
-                digits: true,
-            },
-            role_add: {
-                required: true,
-                maxlength: 100
-            },
-            email_add: {
-                required: true,
-                email: true,
-                maxlength: 45
-            },
-            address_add: {
-                required: true
-            }
-
-        },
+        // rules: {
+        //     nameStaff_add: {
+        //         required: true,
+        //         checkChar: "[a-zA-Z]+",
+        //         maxlength: 50
+        //     },
+        //     phoneNumber_add: {
+        //         required: true,
+        //         minlength: 10,
+        //         maxlength: 10
+        //     },
+        //     cmnd_add: {
+        //         required: true,
+        //         digits: true,
+        //     },
+        //     role_add: {
+        //         required: true,
+        //         maxlength: 100
+        //     },
+        //     email_add: {
+        //         required: true,
+        //         email: true,
+        //         maxlength: 45
+        //     },
+        //     address_add: {
+        //         required: true
+        //     }
+        //
+        // },
         messages: {
             nameStaff_add: {
                 required: "Vui lòng nhập tên nhân viên",
@@ -131,7 +202,7 @@ $(function () {
             var cmnd_add = $('#cmnd_add').val().trim();
             var email_add = $('#email_add').val().trim();
             var address_add = $('#address_add').val().trim();
-            var role = $("#role_add option:selected").text().trim();
+            var role = $("#role_add option:selected").val().trim();
             var username_add = $('#username_add').val().trim();
             var password_add = $('#password_add').val().trim();
             console.log(username_add + " " + password_add);
@@ -173,6 +244,7 @@ function showEditStaffForm() {
     $('.nav__edit-staff').show();
     $('#bang_nhan_vien').find('tr').click(function () {
         var idStaff = $(this).find('td').eq(1).text();
+        $('#idStaff_edit').val(idStaff);
         var name = $(this).find('td').eq(2).text();
         $('#nameStaff_edit').val(name);
         var phoneNumber = $(this).find('td').eq(3).text();
@@ -185,48 +257,50 @@ function showEditStaffForm() {
         $('#address_edit').val(address);
 
         //xu li chuc vu
-
-
-        var username = $(this).find('td').eq(8).text();
+        var roleId = $(this).find('td').eq(7).text();
+        var roleName = $(this).find('td').eq(8).text();
+        showDropDownEdit(roleId, roleName);
+        //
+        var username = $(this).find('td').eq(9).text();
         $('#username_edit').val(username);
 
 
     });
-
 }
+
 
 //Update user information
 $(function () {
     $("#edit_form").validate({
-        rules: {
-            nameStaff_add: {
-                required: true,
-                checkChar: "[a-zA-Z]+",
-                maxlength: 50
-            },
-            phoneNumber_add: {
-                required: true,
-                minlength: 10,
-                maxlength: 10
-            },
-            cmnd_add: {
-                required: true,
-                digits: true,
-            },
-            role_add: {
-                required: true,
-                maxlength: 100
-            },
-            email_add: {
-                required: true,
-                email: true,
-                maxlength: 45
-            },
-            address_add: {
-                required: true
-            }
-
-        },
+        // rules: {
+        //     nameStaff_add: {
+        //         required: true,
+        //         checkChar: "[a-zA-Z]+",
+        //         maxlength: 50
+        //     },
+        //     phoneNumber_add: {
+        //         required: true,
+        //         minlength: 10,
+        //         maxlength: 10
+        //     },
+        //     cmnd_add: {
+        //         required: true,
+        //         digits: true,
+        //     },
+        //     role_add: {
+        //         required: true,
+        //         maxlength: 100
+        //     },
+        //     email_add: {
+        //         required: true,
+        //         email: true,
+        //         maxlength: 45
+        //     },
+        //     address_add: {
+        //         required: true
+        //     }
+        //
+        // },
         messages: {
             nameStaff_add: {
                 required: "Vui lòng nhập tên nhân viên",
@@ -255,74 +329,61 @@ $(function () {
             }
         },
         submitHandler: function () {
+            var idStaff_edit = $('#idStaff_edit').val().trim();
             var nameStaff_edit = $('#nameStaff_edit').val().trim();
             var phoneNumber_edit = $('#phoneNumber_edit').val().trim();
             var cmnd_edit = $('#cmnd_edit').val().trim();
             var email_edit = $('#email_edit').val().trim();
             var address_edit = $('#address_edit').val().trim();
-            var role = $("#role_add option:selected").text().trim();
+            var role = $("#role_edit option:selected").val().trim();
             var username_edit = $('#username_edit').val().trim();
-            var password_edit = $('#password_edit').val().trim();
-
+            // var password_edit = $('#password_edit').val().trim();
+            // var password_edit = $('#password_edit').val().trim();
+            console.log("id: "+idStaff_edit+" "+nameStaff_edit+" "+phoneNumber_edit+" "+role);
             $.ajax({
-                url: "/getStaffByName",
+                url: "/updateStaff",
                 type: "POST",
-                dataType: "json",
                 data: {
-                    "name": nameTable,
+                    "idStaff" : idStaff_edit,
+                    "nameStaff": nameStaff_edit,
+                    "phoneNumber": phoneNumber_edit,
+                    "cmnd": cmnd_edit,
+                    "email":email_edit,
+                    "idRole":role,
+                    "address" :address_edit,
+                    "username":username_edit
                 },
                 success: function (data) {
-                    //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
-                    //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
-                    console.log(data);
-
-                    if (data.data.id != idTable || data.data.name != nameTable || data.data.type != typeEdit || data.data.area != areaEdit) {
-                        $.ajax({
-                            url: "/updateTable",
-                            type: "POST",
-                            data: {
-                                "idTable": idTable,
-                                "nameTable_edit": nameTable,
-                                "type_edit": typeEdit,
-                                "area_edit": areaEdit
-                            },
-                            success: function (data) {
-
-                                $('.nav__edit-dish').hide();
-                                $('.overlay_bang_mon_an').hide();
-                                swal("Thành công", data.data, "success");
-                                showTableTable();
-                            }, error: function (data) {
-                                // console.log("lỗi không cập nhật dc data");
-                                swal("Lỗi", data.errorMessage, "warning");
-                            }
-                        });
-                    } else {
-                        $('.nav__edit-table').hide();
-                        $('.overlay_bang_mon_an').hide();
-                        console.log("khong cap nhat");
-                        swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
-                    }
+                    console.log("abc");
+                    $('.nav__edit-dish').hide();
+                    $('.overlay_bang_mon_an').hide();
+                    swal("Thành công", data.data, "success");
+                    showStaffTable();
                 }, error: function (data) {
-                    swal("Fail", data.responseText, "warning");
+                     console.log("lỗi không cập nhật dc data");
+                    swal("Lỗi", data.errorMessage, "warning");
                 }
             });
+
         }
     });
 });
 
-function searchTableByType() {
-    var selectItem = $("#selectSearchTable").val();
-    if (selectItem == 'Tất cả') {
-        showTableTable();
+function searchByRole() {
+    var selectItem = $("#selectSearch").val();
+
+    console.log(selectItem);
+    if (selectItem == 0) {
+        showStaffTable();
     } else {
         $.ajax({
-            url: "/searchTableByType",
+            url: "/searchStaffByRole",
             type: "POST",
             data: {
-                "type": selectItem
+                "idRole": selectItem
             },
             success: function (data) {
+                console.log(data);
                 showTable(data);
             }, error: function (data) {
                 swal("Lỗi", data.data, "warning");
@@ -396,7 +457,8 @@ function showTable(data) {
                 + '<td>' + row.cmnd + '</td>'
                 + '<td>' + row.email + '</td>'
                 + '<td>' + row.address + '</td>'
-                + '<td>' + row.role.role + '</td>'
+                + '<td id="idRole" style="display: none">' + row.role.id + '</td>'
+                + '<td>' + row.role.brand + '</td>'
                 + '<td>' + row.user.username + '</td>'
                 + '<td>' +
                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditStaffForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
@@ -404,7 +466,7 @@ function showTable(data) {
                 + '</tr>';
         }
     }
-    $("#soBan").html(data.data.length);
+    $("#soNhanVien").html(data.data.length);
     $("#bang_nhan_vien").html(contentString);
 }
 
@@ -417,4 +479,8 @@ function resetAddForm() {
     // $("#role_add option:selected").text().trim();
     $('#username_add').val("");
     $('#password_add').val("");
+
+    $('#role_add').empty();
+    $('#role_edit').empty();
+
 }

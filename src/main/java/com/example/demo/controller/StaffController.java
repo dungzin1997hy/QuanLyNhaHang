@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
+import com.example.demo.dao.RoleDAO;
 import com.example.demo.dao.StaffDAO;
 import com.example.demo.dao.UserDAO;
 import com.example.demo.entity.RoleEntity;
@@ -8,6 +9,7 @@ import com.example.demo.entity.StaffEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.model.Role;
 import com.example.demo.model.Staff;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.StaffService;
 import javafx.animation.ScaleTransition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,10 @@ public class StaffController {
     private StaffDAO staffDAO;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    RoleService roleService;
+    @Autowired
+    RoleDAO roleDAO;
     @Autowired
     private UserDAO userDAO;
 
@@ -52,16 +58,25 @@ public class StaffController {
                                            @RequestParam("nameStaff") String nameStaff,
                                            @RequestParam("phoneNumber") String phoneNumber,
                                            @RequestParam("email") String email,
-                                           @RequestParam("cmnd") String cmnd
+                                           @RequestParam("cmnd") String cmnd,
+                                           @RequestParam("idRole")String idRole,
+                                           @RequestParam("address") String address,
+                                           @RequestParam("username") String username
                                            ) {
+        RoleEntity roleEntity = roleDAO.getRoleById(idRole);
+        StaffEntity staff = staffDAO.getStaffById(idStaff+"");
         StaffEntity staffEntity = new StaffEntity(idStaff,nameStaff,phoneNumber,email,cmnd);
+        staffEntity.setRoleEntity(roleEntity);
+        staffEntity.setAddress(address);
+        UserEntity userEntity = new UserEntity(staff.getUserEntity().getId(),username,staff.getUserEntity().getPassword(),roleEntity.getRole());
+        staffEntity.setUserEntity(userEntity);
         try {
             staffDAO.updateStaff(staffEntity);
-            return new ApiResponse<>(true,"Thêm nhân viên thành công","");
+            return new ApiResponse<>(true,"Sửa thông tin nhân viên thành công","");
         }
         catch (Exception e){
             e.printStackTrace();
-            return new ApiResponse<>(false,"Thêm nhân viên thất bại","");
+            return new ApiResponse<>(false,"Sửa thông tin nhân viên thất bại","");
         }
     }
 
@@ -90,16 +105,17 @@ public class StaffController {
         List<String> strings = userDAO.getAllUsername();
         if(strings.contains(username)) return new ApiResponse<>(false,"","Username đã tồn tại");
 
+        RoleEntity roleEntity = roleDAO.getRoleById(role);
         List<StaffEntity> staffEntities = staffDAO.getAllStaff();
         for(StaffEntity staffEntity:staffEntities){
             if(staffEntity.getCmnd().equals(cmnd)) return new ApiResponse<>(false,"","Số cmnd đã tồn tại");
             if(staffEntity.getEmail().equals(email)) return new ApiResponse<>(false,"","Email đã tồn tại");
             if(staffEntity.getPhoneNumber().equals(phoneNumber)) return new ApiResponse<>(false,"","Số điện thoại đã tồn tại");
         }
-        UserEntity userEntity = new UserEntity(username,password);
-        RoleEntity role1 = new RoleEntity(1,"admin");
+        UserEntity userEntity = new UserEntity(username,password,roleEntity.getRole());
+
         StaffEntity staffEntity = new StaffEntity(name,phoneNumber,email,cmnd,address);
-        staffEntity.setRoleEntity(role1);
+        staffEntity.setRoleEntity(roleEntity);
         staffEntity.setUserEntity(userEntity);
         try{
             staffDAO.addStaff(staffEntity);
@@ -109,10 +125,24 @@ public class StaffController {
             return new ApiResponse<>(false,"","Không thêm được nhân viên này");
         }
     }
-    @PostMapping("/getStaffByName")
-    public ApiResponse<Staff> getStaffByName(@RequestParam("nameStaff") String name){
-        Staff staff = staffService.getStaffByName(name);
-        return new ApiResponse<>(true,staff,"");
+//    @PostMapping("/getStaffByName")
+//    public ApiResponse<Staff> getStaffByName(@RequestParam("nameStaff") String name){
+//        Staff staff = staffService.getStaffByName(name);
+//        return new ApiResponse<>(true,staff,"");
+//    }
+    @PostMapping("/searchStaffByRole")
+    public ApiResponse<List<Staff>> getStaffByRole(@RequestParam("idRole") String Role){
+        List<Staff> staffList = staffService.searchStaffByRole(Role);
+
+            return new ApiResponse<>(true, staffList, "");
+
+    }
+
+
+    @PostMapping("/getAllRole")
+    public ApiResponse<List<Role>> getAllRole(){
+        List<Role> roles= roleService.getAllRole();
+        return new ApiResponse<>(true,roles,"");
     }
 }
 

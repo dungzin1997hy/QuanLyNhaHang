@@ -22,9 +22,11 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column (name = "brand")
+    private String brand;
+
     @Column (name = "role")
     private String role;
-
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roleEntity")
     private List<StaffEntity> staffEntities;
@@ -38,6 +40,7 @@ public class RoleEntity {
         Role role = new Role();
         role.setId(this.id);
         role.setRole(this.role);
+        role.setBrand(this.brand);
         return role;
     }
 }

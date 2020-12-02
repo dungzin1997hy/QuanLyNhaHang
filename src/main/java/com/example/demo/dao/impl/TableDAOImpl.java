@@ -28,7 +28,7 @@ public class TableDAOImpl implements TableDAO {
     @Override
     public List<TableEntity> getAllTable() {
         try {
-            String sql = "SELECT u FROM TableEntity u order by u.area asc";
+            String sql = "SELECT u FROM TableEntity u order by u.area,u.name asc";
             Query query = entityManager.createQuery(sql);
             List<TableEntity> tableEntities = query.getResultList();
             return tableEntities;

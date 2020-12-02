@@ -36,7 +36,7 @@ public class StaffDAOImpl implements StaffDAO {
     @Override
     public List<StaffEntity> getAllStaff() {
         try {
-            String sql = "SELECT u FROM StaffEntity u";
+            String sql = "SELECT u FROM StaffEntity u order by u.id,u.name";
             Query query = entityManager.createQuery(sql);
             List<StaffEntity> staffEntities = query.getResultList();
             return staffEntities;
@@ -47,15 +47,28 @@ public class StaffDAOImpl implements StaffDAO {
     }
 
     @Override
-    public StaffEntity getStaffByName(String nameStaff) {
+    public StaffEntity getStaffById(String nameStaff) {
         try {
-            String sql = "SELECT u FROM StaffEntity u where u.name = '" + nameStaff + "'";
+            String sql = "SELECT u FROM StaffEntity u where u.id = '" + nameStaff + "'";
             return (StaffEntity) entityManager.createQuery(sql).getSingleResult();
         }catch (Exception e){
             e.printStackTrace();
             return null;
         }
         }
+
+    @Override
+    public List<StaffEntity> searchStaffByRole(String role) {
+        try {
+            String sql = "SELECT u FROM StaffEntity u where u.roleEntity.id="+role;
+            Query query = entityManager.createQuery(sql);
+            List<StaffEntity> staffEntities = query.getResultList();
+            return staffEntities;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public Boolean checkExistStaff(String cmnd) {

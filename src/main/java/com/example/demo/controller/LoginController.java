@@ -26,7 +26,10 @@ public class LoginController {
     public String staffManager(){
         return "admin/staffManager";
     }
-
+    @GetMapping("/warehouseManager")
+    public String warehouse(){
+        return "stock/warehouseManager";
+    }
 
 
     @GetMapping("/loginError")
@@ -35,6 +38,8 @@ public class LoginController {
         model.addAttribute("errorMessage", errorMessage);
         return "login";
     }
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.Material;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,12 +26,31 @@ public class MaterialEntity {
     @Column (name = "price")
     private Float price;
 
-    @Column (name = "type")
-    private String type;
-
     @Column (name = "unit")
     private String unit;
 
+    @Column(name ="amount")
+    private int amount = 0;
+
     @Column (name = "description")
     private String description;
+
+    public Material toMaterial(){
+        Material material = new Material();
+        material.setId(this.id);
+        material.setName(this.name);
+        material.setPrice(this.price);
+        material.setUnit(this.unit);
+        material.setAmount(this.amount);
+        material.setDescription(this.description);
+        return material;
+    }
+
+    public MaterialEntity(String name, Float price, String unit, int amount, String description) {
+        this.name = name;
+        this.price = price;
+        this.unit = unit;
+        this.amount = amount;
+        this.description = description;
+    }
 }

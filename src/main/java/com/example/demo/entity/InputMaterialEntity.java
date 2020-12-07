@@ -27,7 +27,6 @@ public class InputMaterialEntity {
     @JoinColumn(name = "materialId", referencedColumnName = "id")
     private MaterialEntity materialEntity;
 
-
     @Column(name ="amount")
     private int amount;
 }

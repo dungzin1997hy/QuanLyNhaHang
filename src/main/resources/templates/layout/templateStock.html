@@ -72,13 +72,13 @@
             <!-- Header with logos -->
             <div class="navbar-header navbar-dark d-none d-md-flex align-items-md-center">
                 <div class="navbar-brand navbar-brand-md">
-                    <a th:href="@{/trang-chu}">
+                    <a th:href="@{/login}">
                         <img th:src="@{/global_assets/images/logo_new1.png}" alt="" class="ml-5">
                     </a>
                 </div>
 
                 <div class="navbar-brand navbar-brand-xs">
-                    <a th:href="@{/trang-chu}" class="d-inline-block">
+                    <a th:href="@{/login}" class="d-inline-block">
                         <img th:src="@{/global_assets/images/logoNew.png}" alt="">
                     </a>
                 </div>
@@ -87,7 +87,7 @@
             <!-- Mobile controls -->
             <div class="d-flex flex-1 d-md-none">
                 <div class="navbar-brand mr-auto">
-                    <a th:href="@{/trang-chu}" class="d-inline-block">
+                    <a th:href="@{/login}" class="d-inline-block">
                         <img th:src="@{/global_assets/images/logo_dark.png}" alt="">
                     </a>
                 </div>
@@ -144,8 +144,39 @@
                                 <div class="text-uppercase font-size-xs line-height-xs">MAIN NAVIGATION</div>
                                 <i class="icon-menu" title="Main"></i></li>
                             <li class="nav-item">
-                                <a th:href="@{/warehouseManager}" data-toggle="tooltip" title="Quản lí kho"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Quản lí kho</span></a>
+                                <a th:href="@{/dishManager}" data-toggle="tooltip" title="Danh sách món ăn"
+                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách món ăn</span></a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a th:href="@{/tableManager}" data-toggle="tooltip" title="Danh sách bàn"
+                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách bàn</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a th:href="@{/staffManager}" data-toggle="tooltip" title="Danh sách nhân viên"
+                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách nhân viên</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a th:href="@{/warehouseManager}" data-toggle="tooltip" title="Danh sách nhân viên"
+                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Warehouse</span></a>
+                            </li>
+                            <li class="nav-item nav-item-submenu">
+                                <a href="#" class="nav-link legitRipple"><i class="icon-list"></i>
+                                    <span>Cấu hình</span></a>
+                                <ul class="nav nav-group-sub">
+                                    <li class="nav-item"><a th:href="@{/cau-hinh-don-gia}" class="nav-link legitRipple">Đơn
+                                        giá</a></li>
+                                    <li class="nav-item"><a th:href="@{/cap-nhat-so-dien}" class="nav-link legitRipple">Cập nhật
+                                        số điện</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item nav-item-submenu">
+                                <a href="#" class="nav-link legitRipple"><i class="icon-stack"></i>
+                                    <span>Quản lý hóa đơn</span></a>
+                                <ul class="nav nav-group-sub">
+                                    <li class="nav-item"><a th:href="@{/danh-sach-hoa-don}" class="nav-link legitRipple">Xem hóa
+                                        đơn</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a th:href="@{/logout}" class="nav-link" data-toggle="tooltip" title="Đăng xuất"><i

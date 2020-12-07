@@ -3,6 +3,7 @@ package com.example.demo.dao.impl;
 import com.example.demo.dao.MaterialDAO;
 import com.example.demo.entity.DishEntity;
 import com.example.demo.entity.MaterialEntity;
+import groovy.transform.Undefined;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,22 @@ import java.util.List;
 public class MaterialDAOImpl implements MaterialDAO {
     @Autowired
     EntityManager entityManager;
+
+    @Override
+    public MaterialEntity getMaterialById(int id) {
+        try{
+            String hql = "SELECT u FROM MaterialEntity u WHERE u.id =:dishName";
+            Query query = entityManager.createQuery(hql);
+            query.setParameter("dishName", id);
+            return (MaterialEntity) query.getSingleResult();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public List<MaterialEntity> getAllMaterial() {
         try {

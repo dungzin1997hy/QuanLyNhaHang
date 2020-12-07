@@ -1,27 +1,26 @@
 var material = new Array(0);
 var materialName = new Array(0);
-var dem =1;
-var totalInput=0;
+var dem = 1;
+var totalInput = 0;
+
 function ready() {
     $.ajax({
         url: "/getAllMaterial",
         type: "POST",
         dataType: "json",
         success: function (data) {
-            material =[];
-            materialName=[];
+            material = [];
+            materialName = [];
             if (data.success == true) {
-                for(var i=0;i<data.data.length;i++){
+                for (var i = 0; i < data.data.length; i++) {
                     material.push(data.data[i]);
                     materialName.push(data.data[i].name);
                 }
 
             }
-            console.log(material);
-            $( "#nameSearch" ).autocomplete({
+            $("#nameSearch").autocomplete({
                 source: materialName
             });
-            console.log(material);
 
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -30,9 +29,7 @@ function ready() {
 }
 
 
-
 function showMaterialTable() {
-    console.log("show lại list table");
     $('.overlay_bang_mon_an').hide();
     $('.nav__add-material').hide();
     $('.nav__edit-material').hide();
@@ -45,7 +42,6 @@ function showMaterialTable() {
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
-                console.log(data);
                 showTable(data);
             }
         }, error: function () {
@@ -58,12 +54,13 @@ function showAddFormMaterial() {
     $('.overlay_bang_mon_an').show();
     $('.nav__add-material').show();
 }
-function showInputMaterial(){
+
+function showInputMaterial() {
     $('.overlay_bang_mon_an').show();
     $('.nav__input-material').show();
 }
 
-function showOutputMaterial(){
+function showOutputMaterial() {
     $('.overlay_bang_mon_an').show();
     $('.nav__output-material').show();
 }
@@ -71,7 +68,6 @@ function showOutputMaterial(){
 jQuery.validator.addMethod("checkChar", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));
 });
-
 
 
 // tìm kiếm nhân viên bằng tên
@@ -199,25 +195,22 @@ $(function () {
         },
         submitHandler: function () {
             var name = $('#nameSearch').val().trim();
-            if(materialName.includes(name) == false){
-                console.log("khong có nguyên liệu");
+            if (materialName.includes(name) == false) {
                 $('#nameSearchError').html("Không có nguyên liệu này");
                 $("#addMaterial").show();
-            }
-            else{
-                console.log("theem vao bang");
+            } else {
                 $('#nameSearchError').html("");
                 $("#addMaterial").hide();
                 var id;
                 var price;
                 var unit;
                 var description;
-                var amount =$('#amount').val().trim();
+                var amount = $('#amount').val().trim();
 
                 $('#nameSearch').val("");
                 $('#amount').val("");
-                for(var i=0;i<material.length;i++){
-                    if(material[i].name == name){
+                for (var i = 0; i < material.length; i++) {
+                    if (material[i].name == name) {
                         id = material[i].id;
                         price = material[i].price;
                         unit = material[i].unit;
@@ -225,31 +218,28 @@ $(function () {
                         break;
                     }
                 }
-                console.log(id+" "+price+" "+unit+" "+description+" "+amount);
-                if(description== null){
-                    description="";
+                if (description == null) {
+                    description = "";
                 }
 
 
-
-                var content="";
+                var content = "";
                 content = content
                     + '<tr role="row" class="odd">'
                     + '<td>' + dem + '</td>'
-                    + '<td id="idMaterial" style="display: none">' + id+ '</td>'
+                    + '<td id="idMaterial" style="display: none">' + id + '</td>'
                     + '<td>' + name + '</td>'
                     + '<td>' + price + '</td>'
                     + '<td>' + unit + '</td>'
-                    + '<td>' + '<input onchange="getNumber(this.value)" style="width: 50px; border: none" value="'+(amount)+'"> '+ '</td>'
+                    + '<td>' + '<input onchange="getNumber(this.value)" style="width: 50px; border: none" value="' + (amount) + '"> ' + '</td>'
                     + '<td>' + description + '</td>'
                     + '<td>' + (price*amount) + '</td>'
-
                     + '<td>' +
                     '<a data-toggle="tooltip" title="Remove"><button onclick="removeRow()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 '</tr>';
                 dem++;
                 $('#bang_nhap_kho tr:last').after(content);
-                totalInput += price*amount;
+                totalInput += price * amount;
                 $('#totalInput').html(totalInput);
             }
         }
@@ -257,26 +247,52 @@ $(function () {
 });
 
 function getNumber(number) {
-    console.log(number);
+    var a = $(this).closest('tr').find('td:eq(3)').text();
+    console.log(a);
 }
 
 function removeRow() {
     $('#bang_nhap_kho').find('tr').click(function () {
-
-        var amount = $(this).find('td').eq(5).val();
-        console.log(amount);
-        totalInput-= amount;
+        var price = $(this).find('td:eq(3)');
+        var amount = $(this).find('td:eq(5) input').val();
+        $('#total')
+        totalInput -= amount;
         $('#totalInput').html(totalInput);
-      //  $(this).closest("tr").remove();
+        $(this).closest("tr").remove();
     });
 }
+
 function saveBillInput() {
     var value = new Array();
-    $('#input_table > tbody  > tr').each(function() {
-        value.push({ 'id':$(this).find('td:eq(1)').text(), 'amount':$(this).find('td:eq(2)').text()});
+    $('#input_table > tbody  > tr').each(function () {
+        var id =$(this).find('td:eq(1)').text();
+        var amount = $(this).find('td:eq(5) input').val();
+        var price =$(this).find('td:eq(3)').text();
+        if(id!= null) {
+            value.push({
+                'id': id,
+                'amount': amount,
+                'price': price
+            });
+        }
     });
-    console.log(JSON.stringify(value));
+    var total = $('#totalInput').val().trim();
+    $.ajax({
+        type: "POST",
+        url:"/inputMaterial",
+        contentType: "application/json",
+        data: JSON.stringify ({
+            "maters":value,
+            "total":total
+        }),
+        success: function (data) {
+            swal("Thành công", data.data, "success");
+        }, error: function (data) {
+            swal("Lỗi", data.errorMessage, "warning");
+        }
+    })
 }
+
 // Nav form edit
 function showEditMaterialForm() {
     $('.overlay_bang_mon_an').show();
@@ -289,7 +305,7 @@ function showEditMaterialForm() {
         var price = $(this).find('td').eq(3).text();
         $('#price_edit').val(price);
         var unit = $(this).find('td').eq(4).text();
-        var amount =$(this).find('td').eq(5).text();
+        var amount = $(this).find('td').eq(5).text();
         $("#amount_edit").text(amount);
         //var amount_edit = $("#amount_edit").text();
         //
@@ -333,28 +349,24 @@ $(function () {
             var description = $('#description_edit').val().trim();
             var amount = $('#amount_edit').text();
             var unit = $("#unit_edit option:selected").text().trim();
-            console.log(amount);
-            console.log("danh sách cập nhật");
             $.ajax({
                 url: "/updateMaterial",
                 type: "POST",
                 data: {
-                    "idMaterial" : idMaterial,
+                    "idMaterial": idMaterial,
                     "name": name,
                     "price": price,
-                    "amount":amount,
+                    "amount": amount,
                     "devices": description,
-                    "unit":unit
+                    "unit": unit
                 },
                 success: function (data) {
-                    console.log("cap nhat nguyen leiuj");
                     $('.nav__edit-material').hide();
                     $('.overlay_bang_mon_an').hide();
                     swal("Thành công", data.data, "success");
                     showMaterialTable();
                     ready();
                 }, error: function (data) {
-                    console.log("lỗi không cập nhật dc data");
                     swal("Lỗi", data.errorMessage, "warning");
                 }
             });
@@ -438,13 +450,12 @@ function closeEditForm() {
 }
 
 function showTable(data) {
-    console.log("show table");
     var contentString = "";
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
-            var string="";
-            if (row.description !=  null){
+            var string = "";
+            if (row.description != null) {
                 string = row.description;
             }
             contentString = contentString

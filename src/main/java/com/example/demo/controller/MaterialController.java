@@ -1,7 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
+import com.example.demo.dao.InputMaterialBillDAO;
+import com.example.demo.dao.InputMaterialDAO;
 import com.example.demo.dao.MaterialDAO;
+import com.example.demo.entity.BillEntity;
+import com.example.demo.entity.InputMaterialBillEntity;
+import com.example.demo.entity.InputMaterialEntity;
 import com.example.demo.entity.MaterialEntity;
 import com.example.demo.model.Dish;
 import com.example.demo.model.Material;
@@ -11,15 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class MaterialController {
+
+
     @Autowired
     MaterialDAO materialDAO;
     @Autowired
     MaterialService materialService;
+    @Autowired
+    InputMaterialBillDAO inputMaterialBillDAO;
+
+    @Autowired
+    InputMaterialDAO inputMaterialDAO;
+
+
     @PostMapping("/getAllMaterial")
     @ResponseBody
     public ApiResponse<List<Material>> getAllMaterial() {
@@ -79,9 +95,38 @@ public class MaterialController {
     }
 
     @PostMapping("/inputMaterial")
-    public ApiResponse<String> inputMaterial(@RequestBody MaterList materList,@RequestParam("total") int total){
-        return new ApiResponse<>(true,"Lưu hoá đơn thành công","");
+    public ApiResponse<String> inputMaterial(@RequestBody MaterList materList){
+
+        try {
+            InputMaterialBillEntity inputMaterialBillEntity = new InputMaterialBillEntity();
+
+            LocalDateTime now = LocalDateTime.now();
+           inputMaterialBillEntity.setTime(now);
+            inputMaterialBillEntity.setTotal(materList.total);
+            InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
+
+
+            for (Mater mater : materList.maters) {
+                if(mater.id == 0){
+                    continue;
+                }
+                InputMaterialEntity inputMaterialEntity = new InputMaterialEntity();
+                MaterialEntity materialEntity = materialDAO.getMaterialById(mater.getId());
+                inputMaterialEntity.setMaterialEntity(materialEntity);
+                inputMaterialEntity.setInputMaterialBillEntity(inputMaterialBillEntity1);
+                inputMaterialEntity.setAmount(mater.amount);
+                inputMaterialDAO.addInputMaterial(inputMaterialEntity);
+            }
+
+            return new ApiResponse<>(true, "Lưu hoá đơn thành công", "");
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Không lưu được hoá đơn");
+        }
     }
+
+//    @PostMapping("/getAllBillInput")
+
 }
 
 
@@ -89,9 +134,11 @@ public class MaterialController {
 class Mater implements Serializable{
     int id;
     int amount;
+    int price;
 }
 
 @Data
 class MaterList implements Serializable{
-    List<Mater> maters = new ArrayList<>();
+    public List<Mater> maters = new ArrayList<>();
+    int total;
 }

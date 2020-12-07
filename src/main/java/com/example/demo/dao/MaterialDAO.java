@@ -5,6 +5,7 @@ import com.example.demo.entity.MaterialEntity;
 import java.util.List;
 
 public interface MaterialDAO {
+    MaterialEntity getMaterialById(int id);
     List<MaterialEntity> getAllMaterial();
     List<MaterialEntity> searchMaterialByName(String name);
 

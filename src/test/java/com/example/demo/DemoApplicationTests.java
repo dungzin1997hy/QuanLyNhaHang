@@ -10,22 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 class DemoApplicationTests {
-
-    @Autowired
-    DishService dishService;
-    @Autowired
-    DishDAO dishDAO;
-    @Test
-    void contextLoads() {
-        String a ="error: device '127.0.0.1:62025' not found";
-        String[] arr = a.split("'");
-        System.out.println(Arrays.toString(arr));
+    public static void main(String[] args) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
     }
 
 }

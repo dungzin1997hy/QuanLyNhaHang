@@ -2,6 +2,8 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/templateStock}">
 <head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>Quản lí kho</title>
     <style>
         label.error {
@@ -24,7 +26,7 @@
     <header layout:fragment="header" class="mt-3 ml-2 mr-2">
         <script>
             $(document).ready(function () {
-
+                ready();
                 $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
                 $(document).ajaxStart(function () {
                     $('#loadingDiv').show();
@@ -38,7 +40,7 @@
 
             });
         </script>
-        <script th:src="@{/js_templates/danhsachNguyenLieu.js}"></script>
+                <script th:src="@{/js_templates/danhsachNguyenLieu.js}"></script>
     </header>
     <section class="container-fluid" layout:fragment="content_body">
         <div class="row">
@@ -211,18 +213,65 @@
                         </ul>
                     </nav>
                     <nav class="nav__input-material">
-                        <ul style="padding-top: 16px">
-                            <li>
+                        <ul style="padding-top: 16px;height: 100%">
+
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 <span>Phiếu nhập kho</span>
                                 <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
                             </li>
-                            <li>
-                                <span>Phiếu nhập kho</span>
-
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                <ul class="nav__edit-input">
+                                    <form id="inputMaterial_form">
+                                        <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                            Tên nguyên liệu  <input id="nameSearch" name="nameSearch"
+                                                                    style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                                    size="40">
+                                            <label class="error"></label>
+                                        </li>
+                                        <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                            Giá <input id="amount" name="amount" type="number"
+                                                       style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                       size="40">
+                                            <label class="error"></label>
+                                        </li>
+                                        <hr>
+                                        <a href="#" data-toggle="tooltip" title="Edit">
+                                            <button class="btn btn-info center-block mb-1" id="btn-add" type="submit"
+                                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                                Thêm mới
+                                            </button>
+                                        </a>
+                                    </form>
+                                </ul>
                             </li>
 
-
+                            <div style="height: 50%">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                           id="input_table" role="grid" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>STT</th>
+                                            <th>Tên</th>
+                                            <th>Giá</th>
+                                            <th>Đơn vị</th>
+                                            <th>Số lượng</th>
+                                            <th>Chi tiết</th>
+                                            <th>Tác vụ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="bang_nhap_kho">
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </div>
+                            <div>
+                                <button class="btn btn-info center-block mb-1" id="inputMaterial"
+                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 10px;">
+                                    Lưu hoá đơn
+                                </button>
+                            </div>
                         </ul>
                     </nav>
                     <nav class="nav__output-material">

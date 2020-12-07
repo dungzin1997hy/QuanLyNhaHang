@@ -1,3 +1,33 @@
+var material = new Array(0);
+var materialName = new Array(0);
+function ready() {
+    $.ajax({
+        url: "/getAllMaterial",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            material =[];
+            materialName=[];
+            if (data.success == true) {
+                for(var i=0;i<data.data.length;i++){
+                    material.push(data.data)
+                    materialName.push(data.data[i].name);
+                }
+
+            }
+            console.log(material);
+            $( "#nameSearch" ).autocomplete({
+                source: materialName
+            });
+            console.log(material);
+
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
+}
+
+
 
 function showMaterialTable() {
     console.log("show lại list table");
@@ -39,6 +69,8 @@ function showOutputMaterial(){
 jQuery.validator.addMethod("checkChar", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));
 });
+
+
 
 // tìm kiếm nhân viên bằng tên
 $(function () {
@@ -130,6 +162,7 @@ $(function () {
                         swal("Lỗi", data.errorMessage, "warning");
                         showMaterialTable();
                     }
+                    ready();
                 }, error: function (data) {
                     swal("Fail", data.errorMessage, "warning");
                 }
@@ -138,6 +171,68 @@ $(function () {
     });
 });
 
+//thêm nhập kho
+$(function () {
+    $("#add_form").validate({
+        // rules: {
+        //     nameMaterial_add: {
+        //         required: true,
+        //         checkChar: "[a-zA-Z]+",
+        //         maxlength: 50
+        //     },
+        //     price_add: {
+        //         required: true,
+        //         minlength: 10,
+        //         maxlength: 10
+        //     }
+        // },
+        messages: {
+            nameMaterial_add: {
+                required: "Vui lòng nhập tên nguyên liệu",
+                checkChar: "Vui lòng chỉ nhập giá trị chữ",
+                maxlength: "Bạn nhập quá dài"
+            },
+            price_add: {
+                required: "Vui lòng nhập giá",
+                minlength: "Chỉ nhập 10 chữ số",
+                maxlength: "Chỉ nhập 10 chữ số"
+            }
+        },
+        submitHandler: function () {
+            var nameMaterial_add = $('#nameMaterial_add').val().trim();
+            var price_add = $('#price_add').val().trim();
+            var description = $('#description_add').val().trim();
+
+            var unit = $("#unit_add option:selected").text().trim();
+
+            $.ajax({
+                url: "/addMaterial",
+                type: "POST",
+                data: {
+                    "nameMaterial": nameMaterial_add,
+                    "price": price_add,
+                    "devices": description,
+                    "unit": unit
+                },
+                success: function (data) {
+                    $('.nav__add-staff').hide();
+                    resetAddForm();
+
+                    if (data.success == true) {
+                        swal("Thêm thành công", data.data, "success");
+                        showMaterialTable();
+                    } else {
+                        swal("Lỗi", data.errorMessage, "warning");
+                        showMaterialTable();
+                    }
+                    ready();
+                }, error: function (data) {
+                    swal("Fail", data.errorMessage, "warning");
+                }
+            });
+        }
+    });
+});
 // Nav form edit
 function showEditMaterialForm() {
     $('.overlay_bang_mon_an').show();
@@ -213,6 +308,7 @@ $(function () {
                     $('.overlay_bang_mon_an').hide();
                     swal("Thành công", data.data, "success");
                     showMaterialTable();
+                    ready();
                 }, error: function (data) {
                     console.log("lỗi không cập nhật dc data");
                     swal("Lỗi", data.errorMessage, "warning");
@@ -223,31 +319,31 @@ $(function () {
     });
 });
 
-function searchByRole() {
-    var selectItem = $("#selectSearch").val();
-
-    console.log(selectItem);
-    if (selectItem == 0) {
-        showStaffTable();
-    } else {
-        $.ajax({
-            url: "/searchStaffByRole",
-            type: "POST",
-            data: {
-                "idRole": selectItem
-            },
-            success: function (data) {
-                console.log(data);
-                showTable(data);
-            }, error: function (data) {
-                swal("Lỗi", data.data, "warning");
-            }
-
-        });
-    }
-
-
-}
+// function searchByRole() {
+//     var selectItem = $("#selectSearch").val();
+//
+//     console.log(selectItem);
+//     if (selectItem == 0) {
+//         showStaffTable();
+//     } else {
+//         $.ajax({
+//             url: "/searchStaffByRole",
+//             type: "POST",
+//             data: {
+//                 "idRole": selectItem
+//             },
+//             success: function (data) {
+//                 console.log(data);
+//                 showTable(data);
+//             }, error: function (data) {
+//                 swal("Lỗi", data.data, "warning");
+//             }
+//
+//         });
+//     }
+//
+//
+// }
 
 function deleteMaterial() {
     $('#bang_nguyen_lieu').find('tr').click(function () {
@@ -277,6 +373,7 @@ function deleteMaterial() {
                             if (data.success == true) {
                                 swal("Done", data.data, "success");
                                 showMaterialTable();
+                                ready();
                             } else swal("Lỗi", "Không xóa được", "warning");
                         }, error: function () {
                             swal("Lỗi", "Không xóa được", "warning");
@@ -312,7 +409,7 @@ function showTable(data) {
                 + '<td id="idMaterial" style="display: none">' + row.id + '</td>'
                 + '<td>' + row.name + '</td>'
                 + '<td>' + row.price + '</td>'
-               
+
                 + '<td>' + row.unit + '</td>'
                 + '<td>' + row.amount + '</td>'
                 + '<td>' + string + '</td>'

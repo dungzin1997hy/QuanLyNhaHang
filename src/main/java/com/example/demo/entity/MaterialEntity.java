@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,6 +36,9 @@ public class MaterialEntity {
     @Column (name = "description")
     private String description;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materialEntity")
+    private List<InputMaterialEntity> inputMaterialEntities;
+
     public Material toMaterial(){
         Material material = new Material();
         material.setId(this.id);
@@ -44,6 +48,15 @@ public class MaterialEntity {
         material.setAmount(this.amount);
         material.setDescription(this.description);
         return material;
+    }
+
+    public MaterialEntity(int id, String name, Float price, String unit, int amount, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.unit = unit;
+        this.amount = amount;
+        this.description = description;
     }
 
     public MaterialEntity(String name, Float price, String unit, int amount, String description) {

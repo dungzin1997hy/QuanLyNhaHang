@@ -46,7 +46,7 @@ public class StaffEntity {
     private List<BillEntity> billEntities;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "staffEntity")
-    private List<InputMaterialEntity> inputMaterialEntities;
+    private List<InputMaterialBillEntity> inputMaterialEntities;
 
     public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd) {
         this.id = id;

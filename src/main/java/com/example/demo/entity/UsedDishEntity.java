@@ -19,7 +19,6 @@ public class UsedDishEntity {
 
     @Id
     @Column(name = "id")
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

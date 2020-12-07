@@ -6,9 +6,12 @@ import com.example.demo.entity.MaterialEntity;
 import com.example.demo.model.Dish;
 import com.example.demo.model.Material;
 import com.example.demo.service.MaterialService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -74,4 +77,21 @@ public class MaterialController {
             return new ApiResponse<>(false,null,"Không tìm được nguyên liệu");
         }
     }
+
+    @PostMapping("/inputMaterial")
+    public ApiResponse<String> inputMaterial(@RequestBody MaterList materList,@RequestParam("total") int total){
+        return new ApiResponse<>(true,"Lưu hoá đơn thành công","");
+    }
+}
+
+
+@Data
+class Mater implements Serializable{
+    int id;
+    int amount;
+}
+
+@Data
+class MaterList implements Serializable{
+    List<Mater> maters = new ArrayList<>();
 }

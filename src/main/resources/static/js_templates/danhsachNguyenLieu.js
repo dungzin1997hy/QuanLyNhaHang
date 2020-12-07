@@ -1,5 +1,7 @@
 var material = new Array(0);
 var materialName = new Array(0);
+var dem =1;
+var totalInput=0;
 function ready() {
     $.ajax({
         url: "/getAllMaterial",
@@ -10,7 +12,7 @@ function ready() {
             materialName=[];
             if (data.success == true) {
                 for(var i=0;i<data.data.length;i++){
-                    material.push(data.data)
+                    material.push(data.data[i]);
                     materialName.push(data.data[i].name);
                 }
 
@@ -173,66 +175,108 @@ $(function () {
 
 //thêm nhập kho
 $(function () {
-    $("#add_form").validate({
-        // rules: {
-        //     nameMaterial_add: {
-        //         required: true,
-        //         checkChar: "[a-zA-Z]+",
-        //         maxlength: 50
-        //     },
-        //     price_add: {
-        //         required: true,
-        //         minlength: 10,
-        //         maxlength: 10
-        //     }
-        // },
+    $("#inputMaterial_form").validate({
+        rules: {
+            // nameSearch: {
+            //     required: true,
+            //     checkChar: "[a-zA-Z]+",
+            //     maxlength: 50
+            // },
+            // amount: {
+            //     required: true,
+            //
+            // }
+        },
         messages: {
-            nameMaterial_add: {
+            nameSearch: {
                 required: "Vui lòng nhập tên nguyên liệu",
                 checkChar: "Vui lòng chỉ nhập giá trị chữ",
                 maxlength: "Bạn nhập quá dài"
             },
-            price_add: {
-                required: "Vui lòng nhập giá",
-                minlength: "Chỉ nhập 10 chữ số",
-                maxlength: "Chỉ nhập 10 chữ số"
+            amount: {
+                required: "Vui lòng nhập số lượng"
             }
         },
         submitHandler: function () {
-            var nameMaterial_add = $('#nameMaterial_add').val().trim();
-            var price_add = $('#price_add').val().trim();
-            var description = $('#description_add').val().trim();
+            var name = $('#nameSearch').val().trim();
+            if(materialName.includes(name) == false){
+                console.log("khong có nguyên liệu");
+                $('#nameSearchError').html("Không có nguyên liệu này");
+                $("#addMaterial").show();
+            }
+            else{
+                console.log("theem vao bang");
+                $('#nameSearchError').html("");
+                $("#addMaterial").hide();
+                var id;
+                var price;
+                var unit;
+                var description;
+                var amount =$('#amount').val().trim();
 
-            var unit = $("#unit_add option:selected").text().trim();
-
-            $.ajax({
-                url: "/addMaterial",
-                type: "POST",
-                data: {
-                    "nameMaterial": nameMaterial_add,
-                    "price": price_add,
-                    "devices": description,
-                    "unit": unit
-                },
-                success: function (data) {
-                    $('.nav__add-staff').hide();
-                    resetAddForm();
-
-                    if (data.success == true) {
-                        swal("Thêm thành công", data.data, "success");
-                        showMaterialTable();
-                    } else {
-                        swal("Lỗi", data.errorMessage, "warning");
-                        showMaterialTable();
+                $('#nameSearch').val("");
+                $('#amount').val("");
+                for(var i=0;i<material.length;i++){
+                    if(material[i].name == name){
+                        id = material[i].id;
+                        price = material[i].price;
+                        unit = material[i].unit;
+                        description = material[i].description;
+                        break;
                     }
-                    ready();
-                }, error: function (data) {
-                    swal("Fail", data.errorMessage, "warning");
                 }
-            });
+                console.log(id+" "+price+" "+unit+" "+description+" "+amount);
+                if(description== null){
+                    description="";
+                }
+
+
+
+                var content="";
+                content = content
+                    + '<tr role="row" class="odd">'
+                    + '<td>' + dem + '</td>'
+                    + '<td id="idMaterial" style="display: none">' + id+ '</td>'
+                    + '<td>' + name + '</td>'
+                    + '<td>' + price + '</td>'
+                    + '<td>' + unit + '</td>'
+                    + '<td>' + '<input onchange="getNumber(this.value)" style="width: 50px; border: none" value="'+(amount)+'"> '+ '</td>'
+                    + '<td>' + description + '</td>'
+                    + '<td>' + (price*amount) + '</td>'
+
+                    + '<td>' +
+                    '<a data-toggle="tooltip" title="Remove"><button onclick="removeRow()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                '</tr>';
+                dem++;
+                $('#bang_nhap_kho tr:last').after(content);
+                totalInput += price*amount;
+                $('#totalInput').html(totalInput);
+            }
         }
     });
 });
+
+function getNumber(number) {
+    console.log(number);
+}
+
+function removeRow() {
+    $('#bang_nhap_kho').find('tr').click(function () {
+
+        var amount = $(this).find('td').eq(5).val();
+        console.log(amount);
+        totalInput-= amount;
+        $('#totalInput').html(totalInput);
+      //  $(this).closest("tr").remove();
+    });
+}
+function saveBillInput() {
+    var value = new Array();
+    $('#input_table > tbody  > tr').each(function() {
+        value.push({ 'id':$(this).find('td:eq(1)').text(), 'amount':$(this).find('td:eq(2)').text()});
+    });
+    console.log(JSON.stringify(value));
+}
 // Nav form edit
 function showEditMaterialForm() {
     $('.overlay_bang_mon_an').show();

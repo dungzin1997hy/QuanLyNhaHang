@@ -40,7 +40,7 @@
 
             });
         </script>
-                <script th:src="@{/js_templates/danhsachNguyenLieu.js}"></script>
+        <script th:src="@{/js_templates/danhsachNguyenLieu.js}"></script>
     </header>
     <section class="container-fluid" layout:fragment="content_body">
         <div class="row">
@@ -224,22 +224,28 @@
                                 <ul class="nav__edit-input">
                                     <form id="inputMaterial_form">
                                         <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                            Tên nguyên liệu  <input id="nameSearch" name="nameSearch"
-                                                                    style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
-                                                                    size="40">
+                                            Tên nguyên liệu <input id="nameSearch" name="nameSearch"
+                                                                   style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                                   size="40">
                                             <label class="error"></label>
+                                            <p style="color: red" id="nameSearchError" name="nameSearchError"></p>
+                                            <button class="btn btn-info center-block mb-1" id="addMaterial"
+                                                    type="submit"
+                                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
+                                                Thêm
+                                            </button>
                                         </li>
                                         <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                            Giá <input id="amount" name="amount" type="number"
-                                                       style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
-                                                       size="40">
-                                            <label class="error"></label>
+                                            Số lượng nhập <input id="amount" name="amount" type="number"
+                                                                 style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                                 size="40">
+                                            <label class="error" id="amountError"></label>
                                         </li>
                                         <hr>
                                         <a href="#" data-toggle="tooltip" title="Edit">
                                             <button class="btn btn-info center-block mb-1" id="btn-add" type="submit"
                                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
-                                                Thêm mới
+                                                Thêm
                                             </button>
                                         </a>
                                     </form>
@@ -258,16 +264,22 @@
                                             <th>Đơn vị</th>
                                             <th>Số lượng</th>
                                             <th>Chi tiết</th>
+                                            <th>Tổng</th>
                                             <th>Tác vụ</th>
                                         </tr>
                                         </thead>
                                         <tbody id="bang_nhap_kho">
+                                        <tr></tr>
                                         </tbody>
                                     </table>
                                 </li>
                             </div>
                             <div>
-                                <button class="btn btn-info center-block mb-1" id="inputMaterial"
+                                <span>Tổng tiền: </span><label style="margin-left: 10px" id="totalInput">0</label>
+                            </div>
+                            <div>
+                                <button class="btn btn-info center-block mb-1 mt-1" id="inputMaterial"
+                                        onclick="saveBillInput()"
                                         style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 10px;">
                                     Lưu hoá đơn
                                 </button>

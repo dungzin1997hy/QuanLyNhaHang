@@ -101,8 +101,9 @@ public class MaterialController {
             InputMaterialBillEntity inputMaterialBillEntity = new InputMaterialBillEntity();
 
             LocalDateTime now = LocalDateTime.now();
-           inputMaterialBillEntity.setTime(now);
+            inputMaterialBillEntity.setTime(now);
             inputMaterialBillEntity.setTotal(materList.total);
+            inputMaterialBillEntity.setType("input");
             InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
 
 
@@ -112,6 +113,47 @@ public class MaterialController {
                 }
                 InputMaterialEntity inputMaterialEntity = new InputMaterialEntity();
                 MaterialEntity materialEntity = materialDAO.getMaterialById(mater.getId());
+                int amount = materialEntity.getAmount();
+                materialEntity.setAmount(amount+mater.amount);
+                materialDAO.updateMaterial(materialEntity );
+
+                inputMaterialEntity.setMaterialEntity(materialEntity);
+                inputMaterialEntity.setInputMaterialBillEntity(inputMaterialBillEntity1);
+                inputMaterialEntity.setAmount(mater.amount);
+                inputMaterialDAO.addInputMaterial(inputMaterialEntity);
+
+            }
+
+            return new ApiResponse<>(true, "Lưu hoá đơn thành công", "");
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Không lưu được hoá đơn");
+        }
+    }
+
+    @PostMapping("/outputMaterial")
+    public ApiResponse<String> outputMaterial(@RequestBody MaterList materList){
+
+        try {
+            InputMaterialBillEntity inputMaterialBillEntity = new InputMaterialBillEntity();
+
+            LocalDateTime now = LocalDateTime.now();
+            inputMaterialBillEntity.setTime(now);
+            inputMaterialBillEntity.setTotal(materList.total);
+            inputMaterialBillEntity.setType("output");
+            InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
+
+
+            for (Mater mater : materList.maters) {
+                if(mater.id == 0){
+                    continue;
+                }
+                InputMaterialEntity inputMaterialEntity = new InputMaterialEntity();
+                MaterialEntity materialEntity = materialDAO.getMaterialById(mater.getId());
+                int amount = materialEntity.getAmount();
+                materialEntity.setAmount(amount+mater.amount);
+                materialDAO.updateMaterial(materialEntity );
+
                 inputMaterialEntity.setMaterialEntity(materialEntity);
                 inputMaterialEntity.setInputMaterialBillEntity(inputMaterialBillEntity1);
                 inputMaterialEntity.setAmount(mater.amount);
@@ -124,7 +166,6 @@ public class MaterialController {
             return new ApiResponse<>(false,"","Không lưu được hoá đơn");
         }
     }
-
 //    @PostMapping("/getAllBillInput")
 
 }

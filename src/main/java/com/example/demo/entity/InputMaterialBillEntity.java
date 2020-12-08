@@ -29,6 +29,9 @@ public class InputMaterialBillEntity {
     @Column(name="total")
     private int Total;
 
+    @Column(name = "type")
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "staffid")
     private StaffEntity staffEntity;

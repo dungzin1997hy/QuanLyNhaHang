@@ -230,6 +230,7 @@
                                             <label class="error"></label>
                                             <p style="color: red" id="nameSearchError" name="nameSearchError"></p>
                                             <button class="btn btn-info center-block mb-1" id="addMaterial"
+                                                    onclick="showAddFormMaterial()"
                                                     type="submit"
                                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
                                                 Thêm
@@ -239,11 +240,12 @@
                                             Số lượng nhập <input id="amount" name="amount" type="number"
                                                                  style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
                                                                  size="40">
-                                            <label class="error" id="amountError"></label>
+                                            <p style="color: red" class="error" id="amountError"></p>
                                         </li>
                                         <hr>
                                         <a href="#" data-toggle="tooltip" title="Edit">
                                             <button class="btn btn-info center-block mb-1" id="btn-add" type="submit"
+
                                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
                                                 Thêm
                                             </button>
@@ -286,14 +288,78 @@
                             </div>
                         </ul>
                     </nav>
+
+
+
                     <nav class="nav__output-material">
-                        <ul style="padding-top: 16px">
+                        <ul style="padding-top: 16px;height: 100%">
                             <li>
                                 <span>Phiếu xuất kho</span>
                                 <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
 
                             </li>
+
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                <ul class="nav__edit-input">
+                                    <form id="outputMaterial_form">
+                                        <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                            Tên nguyên liệu <input id="nameSearchOutput" name="nameSearchOutput"
+                                                                   style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                                   size="40">
+                                            <label class="error"></label>
+                                            <p style="color: red" id="nameSearchOutputError" name="nameSearchError"></p>
+                                            <button class="btn btn-info center-block mb-1" id="addMaterialOutput"
+                                                    onclick="showAddFormMaterial()"
+                                                    type="submit"
+                                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
+                                                Thêm
+                                            </button>
+                                        </li>
+                                        <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                            Số lượng xuất <input id="amountOutput" name="amount" type="number"
+                                                                 style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                                 size="40">
+                                            <p style="color: red" class="error" id="amountOutputError"></p>
+                                        </li>
+                                        <hr>
+                                        <a href="#" data-toggle="tooltip" title="Edit">
+                                            <button class="btn btn-info center-block mb-1" id="btn-add-output" type="submit"
+                                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                                Thêm
+                                            </button>
+                                        </a>
+                                    </form>
+                                </ul>
+                            </li>
+                            <div style="height: 50%">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                           id="output_table" role="grid" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>STT</th>
+                                            <th>Tên</th>
+                                            <th>Giá</th>
+                                            <th>Đơn vị</th>
+                                            <th>Số lượng</th>
+                                            <th>Chi tiết</th>
+                                            <th>Tác vụ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="bang_xuat_kho">
+                                        <tr></tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </div>
+                            <div>
+                                <button class="btn btn-info center-block mb-1 mt-1" id="outputMaterial"
+                                        onclick="saveBillOutput()"
+                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 10px;">
+                                    Lưu hoá đơn
+                                </button>
+                            </div>
 
                         </ul>
                     </nav>

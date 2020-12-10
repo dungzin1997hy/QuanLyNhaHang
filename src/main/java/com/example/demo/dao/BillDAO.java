@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BillDAO {
     List<BillEntity> getAllBill();
+    BillEntity addBill(BillEntity billEntity);
 }

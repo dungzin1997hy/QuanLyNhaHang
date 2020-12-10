@@ -22,15 +22,21 @@ public class LoginController {
     public String tableManager(){
         return "admin/tableManager";
     }
+
     @GetMapping("/staffManager")
     public String staffManager(){
         return "admin/staffManager";
     }
+
     @GetMapping("/warehouseManager")
     public String warehouse(){
         return "stock/warehouseManager";
     }
 
+    @GetMapping("/receptHome")
+    public String receptHome(){
+        return "recept/receptHome";
+    }
 
     @GetMapping("/loginError")
     public String login(HttpServletRequest request, Model model) {
@@ -38,8 +44,4 @@ public class LoginController {
         model.addAttribute("errorMessage", errorMessage);
         return "login";
     }
-
-
-
-
 }

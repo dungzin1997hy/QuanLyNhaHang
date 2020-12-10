@@ -1,16 +1,26 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
+import com.example.demo.dao.BillDAO;
 import com.example.demo.dao.TableDAO;
+import com.example.demo.dao.UsedDishDAO;
+import com.example.demo.entity.BillEntity;
 import com.example.demo.entity.TableEntity;
+import com.example.demo.entity.UsedDishEntity;
+import com.example.demo.model.Bill;
 import com.example.demo.model.Table;
+import com.example.demo.model.UsedDish;
 import com.example.demo.service.TableService;
+import com.example.demo.service.UsedDishService;
 import javafx.scene.control.Tab;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,6 +30,18 @@ public class TableController {
     TableDAO tableDAO;
     @Autowired
     public TableService tableService;
+
+    @Autowired
+    BillDAO billDAO;
+
+    @Autowired
+    UsedDishDAO usedDishDAO;
+
+
+    @Autowired
+    public UsedDishService usedDishService;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
 
     @PostMapping("/getAllTable")
     public ApiResponse<List<Table>> getAllTable() {
@@ -33,16 +55,18 @@ public class TableController {
         return new ApiResponse<>(true, tables, "");
     }
 
-    @PostMapping("/getTableByArea")
-    public ApiResponse<List<Table>> getTableByArea(@RequestParam("area") String area) {
+    @PostMapping("/getTableByArea/{area}")
+    public ApiResponse<List<Table>> getTableByArea(@PathVariable String area) {
         List<Table> tables = tableService.getTableByArea(area);
         return new ApiResponse<>(true, tables, "");
     }
 
     @PostMapping("/getTableByName")
     public ApiResponse<Table> getTableByName(@RequestParam("name") String name) {
-        Table table = tableService.getTableByName(name);
-        return new ApiResponse<>(true, table, "");
+        Table tableEntity =tableService.getTableByName(name);
+        return new ApiResponse<>(true,tableEntity,"");
+//        Table table = tableService.getTableByName(name);
+//        return new ApiResponse<>(true, table, "");
     }
 
     @PostMapping("/addTable")
@@ -86,4 +110,46 @@ public class TableController {
             return new ApiResponse<>(false, "", "Xoá bàn thất bại");
         }
     }
+
+    @PostMapping("/getUsedDishByTable")
+    public ApiResponse<List<UsedDish>> getUsedDish(@RequestParam("idTable") String idTable){
+        try{
+            List<UsedDish> usedDishes = usedDishService.getUsedDishByTable(idTable);
+            return new ApiResponse<>(true,usedDishes,"");
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @PostMapping("/addPayBill")
+    public ApiResponse<String> addPayBill(@RequestBody Listinteger listinteger){
+       try {
+           LocalDateTime dt = LocalDateTime.parse(listinteger.time, formatter);
+           BillEntity billEntity = new BillEntity();
+           billEntity.setTime(dt);
+           billEntity.setTotal(listinteger.total);
+           billEntity.setPaymentType("tiền mặt");
+           BillEntity billEntity1 = billDAO.addBill(billEntity);
+           for (int i : listinteger.list) {
+               UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);
+               usedDishEntity.setBillEntity(billEntity1);
+               usedDishDAO.updateTable(usedDishEntity);
+           }
+           return new ApiResponse<>(true, "Thanh toán thành công", "");
+       }
+       catch (Exception e){
+           e.printStackTrace();
+           return new ApiResponse<>(false,"","Không thanh toán được");
+       }
+    }
+}
+
+@Data
+class Listinteger implements Serializable{
+    public List<Integer> list = new ArrayList<>();
+    int total;
+    String time;
+    int idCustomer;
+    int idRecept;
 }

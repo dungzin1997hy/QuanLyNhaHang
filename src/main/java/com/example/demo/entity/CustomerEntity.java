@@ -30,6 +30,9 @@ public class CustomerEntity {
     @Column (name = "email")
     private String email;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private List<BillEntity> billEntities;
+
 
     public CustomerEntity(String name, String phoneNumber, String email) {
         this.name = name;

@@ -33,7 +33,6 @@ public class TableEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
     private List<UsedDishEntity> usedDishEntities;
 
-
     public TableEntity(String name, String type,String status, String area) {
         this.name = name;
         this.type = type;
@@ -41,7 +40,16 @@ public class TableEntity {
         this.area = area;
     }
 
+    public com.example.demo.model.Table toTable(){
+        com.example.demo.model.Table table  = new com.example.demo.model.Table();
+        table.setId(this.id);
+        table.setArea(this.getArea());
+        table.setType(this.getType());
+        table.setStatus(this.getStatus());
+        table.setName(this.name);
+        return table;
 
+    }
 
     public TableEntity(int id, String name, String type, String status, String area) {
         this.id = id;

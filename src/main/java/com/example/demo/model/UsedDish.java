@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsedDish {
     private int id;
     private int amount;
-    private DishEntity dishEntity;
-    private String time;
+    private Table table;
+    private Dish dish;
+    private LocalDateTime time;
 }

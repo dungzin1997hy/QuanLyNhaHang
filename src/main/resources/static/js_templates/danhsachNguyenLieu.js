@@ -236,6 +236,7 @@ $(function () {
 
 
                 var content = "";
+                var id = "sum" + dem;
                 content = content
                     + '<tr role="row" class="odd">'
                     + '<td>' + dem + '</td>'
@@ -243,9 +244,9 @@ $(function () {
                     + '<td>' + name + '</td>'
                     + '<td>' + price + '</td>'
                     + '<td>' + unit + '</td>'
-                    + '<td>' + '<input onchange="getNumber()" style="width: 50px; border: none" value="' + (amount) + '"> ' + '</td>'
+                    + '<td>' + '<input type="number" min="0" name="'+ price+'" id="' + dem +'" onchange="getNumber(this.value,this.id,this.name)" style="width: 50px; border: none" value="' + (amount) + '"> ' + '</td>'
                     + '<td>' + description + '</td>'
-                    + '<td>' + (price*amount) + '</td>'
+                    + '<td id="' + id +'">' + (price*amount) + '</td>'
                     + '<td>' +
                     '<a data-toggle="tooltip" title="Remove"><button onclick="removeRow()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 '</tr>';
@@ -258,9 +259,11 @@ $(function () {
     });
 });
 
-function getNumber() {
-    var a= $(this).closest('tr').find('td:eq(3)').val();
-    console.log(a);
+function getNumber(value,id,name) {
+    console.log(value+" "+id+" "+name);
+    var id1 = '#' + 'sum' + id;
+    console.log(id1 );
+    $('#' + 'sum' + id).text(value * name);
 }
 
 function removeRow() {
@@ -416,7 +419,6 @@ function saveBillOutput() {
     var value = new Array();
     $('#output_table > tbody  > tr').each(function () {
         var id =$(this).find('td:eq(1)').text();
-
         var amount = $(this).find('td:eq(5) input').val();
         var price =$(this).find('td:eq(3)').text();
         console.log(id+" "+amount+" "+price);

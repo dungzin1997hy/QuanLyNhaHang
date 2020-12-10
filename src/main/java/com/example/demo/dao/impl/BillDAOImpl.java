@@ -3,6 +3,7 @@ package com.example.demo.dao.impl;
 import com.example.demo.dao.BillDAO;
 import com.example.demo.entity.BillEntity;
 import com.example.demo.entity.CustomerEntity;
+import com.example.demo.entity.InputMaterialBillEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,5 +29,11 @@ public class BillDAOImpl implements BillDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public BillEntity addBill(BillEntity billEntity) {
+        entityManager.persist(billEntity);
+        return billEntity;
     }
 }

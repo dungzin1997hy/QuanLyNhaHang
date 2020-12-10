@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.UsedDish;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -23,6 +25,9 @@ public class BillEntity {
     @JoinColumn(name = "staffid")
     private StaffEntity staffEntity;
 
+    @ManyToOne
+    @JoinColumn(name = "customerid")
+    private CustomerEntity customerEntity;
 
     @Column(name = "total")
     private int total;
@@ -31,8 +36,17 @@ public class BillEntity {
     private String paymentType;
 
     @Column (name = "time")
-    private String time;
+    private LocalDateTime time;
 
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "billEntity")
+    private List<UsedDishEntity> usedDishEntities;
 
+    public BillEntity(StaffEntity staffEntity, CustomerEntity customerEntity, int total, String paymentType, LocalDateTime time) {
+        this.staffEntity = staffEntity;
+        this.customerEntity = customerEntity;
+        this.total = total;
+        this.paymentType = paymentType;
+        this.time = time;
+    }
 }

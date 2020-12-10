@@ -61,8 +61,7 @@ public class StaffController {
                                            @RequestParam("cmnd") String cmnd,
                                            @RequestParam("idRole")String idRole,
                                            @RequestParam("address") String address,
-                                           @RequestParam("username") String username
-                                           ) {
+                                           @RequestParam("username") String username) {
         RoleEntity roleEntity = roleDAO.getRoleById(idRole);
         StaffEntity staff = staffDAO.getStaffById(idStaff+"");
         StaffEntity staffEntity = new StaffEntity(idStaff,nameStaff,phoneNumber,email,cmnd);

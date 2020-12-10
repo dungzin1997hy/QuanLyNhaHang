@@ -15,7 +15,7 @@ public class Table {
     private String status;
     private String type;
     private String area;
-    private List<UsedDish> usedDishList;
+    //private List<UsedDish> usedDishList;
 
     
 }

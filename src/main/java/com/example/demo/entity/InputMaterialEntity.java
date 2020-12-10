@@ -29,4 +29,6 @@ public class InputMaterialEntity {
 
     @Column(name ="amount")
     private int amount;
+
+
 }

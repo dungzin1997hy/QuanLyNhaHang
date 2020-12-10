@@ -1,10 +1,12 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.Dish;
 import lombok.*;
 
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,8 +35,8 @@ public class DishEntity {
     private String description;
 
    // @Transient
-    @OneToOne(mappedBy = "dishEntity")
-    private UsedDishEntity usedDishEntity;
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "dishEntity")
+   private List<UsedDishEntity> usedDishEntities;
 
     public DishEntity(String name, Float price, String type, String unit, String description) {
         this.name = name;
@@ -51,6 +53,17 @@ public class DishEntity {
         this.type = type;
         this.unit = unit;
         this.description = description;
+    }
+
+    public Dish toDish(){
+        Dish dish = new Dish();
+        dish.setId(this.getId());
+        dish.setName(this.getName());
+        dish.setType(this.getType());
+        dish.setPrice(this.getPrice());
+        dish.setDescription(this.getDescription());
+        dish.setUnit(this.getUnit());
+        return dish;
     }
 
     public DishEntity(int id) {

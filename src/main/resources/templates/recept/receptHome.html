@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/templateStock}">
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Giao diện lễ tân</title>
+    <style>
+        label.error {
+            color: red;
+            width: 200px;
+            position: absolute;
+        }
+
+        .dropdown-menu {
+            left: 30px !important;
+        }
+
+        /*thead {*/
+        /*    width: calc( 100% - 1em )!* scrollbar is average 1em/16px width, remove it from thead width *!*/
+        /*}*/
+
+
+        .datepicker {
+            margin-left: 75px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <header layout:fragment="header" class="mt-3 ml-2 mr-2">
+        <script>
+            $(document).ready(function () {
+                ready();
+            });
+        </script>
+        <script th:src="@{/js_templates/giaodienletan.js}"></script>
+    </header>
+    <section class="container-fluid" layout:fragment="content_body" style="height: 100%">
+        <div class="row" style="height: 100%">
+            <div class="col-lg-12" style="height: 100%">
+                <div class="container-fluid row" style="height: 100%">
+                    <div class="col-lg-4" style="height: 100%">
+                        <div id="khuAcontainer" style="height: 30%" class="scroll">
+                            <span>Khu A</span>
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"
+                                   style="height: 80%!important;">
+                                <thead>
+                                <tr role="row">
+                                    <th>Tên</th>
+                                    <th>Tình trạng</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody id="ban_khu_A">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="khuBcontainer" style="height: 30%">
+                            <hr>
+                            <span>Khu B</span>
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_0_info"
+                                   style="height: 80%;overflow-y: scroll;">
+                                <thead>
+                                <tr role="row">
+                                    <th>Tên</th>
+                                    <th>Tình trạng</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody id="ban_khu_B" style="overflow-y: scroll">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="khuCcontainer" style="height: 30%">
+                            <hr>
+                            <span>Khu C</span>
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_2" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                <tr role="row">
+                                    <th>Tên</th>
+                                    <th>Tình trạng</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody id="ban_khu_C">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="usedDish" class="col-lg-4" style="height: 80%">
+                        <span>Món ăn đã sử dụng</span>
+                        <br>
+                        <div style="display: flex;justify-content: space-between" class="mt-2">
+                            <div style="display: flex">
+                                <label for="nameTable">Tên bàn:</label>
+                                <p id="nameTable" class="ml-1"></p>
+                            </div>
+                            <div style="display: flex">
+                                <label for="total">Tổng tiền: </label>
+                                <p id="total" class="ml-1" style="width: 50px"></p>
+                            </div>
+                        </div>
+                        <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                               id="DataTables_Table_4" role="grid" aria-describedby="DataTables_Table_0_info"
+                               style="height: 350px">
+                            <thead>
+                            <tr role="row">
+                                <th>Tên món ăn</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Tiền</th>
+                            </tr>
+                            </thead>
+                            <tbody id="useddishTable">
+                            </tbody>
+                        </table>
+                        <div style="display:flex;justify-content:center; height: 200px">
+                            <button class="m-2" style="width: 30%;text-align: center;height: 40px">Gọi món</button>
+                            <button class="m-2" style="width: 30%;text-align: center;height: 40px" onclick="showBillForm()">Thanh toán</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" style=" height: 100%">
+                        <div id="bill" style="height: 100%;display: none" >
+                            <div style="display: flex;justify-content: space-between">
+                                <div id="ttnhahang">
+                                    <h1>Nhà hàng</h1>
+                                    <h1>Yến Yến</h1>
+                                    <span>SĐT: 0365253647</span>
+                                </div>
+                                <div id="nameBill">
+                                    <h1>Hoá đơn thanh toán</h1>
+                                </div>
+                            </div>
+                            <div class="mt-1" style="display: flex">
+                                <p>Tên khách hàng: </p>
+                                <p>fjdsljal</p>
+                                <p id="idCustomer" style="display: none"></p>
+                            </div>
+                            <div class="mt-1" style="display: flex;">
+                                <p>Thu ngân: </p>
+                                <p id="receptName" class="ml-2">Dũng</p>
+                                <p id="idRecept" style="display: none"></p>
+                            </div>
+                            <div class="mt-1" style="display: flex">
+                                <p>Thời gian: </p>
+                                <p id="time"></p>
+                            </div>
+                            <hr>
+                            <div class="mt-1">
+                                <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="height: 350px">
+                                    <thead>
+                                    <tr role="row">
+                                        <th>Tên món ăn</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tiền</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="useddishTableBill">
+                                    </tbody>
+                                </table>
+                                <div style="display: flex;justify-content: flex-end" class="mt-2">
+                                    <p style="width: 150px">Tổng tiền: </p>
+                                    <p id="TotalBill" style="width: 150px"></p>
+                                </div>
+                                <div>
+                                    <div style="display: flex;justify-content: flex-end">
+                                        <p style="width: 150px">Khách thanh toán:</p>
+                                        <input type="number" style="width: 150px" onchange="changeValue(this.value)" id="inputCus">
+                                        <p id="inputError" style="color: red"></p>
+                                    </div>
+                                    <div class="mt-1" style="display: flex;justify-content: flex-end">
+                                        <p style="width: 150px">Số tiền trả lại:</p>
+                                        <p id="backCus" style="width: 150px"></p>
+                                    </div>
+
+                                    <div style="text-align: center">
+                                        <button id="btnThanhToan" style="width: 300px;text-align: center" onclick="saveBill()" disabled>Thanh toán</button>
+                                        <button style="width: 300px;text-align: center" onclick="cancelBill()">Huỷ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span id="idMaterial_delete" style="display: none"></span>
+    </section>
+</div>
+</body>
+</html>

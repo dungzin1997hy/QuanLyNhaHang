@@ -2,7 +2,9 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.TableDAO;
 import com.example.demo.entity.TableEntity;
+import com.example.demo.entity.UsedDishEntity;
 import com.example.demo.model.Table;
+import com.example.demo.model.UsedDish;
 import com.example.demo.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -68,12 +70,19 @@ public class TableServiceImpl implements TableService {
     @Override
     public Table getTableByName(String name) {
         TableEntity tableEntity = tableDAO.getTableByName(name);
+//        List<UsedDishEntity> usedDishEntities = tableEntity.getUsedDishEntities();
+//        List<UsedDish> usedDishes = new ArrayList<>();
+//        for(UsedDishEntity usedDishEntity:usedDishEntities){
+//            UsedDish usedDish = usedDishEntity.toUsedDish();
+//            usedDishes.add(usedDish);
+//        }
         Table table = new Table();
         table.setId(tableEntity.getId());
         table.setName(tableEntity.getName());
         table.setStatus(tableEntity.getStatus());
         table.setType(tableEntity.getType());
         table.setArea(tableEntity.getArea());
+       // table.setUsedDishList(usedDishes);
         return table;
 
 

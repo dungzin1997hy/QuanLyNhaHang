@@ -3,18 +3,18 @@ package com.example.demo.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Table {
+public class Booking {
     private int id;
-    private String name;
-    private String status;
-    private String type;
-    private String area;
     private Customer customer;
-    //private List<UsedDish> usedDishList;
+    private TimeBook timeBook;
+    private Table table;
+    private Date date;
+    private String status;
 }

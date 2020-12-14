@@ -210,7 +210,8 @@ $(function () {
             if (materialName.includes(name) == false) {
                 $('#nameSearchError').html("Không có nguyên liệu này");
                 $("#addMaterial").show();
-            } else {
+            }
+            else {
                 $('#nameSearchError').html("");
                 $("#addMaterial").hide();
                 var id;
@@ -236,7 +237,7 @@ $(function () {
 
 
                 var content = "";
-                var id = "sum" + dem;
+                var idtemp = "sum" + dem;
                 content = content
                     + '<tr role="row" class="odd">'
                     + '<td>' + dem + '</td>'
@@ -246,7 +247,7 @@ $(function () {
                     + '<td>' + unit + '</td>'
                     + '<td>' + '<input type="number" min="0" name="'+ price+'" id="' + dem +'" onchange="getNumber(this.value,this.id,this.name)" style="width: 50px; border: none" value="' + (amount) + '"> ' + '</td>'
                     + '<td>' + description + '</td>'
-                    + '<td id="' + id +'">' + (price*amount) + '</td>'
+                    + '<td id="' + idtemp +'">' + (price*amount) + '</td>'
                     + '<td>' +
                     '<a data-toggle="tooltip" title="Remove"><button onclick="removeRow()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 '</tr>';

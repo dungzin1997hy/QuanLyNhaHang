@@ -4,6 +4,8 @@ package com.example.demo.controller;
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.CustomerDAO;
 import com.example.demo.entity.CustomerEntity;
+import com.example.demo.model.Customer;
+import com.example.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,10 +19,26 @@ public class CustomerController {
     @Autowired
     private CustomerDAO customerDAO;
 
+    @Autowired
+    CustomerService customerService;
+
     @PostMapping("/getAllCustomer")
-    public ApiResponse<List<CustomerEntity>> getAllCustomer() {
-        List<CustomerEntity> customerEntities = customerDAO.getAllCustomer();
-        return new ApiResponse<>(true, customerEntities, "");
+    public ApiResponse<List<Customer>> getAllCustomer() {
+        List<Customer> customers = customerService.getAllCustomer();
+        return new ApiResponse<>(true, customers, "");
+    }
+
+    @PostMapping("/searchCustomerByPhoneNumber")
+    @ResponseBody
+    public ApiResponse<Customer> searchCustomerByPhoneNumber(@RequestParam("customerPhoneNumber") String phoneNumber) {
+        try {
+            Customer customers = customerService.searchCustomerByPhoneNumber(phoneNumber);
+                return new ApiResponse<>(true,customers,"");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,null,"Không tìm thấy khách hàng này");
+        }
     }
 
     @PostMapping("/searchCustomerByName")

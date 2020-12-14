@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,14 +31,29 @@ public class CustomerEntity {
     @Column (name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
-    private List<BillEntity> billEntities;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "billEntity")
+    private List<UsedDishEntity> usedDishEntities;
 
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private List<BookingEntity> bookingEntities;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private List<TableEntity> tableEntities;
 
     public CustomerEntity(String name, String phoneNumber, String email) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public Customer toCustomer(){
+        Customer customer = new Customer();
+        customer.setId(this.id);
+        customer.setEmail(this.email);
+        customer.setName(this.name);
+        customer.setPhoneNumber(this.phoneNumber);
+        return customer;
     }
 
 }

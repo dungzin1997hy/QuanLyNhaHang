@@ -136,6 +136,9 @@ public class TableController {
                usedDishEntity.setBillEntity(billEntity1);
                usedDishDAO.updateTable(usedDishEntity);
            }
+           TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
+           tableEntity.setStatus("free");
+           tableDAO.updateTable(tableEntity);
            return new ApiResponse<>(true, "Thanh toán thành công", "");
        }
        catch (Exception e){
@@ -152,4 +155,5 @@ class Listinteger implements Serializable{
     String time;
     int idCustomer;
     int idRecept;
+    String nameTable;
 }

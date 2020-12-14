@@ -30,9 +30,19 @@ public class TableEntity {
     @Column (name="area")
     private String area;
 
+    @ManyToOne
+    @JoinColumn(name = "customerid")
+    private CustomerEntity customerEntity;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
     private List<UsedDishEntity> usedDishEntities;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
+    private List<BillEntity> billEntities ;
+
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
+    private List<BookingEntity> bookingEntities ;
     public TableEntity(String name, String type,String status, String area) {
         this.name = name;
         this.type = type;
@@ -47,7 +57,9 @@ public class TableEntity {
         table.setType(this.getType());
         table.setStatus(this.getStatus());
         table.setName(this.name);
-        return table;
+        if(this.customerEntity!= null) {
+            table.setCustomer(this.customerEntity.toCustomer());
+        }return table;
 
     }
 

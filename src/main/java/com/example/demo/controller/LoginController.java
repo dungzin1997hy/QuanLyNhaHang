@@ -22,6 +22,11 @@ public class LoginController {
     public String tableManager(){
         return "admin/tableManager";
     }
+    @GetMapping("/booking")
+    public String booking(){
+        return "recept/booking";
+    }
+
 
     @GetMapping("/staffManager")
     public String staffManager(){

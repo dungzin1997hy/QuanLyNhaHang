@@ -98,6 +98,7 @@
                             <div style="display: flex">
                                 <label for="nameTable">Tên bàn:</label>
                                 <p id="nameTable" class="ml-1"></p>
+                                <p id="idTable" style="display: none"></p>
                             </div>
                             <div style="display: flex">
                                 <label for="total">Tổng tiền: </label>
@@ -112,6 +113,7 @@
                                 <th>Tên món ăn</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
+                                <th>Thời gian</th>
                                 <th>Tiền</th>
                             </tr>
                             </thead>
@@ -120,11 +122,13 @@
                         </table>
                         <div style="display:flex;justify-content:center; height: 200px">
                             <button class="m-2" style="width: 30%;text-align: center;height: 40px">Gọi món</button>
-                            <button class="m-2" style="width: 30%;text-align: center;height: 40px" onclick="showBillForm()">Thanh toán</button>
+                            <button id="btnThanh" class="m-2" style="width: 30%;text-align: center;height: 40px"
+                                    onclick="showBillForm()" disabled>Thanh toán
+                            </button>
                         </div>
                     </div>
-                    <div class="col-lg-4" style=" height: 100%">
-                        <div id="bill" style="height: 100%;display: none" >
+                    <div class="col-lg-6" style=" height: 100%">
+                        <div id="bill" style="height: 100%;display: none">
                             <div style="display: flex;justify-content: space-between">
                                 <div id="ttnhahang">
                                     <h1>Nhà hàng</h1>
@@ -159,6 +163,7 @@
                                         <th>Tên món ăn</th>
                                         <th>Giá</th>
                                         <th>Số lượng</th>
+                                        <th>Thời gian</th>
                                         <th>Tiền</th>
                                     </tr>
                                     </thead>
@@ -172,7 +177,8 @@
                                 <div>
                                     <div style="display: flex;justify-content: flex-end">
                                         <p style="width: 150px">Khách thanh toán:</p>
-                                        <input type="number" style="width: 150px" onchange="changeValue(this.value)" id="inputCus">
+                                        <input type="number" style="width: 150px" onchange="changeValue(this.value)"
+                                               id="inputCus">
                                         <p id="inputError" style="color: red"></p>
                                     </div>
                                     <div class="mt-1" style="display: flex;justify-content: flex-end">
@@ -181,13 +187,64 @@
                                     </div>
 
                                     <div style="text-align: center">
-                                        <button id="btnThanhToan" style="width: 300px;text-align: center" onclick="saveBill()" disabled>Thanh toán</button>
-                                        <button style="width: 300px;text-align: center" onclick="cancelBill()">Huỷ</button>
+                                        <button id="btnThanhToan" style="width: 300px;text-align: center"
+                                                onclick="saveBill()" disabled>Thanh toán
+                                        </button>
+                                        <button style="width: 300px;text-align: center" onclick="cancelBill()">Huỷ
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-12" id="callDish" style="height: 100%;display: none;">
+                        <h1 style="text-align: center">Gọi món</h1>
+                        <div class="col-lg-12 row">
+                            <div class="col-lg-2" style="display: flex;flex-direction: column">
+                                <h3 style="text-align: center">Loại</h3>
+                                <button>Đồ Xào</button>
+                                <button>Đồ Uống</button>
+                                <button>Đồ Chiên</button>
+                                <button>Đồ tráng miệng </button>
+                            </div>
+                            <div class="col-lg-5">
+                                <h3 style="text-align: center">
+                                    Đồ ăn
+                                </h3>
+                                <div id="dish"></div>
+                            </div>
+
+                            <div class="col-lg-5">
+                                <div class="card-body">
+                                    <div class="table-responsive-1 row" id="callDishTemplate">
+                                        <table class="table table-bordered text-center">
+                                            <thead>
+                                            <tr class="text-center" style="background-color: #f2f2f2">
+
+                                                <th style=" width: 9%;">Ảnh</th>
+                                                <th style=" width: 50%;">Tên món ăn</th>
+                                                <th style=" width: 12%;">Loại</th>
+                                                <th style=" width: 8%;">Giá</th>
+                                                <th style=" width: 11%;">Số lượng</th>
+                                                <th style=" width: 12%;">Tiền</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="callDishTable">
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div style="display: flex;justify-content: center">
+                                    <button style="width: 100px" id="bookDish" onclick="bookDish()">Đặt món</button>
+                                    <button style="width: 100px; margin-left: 50px" onclick="cancelBookDish()">Huỷ
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

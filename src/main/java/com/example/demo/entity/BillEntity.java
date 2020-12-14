@@ -26,6 +26,10 @@ public class BillEntity {
     private StaffEntity staffEntity;
 
     @ManyToOne
+    @JoinColumn(name = "tableid")
+    private TableEntity tableEntity;
+
+    @ManyToOne
     @JoinColumn(name = "customerid")
     private CustomerEntity customerEntity;
 

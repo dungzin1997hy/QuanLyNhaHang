@@ -4,17 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import javax.persistence.Access;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Table {
+public class Customer {
     private int id;
     private String name;
-    private String status;
-    private String type;
-    private String area;
-    private Customer customer;
-    //private List<UsedDish> usedDishList;
+    private String phoneNumber;
+    private String email;
 }

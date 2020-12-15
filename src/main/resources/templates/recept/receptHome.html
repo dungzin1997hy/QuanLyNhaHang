@@ -33,6 +33,12 @@
             $(document).ready(function () {
                 ready();
             });
+            $(document).keypress(
+                function(event){
+                    if (event.which == '13') {
+                        event.preventDefault();
+                    }
+                });
         </script>
         <script th:src="@{/js_templates/giaodienletan.js}"></script>
     </header>

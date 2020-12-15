@@ -30,4 +30,17 @@ public class TimeBookDAOImpl implements TimeBookDAO {
         }
         return null;
     }
+
+    @Override
+    public TimeBookEntity searchTimeBookByID(int id) {
+        try{
+            String sql ="SELECT u FROM TimeBookEntity u WHERE u.id = '"+id+"'";
+            Query query = entityManager.createQuery(sql);
+            TimeBookEntity timeBookEntity = (TimeBookEntity) query.getSingleResult();
+            return timeBookEntity;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

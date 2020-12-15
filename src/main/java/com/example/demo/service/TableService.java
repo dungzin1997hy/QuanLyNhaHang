@@ -8,6 +8,8 @@ public interface TableService {
     List<Table> getAllTable();
     List<Table> searchTableByType(String type);
     List<Table> getTableByArea(String area);
+    List<Table> searchTableBooking(String type,int idTimeBook);
+
 
     Table getTableByName(String name);
 }

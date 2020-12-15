@@ -38,6 +38,19 @@
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
+                $(document).keypress(
+                    function(event){
+                        if (event.which == '13') {
+                            event.preventDefault();
+                        }
+                    });
+                $("#date_add").datepicker(
+                    {
+                        todayHighlight: true,
+                        format: 'dd/mm/yyyy',
+                        autoclose: true
+                    }
+                );
                 console.log("show dish table");
                 showBookingTable();
                 console.log("abc");
@@ -98,6 +111,7 @@
                                     <th>SĐT</th>
                                     <th>Bàn</th>
                                     <th>Thời gian</th>
+                                    <th>Ngày</th>
                                     <th>Chi tiết</th>
                                     <th>Tác vụ</th>
                                 </tr>
@@ -121,7 +135,7 @@
                             <form id="add_form">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Số điện thoại: <input id="phoneNumberAdd" name="phoneNumberAdd"
-                                                style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" type="number"
                                                 size="40" onchange="changePhoneNumber(this.value)">
                                     <label class="error"></label>
                                 </li>
@@ -134,7 +148,7 @@
                                 <p style="color: red" id="phoneNumberSearchError" name="phoneNumberSearchError"></p>
                                 <button class="btn btn-info center-block mb-1" id="addCustomer"
                                         onclick="showAddFormCustomer()"
-                                        type="submit"
+                                        type="button"
                                         style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
                                     Thêm
                                 </button>
@@ -148,21 +162,27 @@
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Thời gian <select id="time_add" class="time_add filterInput mt-2 ml-1" name="time_add">
-
                                 </select>
-                                <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    <button>Tìm bàn</button>
                                 </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ngày<input id="date_add" name="date_add"
+                                                                 placeholder="Chọn ngày"
+                                                                 style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px" size="38"
+                                                                 readonly>
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <button onclick="searchTableBooking()" type="button">Tìm bàn</button>
+                                </li>
+
                                 <li class="nav__edit-input" style="padding-bottom: 5px">
                                     <table class="table datatable-responsive dataTable no-footer dtr-inline"
                                            role="grid" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                         <tr role="row">
                                             <th>STT</th>
-                                            <th>Tên KH</th>
-                                            <th>SĐT</th>
-                                            <th>Bàn</th>
-                                            <th>Thời gian</th>
+                                            <th>Tên bàn</th>
+                                            <th>Loại</th>
                                             <th>Chi tiết</th>
                                             <th>Tác vụ</th>
                                         </tr>
@@ -170,6 +190,7 @@
                                         <tbody id="bang_tim_ban_booking">
                                         </tbody>
                                     </table>
+                                    <span id="idban_booking" style="display: none"></span>
                                 </li>
                                 <hr>
                                 <a href="#" data-toggle="tooltip" title="Edit">
@@ -189,7 +210,7 @@
                                           style="font-size: 22px; color: #0f74a8;"
                                           >Thêm khách hàng</span></i>
                                 <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 260px;"
-                                   data-toggle="tooltip" title="Đóng" onclick="closeAddForm()"></i>
+                                   data-toggle="tooltip" title="Đóng" onclick="closeAddCusForm()"></i>
                             </li>
                             <hr>
                             <form id="add_Customer_form">

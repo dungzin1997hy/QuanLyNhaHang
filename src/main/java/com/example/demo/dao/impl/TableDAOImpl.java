@@ -52,6 +52,20 @@ public class TableDAOImpl implements TableDAO {
     }
 
     @Override
+    public List<TableEntity> searchTableBooking(String type, int idTime) {
+        try {
+            String sql = "SELECT a FROM TableEntity a WHERE '"+idTime+"' <> ALL (SELECT b.timeBookEntity.id FROM a.bookingEntities b) and a.type='"+type+"'";
+         //   String sql1="Select b.tableEntity.id from TableEntity.bookingEntities b";
+            Query query = entityManager.createQuery(sql);
+            List<TableEntity> tableEntities = query.getResultList();
+            return tableEntities;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public TableEntity getTableByName(String name) {
         try{
             String sql ="SELECT u FROM TableEntity u WHERE u.name='"+name+"'";
@@ -78,6 +92,20 @@ public class TableDAOImpl implements TableDAO {
         }
         return true;
 
+    }
+
+    @Override
+    public TableEntity searchTableByID(String id) {
+        try{
+            String sql ="SELECT u from TableEntity u where u.id='"+id+"'";
+            Query query = entityManager.createQuery(sql);
+            TableEntity tableEntity = (TableEntity) query.getSingleResult();
+            return tableEntity;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

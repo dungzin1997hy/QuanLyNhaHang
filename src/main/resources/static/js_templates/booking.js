@@ -1,6 +1,7 @@
 var Customer = new Array(0);
 var CustomerPhoneNumber = new Array(0);
 var Type = new Array(0);
+
 function ready() {
     $.ajax({
         url: "/getAllCustomer",
@@ -15,8 +16,7 @@ function ready() {
                     CustomerPhoneNumber.push(data.data[i].phoneNumber);
                 }
             }
-            console.log(Customer);
-            console.log(CustomerPhoneNumber);
+
             $("#phoneNumberAdd").autocomplete({
                 source: CustomerPhoneNumber
             });
@@ -43,11 +43,10 @@ function ready() {
             // console.log(Type);
             $('#time_add').empty();
             for (let optObj of Type) {
-                console.log(optObj);
                 let optEle = document.createElement("option");
                 var startTime = optObj.startTime.split(':');
                 var stopTime = optObj.stopTime.split(':');
-                var text =startTime[0]+":"+startTime[1]+'-'+stopTime[0]+":"+stopTime[1];
+                var text = startTime[0] + ":" + startTime[1] + '-' + stopTime[0] + ":" + stopTime[1];
                 optEle.text = text;
                 optEle.value = optObj.id;
                 time_add.add(optEle);
@@ -60,10 +59,77 @@ function ready() {
     });
 
 }
+
 function changePhoneNumber(value) {
-    console.log(value);
-    var i = CustomerPhoneNumber.indexOf(value);
-    $('#nameCus').val(Customer[i].name);
+    if (CustomerPhoneNumber.includes(value) == false) {
+        $('#phoneNumberSearchError').html("Không có khách hàng này");
+        $("#addCustomer").show();
+        $('#nameCus').val("");
+        $('#phoneNumberCusAdd').val(value);
+    } else {
+        var i = CustomerPhoneNumber.indexOf(value);
+        $('#nameCus').val(Customer[i].name);
+    }
+}
+function closeAddCusForm() {
+    $('#nameCus_add').val("");
+    $('#phoneNumberCusAdd').val("");
+    $('#emailCusAdd').val("");
+    $('.nav__add-customer').hide();
+
+}
+//tìm bàn trống trong khoảng đặt bàn
+function searchTableBooking() {
+    var type =$('#type_add option:selected').val().trim();
+    var idTimeBook = $('#time_add option:selected').val().trim();
+    console.log(type+" "+idTimeBook);
+    $.ajax({
+        url: "/searchTableBooking",
+        type: "POST",
+        dataType: "json",
+        data:{
+          "type":type,
+          "idTimeBook":idTimeBook
+        },
+        success: function (data) {
+            if (data.success == true) {
+
+                var contentString = "";
+                if(data.data.length == 0){
+                    swal("Fail","Không còn bàn trống trong khoảng thời gian này","error");
+                }
+                else
+                if (data.data != null) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        var row = data.data[i];
+                        if (row.description == null) {
+                            var string = "";
+                        } else string = row.description;
+                        contentString = contentString
+                            + '<tr id="row'+(row.id)+'" role="row" class="odd">'
+                            + '<td>' + (i + 1) + '</td>'
+                            + '<td id="idTable" style="display: none">' + row.id + '</td>'
+                            + '<td>' + row.name + '</td>'
+                            + '<td>' + row.type + '</td>'
+                            + '<td>' + "" + '</td>'
+                            + '<td>' +
+                            '<button type="button" name="'+(row.id)+'" data-toggle="tooltip" title="Chọn" class="btn btn-info center-block mb-1" onclick="chooseTable(this.name)" style="padding:1px 1px 1px 1px; border-radius: 20px">Chọn</button></td>'
+                            + '</tr>';
+                    }
+                }
+                //  $("#soMonAn").html(data.data.length);
+                $("#bang_tim_ban_booking").html(contentString);
+            }
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
+}
+function chooseTable(name) {
+    var temp = $('#idban_booking').text();
+    $('#row'+temp).css({'background-color':'white'});
+    $('#idban_booking').html(name);
+    $('#row'+name).css({'background-color':'red'});
 }
 //Show user list
 function showBookingTable() {
@@ -77,7 +143,7 @@ function showBookingTable() {
         success: function (data) {
             if (data.success == true) {
                 showTable(data);
-                console.log(data);
+               console.log(data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -86,12 +152,18 @@ function showBookingTable() {
 }
 
 function showAddFormBooking() {
+    $('#phoneNumberAdd').val("");
+    $('#nameCus').val("");
+    $('#idban_booking').html("");
+    $("#bang_tim_ban_booking").empty();
     $('.overlay_bang_mon_an').show();
     $('.nav__add-booking').show();
 }
-function showAddFormCustomer(){
+
+function showAddFormCustomer() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__add-customer').show();;
+    $('.nav__add-customer').show();
+    ;
 
 }
 
@@ -141,53 +213,50 @@ jQuery.validator.addMethod("checkChar", function (value, element, param) {
 $(function () {
     $("#add_form").validate({
         rules: {
-            // nameDish_add: {
-            //     required: true,
-            //     checkChar: "[a-zA-Z]+",
-            //     maxlength: 20
-            // },
-            // price_add: {
-            //     digits: true,
-            //     required: true
-            // },
+            phoneNumberAdd: {
+                required: true
+
+            },
+            nameCus: {
+                required: true
+            },
             // devices_add: {
             //     maxlength: 50
             // }
         },
         messages: {
             phoneNumberAdd: {
-                required: "Vui lòng nhập tên món ăn",
-
+                required: "Vui lòng nhập số điện thoại",
+            },
+            nameCus:{
+                required: "Vui lòng nhập thông tin khách hàng"
             }
         },
         submitHandler: function () {
-            var phoneNumber = $('#phoneNumberAdd').val().trim();
-            if (CustomerPhoneNumber.includes(phoneNumber) == false) {
-                $('#phoneNumberSearchError').html("Không có khách hàng này");
-                $("#addCustomer").show();
-                $('#phoneNumberCusAdd').val(phoneNumber);
-            }
-            else
+            var cusPhone = $('#phoneNumberAdd').val().trim();
+            var timebookid = $('#time_add option:selected').val();
+
+            var idban = $('#idban_booking').text();
+            var date =$('#date_add').val().trim();
+            var cusname = $('#nameCus').val().trim();
+
             $.ajax({
-                url: "/addDish",
+                url: "/addBooking",
                 type: "POST",
                 data: {
-                    "nameDish_add": nameDish_add,
-                    "price_add": price_add,
-                    "type_add": type_add,
-                    "unit_add": unit_add,
-                    "devices_add": devices_add
+                    "cusPhone": cusPhone,
+                    "timebookid": timebookid,
+                    "idban": idban,
+                    "date": date
                 },
                 success: function (data) {
-                    $('.nav__add-dish').hide();
-                    resetAddForm();
-
+                    $('.nav__add-booking').hide();
                     if (data.success == true) {
                         swal("Thành công", data.data, "success");
-                        showDishTable();
+                        showBookingTable();
                     } else {
                         swal("Lỗi", data.errorMessage, "warning");
-                        showDishTable();
+                        showBookingTable();
                     }
                 }, error: function (data) {
                     swal("Fail", data.errorMessage, "warning");
@@ -222,7 +291,7 @@ $(function () {
                 required: "Vui lòng nhập số điện thoại"
             },
             emailCusAdd: {
-                maxlength:"Vui lòng nhập nhỏ hơn 50 ký tự"
+                maxlength: "Vui lòng nhập nhỏ hơn 50 ký tự"
             }
 
         },
@@ -232,8 +301,7 @@ $(function () {
             var email = $('#emailCusAdd').val().trim();
             if (CustomerPhoneNumber.includes(phoneNumber) == true) {
                 swal("Fail", "Khách hàng đã tồn tại", "warning");
-            }
-            else
+            } else
                 $.ajax({
                     url: "/addCustomer",
                     type: "POST",
@@ -263,6 +331,7 @@ $(function () {
         }
     });
 });
+
 // Nav form edit
 function showEditForm() {
     $('.overlay_bang_mon_an').show();
@@ -442,10 +511,10 @@ function searchByType() {
         showDishTable();
     } else {
         $.ajax({
-            url : "/searchDishByType",
-            type : "POST",
+            url: "/searchDishByType",
+            type: "POST",
             data: {
-                "typeDish" : selectItem
+                "typeDish": selectItem
             },
             success: function (data) {
                 showTable(data);
@@ -513,14 +582,15 @@ function showTable(data) {
             } else string = row.description;
             contentString = contentString
                 + '<tr role="row" class="odd">'
-                + '<td>' + (i+1) + '</td>'
+                + '<td>' + (i + 1) + '</td>'
                 + '<td id="idBooking" style="display: none">' + row.id + '</td>'
                 + '<td id="idCustomer" style="display: none">' + row.customer.id + '</td>'
                 + '<td>' + row.customer.name + '</td>'
                 + '<td>' + row.customer.phoneNumber + '</td>'
                 + '<td id="idTable" style="display: none">' + row.table.id + '</td>'
                 + '<td>' + row.table.name + '</td>'
-                + '<td>' + row.timeBook.startTime+' - '+row.timeBook.stopTime + '</td>'
+                + '<td>' + row.timeBook.startTime + ' - ' + row.timeBook.stopTime + '</td>'
+                + '<td>' + row.date + '</td>'
                 + '<td>' + string + '</td>'
                 + '<td>' +
                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
@@ -528,7 +598,7 @@ function showTable(data) {
                 + '</tr>';
         }
     }
-  //  $("#soMonAn").html(data.data.length);
+    //  $("#soMonAn").html(data.data.length);
     $("#bang_booking").html(contentString);
 }
 

@@ -63,8 +63,8 @@ public class TableController {
 
     @PostMapping("/getTableByName")
     public ApiResponse<Table> getTableByName(@RequestParam("name") String name) {
-        Table tableEntity =tableService.getTableByName(name);
-        return new ApiResponse<>(true,tableEntity,"");
+        Table tableEntity = tableService.getTableByName(name);
+        return new ApiResponse<>(true, tableEntity, "");
 //        Table table = tableService.getTableByName(name);
 //        return new ApiResponse<>(true, table, "");
     }
@@ -112,44 +112,56 @@ public class TableController {
     }
 
     @PostMapping("/getUsedDishByTable")
-    public ApiResponse<List<UsedDish>> getUsedDish(@RequestParam("idTable") String idTable){
-        try{
+    public ApiResponse<List<UsedDish>> getUsedDish(@RequestParam("idTable") String idTable) {
+        try {
             List<UsedDish> usedDishes = usedDishService.getUsedDishByTable(idTable);
-            return new ApiResponse<>(true,usedDishes,"");
-        }catch (Exception e){
+            return new ApiResponse<>(true, usedDishes, "");
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @PostMapping("/addPayBill")
-    public ApiResponse<String> addPayBill(@RequestBody Listinteger listinteger){
-       try {
-           LocalDateTime dt = LocalDateTime.parse(listinteger.time, formatter);
-           BillEntity billEntity = new BillEntity();
-           billEntity.setTime(dt);
-           billEntity.setTotal(listinteger.total);
-           billEntity.setPaymentType("tiền mặt");
-           BillEntity billEntity1 = billDAO.addBill(billEntity);
-           for (int i : listinteger.list) {
-               UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);
-               usedDishEntity.setBillEntity(billEntity1);
-               usedDishDAO.updateTable(usedDishEntity);
-           }
-           TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
-           tableEntity.setStatus("free");
-           tableDAO.updateTable(tableEntity);
-           return new ApiResponse<>(true, "Thanh toán thành công", "");
-       }
-       catch (Exception e){
-           e.printStackTrace();
-           return new ApiResponse<>(false,"","Không thanh toán được");
-       }
+    public ApiResponse<String> addPayBill(@RequestBody Listinteger listinteger) {
+        try {
+            LocalDateTime dt = LocalDateTime.parse(listinteger.time, formatter);
+            BillEntity billEntity = new BillEntity();
+            billEntity.setTime(dt);
+            billEntity.setTotal(listinteger.total);
+            billEntity.setPaymentType("tiền mặt");
+            BillEntity billEntity1 = billDAO.addBill(billEntity);
+            for (int i : listinteger.list) {
+                UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);
+                usedDishEntity.setBillEntity(billEntity1);
+                usedDishDAO.updateTable(usedDishEntity);
+            }
+            TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
+            tableEntity.setStatus("free");
+            tableDAO.updateTable(tableEntity);
+            return new ApiResponse<>(true, "Thanh toán thành công", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse<>(false, "", "Không thanh toán được");
+        }
+    }
+
+    @PostMapping("/searchTableBooking")
+    public ApiResponse<List<Table>> searchTableBooking(@RequestParam("type") String type,
+                                                       @RequestParam("idTimeBook") int idTime) {
+        try {
+            List<Table> tables = tableService.searchTableBooking(type, idTime);
+            System.out.println(tables.size());
+            return new ApiResponse<>(true,tables,"");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse<>(false, null, "Lỗi");
+        }
     }
 }
 
 @Data
-class Listinteger implements Serializable{
+class Listinteger implements Serializable {
     public List<Integer> list = new ArrayList<>();
     int total;
     String time;

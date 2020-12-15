@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TimeBookDAO {
     List<TimeBookEntity> getAllTimeBookEntity();
+    TimeBookEntity searchTimeBookByID(int id);
 }

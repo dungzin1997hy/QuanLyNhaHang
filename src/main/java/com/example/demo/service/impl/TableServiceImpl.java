@@ -68,6 +68,16 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    public List<Table> searchTableBooking(String type, int idTimeBook) {
+        List<TableEntity> tableEntities = tableDAO.searchTableBooking(type,idTimeBook);
+        List<Table> tables = new ArrayList<>();
+        for(TableEntity tableEntity: tableEntities){
+            tables.add(tableEntity.toTable());
+        }
+        return tables;
+    }
+
+    @Override
     public Table getTableByName(String name) {
         TableEntity tableEntity = tableDAO.getTableByName(name);
 //        List<UsedDishEntity> usedDishEntities = tableEntity.getUsedDishEntities();

@@ -33,6 +33,12 @@
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
+                $(document).keypress(
+                    function(event){
+                        if (event.which == '13') {
+                            event.preventDefault();
+                        }
+                    });
                 console.log("show staff table");
                 showMaterialTable();
                 console.log("abc");

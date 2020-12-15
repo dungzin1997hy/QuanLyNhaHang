@@ -45,7 +45,9 @@ public class BookingEntity {
         booking.setTimeBook(this.timeBookEntity.toTimeBook());
         booking.setTable(this.tableEntity.toTable());
         booking.setDate(this.date);
-        booking.setCustomer(this.customerEntity.toCustomer());
+        if(this.customerEntity!= null) {
+            booking.setCustomer(this.customerEntity.toCustomer());
+        }
         booking.setStatus(this.status);
         return booking;
     }

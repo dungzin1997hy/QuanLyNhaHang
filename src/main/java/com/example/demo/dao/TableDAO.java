@@ -10,9 +10,12 @@ public interface TableDAO {
 
     List<TableEntity> getAllTable();
     List<TableEntity> getTableByArea(String area);
+    List<TableEntity> searchTableBooking(String type,int idTime);
 
     TableEntity getTableByName(String name);
     Boolean checkExistTable(String tableName);
+    TableEntity searchTableByID(String id);
+
 
     void addTable(TableEntity tableEntity);
     void deleteTable(int idTable);

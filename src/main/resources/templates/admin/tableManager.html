@@ -30,6 +30,12 @@
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
+                $(document).keypress(
+                    function(event){
+                        if (event.which == '13') {
+                            event.preventDefault();
+                        }
+                    });
                 showTableTable();
                 $("#customer_ID_search").focus();
             });

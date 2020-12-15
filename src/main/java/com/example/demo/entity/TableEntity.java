@@ -38,11 +38,12 @@ public class TableEntity {
     private List<UsedDishEntity> usedDishEntities;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
-    private List<BillEntity> billEntities ;
+    private List<BillEntity> billEntities;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
-    private List<BookingEntity> bookingEntities ;
+    private List<BookingEntity> bookingEntities;
+
     public TableEntity(String name, String type,String status, String area) {
         this.name = name;
         this.type = type;

@@ -34,7 +34,7 @@ function ready() {
         type: "POST",
         dataType: "json",
         success: function (data) {
-
+            Type = [];
             if (data.success == true) {
                 for (var i = 0; i < data.data.length; i++) {
                     Type.push(data.data[i]);
@@ -80,18 +80,22 @@ function closeAddCusForm() {
 }
 //tìm bàn trống trong khoảng đặt bàn
 function searchTableBooking() {
-    var type =$('#type_add option:selected').val().trim();
+   // var type =$('#type_add option:selected').val().trim();
     var idTimeBook = $('#time_add option:selected').val().trim();
-    console.log(type+" "+idTimeBook);
+    var date = $('#date_add').val().trim();
+   // console.log(type+" "+idTimeBook);
     $.ajax({
         url: "/searchTableBooking",
         type: "POST",
         dataType: "json",
         data:{
-          "type":type,
-          "idTimeBook":idTimeBook
+          "type":"",
+          "idTimeBook":idTimeBook,
+            "date":date
+
         },
         success: function (data) {
+            $('#date_add').val(date);
             if (data.success == true) {
 
                 var contentString = "";
@@ -151,6 +155,7 @@ function showBookingTable() {
     });
 }
 
+
 function showAddFormBooking() {
     $('#phoneNumberAdd').val("");
     $('#nameCus').val("");
@@ -167,47 +172,87 @@ function showAddFormCustomer() {
 
 }
 
+function checkin(){
+    $('#bang_booking').find('tr').click(function () {
+        var id = $(this).find('td').eq(1).text();
+        swal({
+                title: "Xác nhận !!!",
+                text: "Bạn có xác nhận checkin hay không không ?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Có",
+                cancelButtonText: "Quay lại",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "/checkinBooking",
+                        type: "POST",
+                        data: {
+                            "idBooking": id
+                        },
+                        success: function (data) {
+                            swal("Done", data.data, "success");
+                            showBookingTable();
+                        }, error: function () {
+                            swal("Lỗi", "Không xóa được", "warning");
+                        }
+                    });
+                }
+            });
+    });
+}
+
 jQuery.validator.addMethod("checkChar", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));
 });
 
-// // tìm kiếm món ăn = tên
-// $(function () {
-//     $("#form_search_dish").validate({
-//         submitHandler: function () {
-//             var nameDish = $("#dish_name_search").val().trim();
-//             if (nameDish == "") {
-//                 showDishTable();
-//             } else {
-//                 $.ajax({
-//                     url: "/searchListDishByName",
-//                     type: "POST",
-//                     dataType: "json",
-//                     data: {
-//                         "nameDish": nameDish,
-//                     },
-//                     success: function (data) {
-//                         if(data.success == true) {
-//                             swal("Thành công", "Tìm thành công", "success");
-//                             $('#dish_name_search').focus();
-//                             $('#dish_name_search').val("");
-//                             showTable(data);
-//                         }
-//                         else {
-//                             swal("Lỗi",data.errorMessage,"warning");
-//                             $('#dish_name_search').val("");
-//                             $('#dish_name_search').focus();
-//                             showDishTable();
-//                         }
-//
-//                     }, error: function (data) {
-//                         swal("Fail", data.responseText, "warning");
-//                     }
-//                 });
-//             }
-//         }
-//     });
-// });
+// tìm kiếm booking  = sdt
+$(function () {
+    $("#form_search_booking").validate({
+        submitHandler: function () {
+            var phoneNumber = $("#phoneNumberSearch").val().trim();
+            if (phoneNumber == "") {
+                showBookingTable();
+                console.log("null");
+            } else {
+                $.ajax({
+                    url: "/searchBookingByPhoneNumber",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "phoneNumber": phoneNumber,
+                    },
+                    success: function (data) {
+                        console.log("show");
+                        if(data.data.length == 0){
+                            swal("Fail", "Không tìm thấy!!!", "warning");
+                            showBookingTable();
+                        }
+                        else
+                        if(data.success == true) {
+                            swal("Thành công", "Tìm thành công", "success");
+                            $('#phoneNumberSearch').val("");
+                            showTable(data);
+                        }
+                        else {
+                            swal("Lỗi",data.errorMessage,"warning");
+                            $('#phoneNumberSearch').val("");
+                            showBookingTable();
+                        }
+
+                    }, error: function (data) {
+                        swal("Fail", data.responseText, "warning");
+                    }
+                });
+            }
+        }
+    });
+});
+
 
 //thêm booking
 $(function () {
@@ -332,201 +377,7 @@ $(function () {
     });
 });
 
-// Nav form edit
-function showEditForm() {
-    $('.overlay_bang_mon_an').show();
-    $('.nav__edit-dish').show();
-    $('#bang_mon_an').find('tr').click(function () {
-        var idDish = $(this).find('td').eq(1).text();
-        $('#idDish_edit').val(idDish);
-        var nameDish = $(this).find('td').eq(2).text();
-        $('#nameDish_edit').val(nameDish);
-        var price = $(this).find('td').eq(3).text();
-        $('#price_edit').val(price);
-        var type = $(this).find('td').eq(4).text();
 
-        //console.log(type);
-        if (type.trim() == 'Đồ xào') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ chiên') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ uống') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ tráng miệng') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-        }
-
-        var unit = $(this).find('td').eq(5).text();
-
-        if (unit.trim() == 'Đĩa') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Bát') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Cốc') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Chai') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-        }
-        var description = $(this).find('td').eq(6).text();
-        $('#devices_edits').val(description);
-    });
-
-}
-
-//Update user information
-$(function () {
-    $("#edit_form").validate({
-        rules: {
-            nameDish_edit: {
-                required: true,
-                checkChar: "[a-zA-Z]+",
-                maxlength: 20
-            },
-            price_edit: {
-                digits: true,
-                required: true
-            },
-            devices_edit: {
-                maxlength: 50
-            }
-        },
-        messages: {
-            nameDish_edit: {
-                required: "Vui lòng nhập tên món ăn",
-                checkChar: "Vui lòng chỉ nhập kí tự chữ",
-                maxlength: "Tên món ăn quá dài"
-            },
-            price_edit: {
-                required: "Vui lòng nhập giá",
-                digits: "Vui lòng chỉ nhập số"
-            },
-
-            devices_edit: {
-
-                maxlength: "Nhỏ hơn 50 kí tự"
-            }
-        },
-        submitHandler: function () {
-            var idDishEdit = $('#idDish_edit').val().trim();
-            var nameDishEdit = $('#nameDish_edit').val().trim();
-            var priceEdit = $('#price_edit').val().trim();
-            var typeEdit = $('#type_edit option:selected').val().trim();
-            var unitEdit = $('#unit_edit option:selected').val().trim();
-            var devices_edits = $('#devices_edits').val().trim();
-
-            $.ajax({
-                url: "/searchDishByName",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    "nameDish": nameDishEdit,
-                },
-                success: function (data) {
-                    //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
-                    //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
-                    console.log(data);
-
-                    if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit) {
-                        $.ajax({
-                            url: "/updateDish",
-                            type: "POST",
-                            data: {
-                                "idDish_edit": idDishEdit,
-                                "nameDish_edit": nameDishEdit,
-                                "price_edit": priceEdit,
-                                "type_edit": typeEdit,
-                                "unit_edit": unitEdit,
-                                "devices_edit": devices_edits
-                            },
-                            success: function (data) {
-
-                                $('.nav__edit-dish').hide();
-                                $('.overlay_bang_mon_an').hide();
-                                swal("Thành công", data.data, "success");
-                                showDishTable();
-                            }, error: function (data) {
-                                // console.log("lỗi không cập nhật dc data");
-                                swal("Lỗi", data.errorMessage, "warning");
-                            }
-                        });
-                    } else {
-                        $('.nav__edit-dish').hide();
-                        $('.overlay_bang_mon_an').hide();
-                        console.log("khong cap nhat");
-                        swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
-                    }
-                }, error: function (data) {
-                    swal("Fail", data.responseText, "warning");
-                }
-            });
-        }
-    });
-});
-
-function searchByType() {
-    var selectItem = $("#selectSearch").val();
-    if (selectItem == 'Tất cả') {
-        showDishTable();
-    } else {
-        $.ajax({
-            url: "/searchDishByType",
-            type: "POST",
-            data: {
-                "typeDish": selectItem
-            },
-            success: function (data) {
-                showTable(data);
-            }, error: function (data) {
-                swal("Lỗi", data.data, "warning");
-            }
-
-        });
-    }
-
-
-}
 
 function deleteBooking() {
     $('#bang_booking').find('tr').click(function () {
@@ -566,9 +417,9 @@ function deleteBooking() {
 
 function closeEditForm() {
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-dish').hide();
-    $('.nav__edit-dish').hide();
-    resetAddForm();
+    $('.nav__add-booking').hide();
+    //$('.nav__edit-dish').hide();
+
 }
 
 function showTable(data) {
@@ -580,6 +431,11 @@ function showTable(data) {
             if (row.description == null) {
                 var string = "";
             } else string = row.description;
+            console.log(row.date);
+            var date = row.date.split("T");
+
+
+
             contentString = contentString
                 + '<tr role="row" class="odd">'
                 + '<td>' + (i + 1) + '</td>'
@@ -590,10 +446,10 @@ function showTable(data) {
                 + '<td id="idTable" style="display: none">' + row.table.id + '</td>'
                 + '<td>' + row.table.name + '</td>'
                 + '<td>' + row.timeBook.startTime + ' - ' + row.timeBook.stopTime + '</td>'
-                + '<td>' + row.date + '</td>'
+                + '<td>' + date[0] + '</td>'
                 + '<td>' + string + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="checkin()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
                 '<a data-toggle="tooltip" title="Remove"><button onclick="deleteBooking()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 + '</tr>';
         }
@@ -602,18 +458,3 @@ function showTable(data) {
     $("#bang_booking").html(contentString);
 }
 
-function resetAddForm() {
-    $("#nameDish_add").val("");
-    $("#price_add").val("");
-    $('#type_add').empty();
-    $('#type_add').append('<option value="Đồ xào">Đồ xào</option>');
-    $('#type_add').append('<option value="Đồ chiên">Đồ chiên</option>');
-    $('#type_add').append('<option value="Đồ uống">Đồ uống</option>');
-    $('#type_add').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-    $('#unit_add').empty();
-    $('#unit_add').append('<option value="Bát">Bát</option>');
-    $('#unit_add').append('<option value="Đĩa">Đĩa</option>');
-    $('#unit_add').append('<option value="Cốc">Cốc</option>');
-    $('#unit_add').append('<option value="Chai">Chai</option>');
-    $("#devices_add").val("");
-}

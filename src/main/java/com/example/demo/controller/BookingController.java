@@ -43,6 +43,33 @@ public class BookingController {
         }
     }
 
+    @PostMapping("/searchBookingByPhoneNumber")
+    public ApiResponse<List<Booking>> searchBookingByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber){
+        try{
+            List<Booking> bookings = bookingService.getBookingByCustomer(phoneNumber);
+            return new ApiResponse<>(true,bookings,"");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,null,"Lỗi");
+        }
+    }
+    @PostMapping("/checkinBooking")
+    public ApiResponse<String> checkinBooking(@RequestParam("idBooking") int id){
+        try {
+            BookingEntity bookingEntity = bookingDAO.getBookingByID(id);
+            bookingEntity.setStatus("complete");
+            bookingDAO.updateBooking(bookingEntity);
+            TableEntity tableEntity = bookingEntity.getTableEntity();
+            tableEntity.setStatus("using");
+            tableEntity.setCustomerEntity(bookingEntity.getCustomerEntity());
+            tableDAO.updateTable(tableEntity);
+            return new ApiResponse<>(true,"Checkin thành công","");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Lỗi");
+        }
+    }
+
     @PostMapping("/deleteBooking")
     public ApiResponse<String> deleteBooking(@RequestParam("idBooking")int id){
         try{
@@ -65,6 +92,7 @@ public class BookingController {
             TableEntity tableEntity = tableDAO.searchTableByID(idTable);
             BookingEntity bookingEntity = new BookingEntity();
             bookingEntity.setCustomerEntity(customerEntity);
+
             bookingEntity.setDate(date);
             bookingEntity.setTableEntity(tableEntity);
             bookingEntity.setTimeBookEntity(timeBookEntity);

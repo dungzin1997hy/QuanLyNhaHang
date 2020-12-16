@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -148,11 +149,12 @@ public class TableController {
 
     @PostMapping("/searchTableBooking")
     public ApiResponse<List<Table>> searchTableBooking(@RequestParam("type") String type,
-                                                       @RequestParam("idTimeBook") int idTime) {
+                                                       @RequestParam("idTimeBook") int idTime,
+                                                       @RequestParam("date") Date date) {
         try {
-            List<Table> tables = tableService.searchTableBooking(type, idTime);
+            List<Table> tables = tableService.searchTableBooking(type, idTime,date);
             System.out.println(tables.size());
-            return new ApiResponse<>(true,tables,"");
+            return new ApiResponse<>(true, tables, "");
         } catch (Exception e) {
             e.printStackTrace();
             return new ApiResponse<>(false, null, "Lỗi");

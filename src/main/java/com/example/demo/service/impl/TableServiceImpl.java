@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -68,8 +69,8 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public List<Table> searchTableBooking(String type, int idTimeBook) {
-        List<TableEntity> tableEntities = tableDAO.searchTableBooking(type,idTimeBook);
+    public List<Table> searchTableBooking(String type, int idTimeBook, Date date) {
+        List<TableEntity> tableEntities = tableDAO.searchTableBooking(type,idTimeBook,date);
         List<Table> tables = new ArrayList<>();
         for(TableEntity tableEntity: tableEntities){
             tables.add(tableEntity.toTable());

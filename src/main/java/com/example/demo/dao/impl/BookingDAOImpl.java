@@ -3,6 +3,7 @@ package com.example.demo.dao.impl;
 import com.example.demo.dao.BookingDAO;
 import com.example.demo.entity.BookingEntity;
 import com.example.demo.entity.CustomerEntity;
+import com.example.demo.model.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public List<BookingEntity> getAllBooking() {
         try {
-            String sql = "SELECT u FROM BookingEntity u where u.status = 'notcomplete' ";
+            String sql = "SELECT u FROM BookingEntity u where u.status = 'notcomplete' order by u.date,u.timeBookEntity.id";
             Query query = entityManager.createQuery(sql);
             List<BookingEntity> bookingEntities = query.getResultList();
             return bookingEntities;
@@ -33,7 +34,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public List<BookingEntity> getBookingByCustomer(String phoneNumber) {
         try {
-            String sql = "SELECT u FROM BookingEntity u where u.customerEntity.phoneNumber = "+phoneNumber;
+            String sql = "SELECT u FROM BookingEntity u where u.customerEntity.phoneNumber like '%"+phoneNumber+"%' order by u.date,u.timeBookEntity.id";
             Query query = entityManager.createQuery(sql);
             List<BookingEntity> bookingEntities = query.getResultList();
             return bookingEntities;
@@ -41,6 +42,14 @@ public class BookingDAOImpl implements BookingDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public BookingEntity getBookingByID(int id) {
+        String sql ="select u from BookingEntity u where u.id = '"+id+"'";
+        Query query = entityManager.createQuery(sql);
+        BookingEntity bookingEntity = (BookingEntity) query.getSingleResult();
+        return bookingEntity;
     }
 
     @Override

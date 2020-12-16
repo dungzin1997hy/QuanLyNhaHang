@@ -433,9 +433,19 @@ function showTable(data) {
             } else string = row.description;
             console.log(row.date);
             var date = row.date.split("T");
-
-
-
+            var datetime = date[0].split("-");
+            var year = datetime[0];
+            var month = datetime[1];
+            var day = parseInt(datetime[2])+1;
+            if(month<10) month = '0'+month;
+            if(day<10) day = '0'+day;
+            var time = day+"-"+month+"-"+year;
+            var currentdate = new Date();
+            var datenow = ((currentdate.getDate() < 10)?"0":"") + currentdate.getDate() +"-"+(((currentdate.getMonth()+1) < 10)?"0":"") + (currentdate.getMonth()+1) +"-"+ currentdate.getFullYear();
+            if(datenow == time){
+                var button = '<button  id=" btn'+row.id+'" data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="checkin()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>';
+            }
+            else var button ='<button disabled id=" btn'+row.id+'" data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="checkin()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>';
             contentString = contentString
                 + '<tr role="row" class="odd">'
                 + '<td>' + (i + 1) + '</td>'
@@ -446,12 +456,15 @@ function showTable(data) {
                 + '<td id="idTable" style="display: none">' + row.table.id + '</td>'
                 + '<td>' + row.table.name + '</td>'
                 + '<td>' + row.timeBook.startTime + ' - ' + row.timeBook.stopTime + '</td>'
-                + '<td>' + date[0] + '</td>'
+                + '<td>' + time + '</td>'
                 + '<td>' + string + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="checkin()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                button+
                 '<a data-toggle="tooltip" title="Remove"><button onclick="deleteBooking()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                 + '</tr>';
+            if(datenow == time){
+                $('#btn'+row.id).prop('disabled', true);
+            }
         }
     }
     //  $("#soMonAn").html(data.data.length);

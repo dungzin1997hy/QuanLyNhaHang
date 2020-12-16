@@ -24,6 +24,8 @@ public class DishEntity {
     @Column (name = "name")
     private String name;
 
+    @Column (name="urlimage")
+    private String url;
     @Column (name = "price")
     private Float price;
 
@@ -53,6 +55,7 @@ public class DishEntity {
         this.type = type;
         this.unit = unit;
         this.description = description;
+
     }
 
     public Dish toDish(){
@@ -63,6 +66,7 @@ public class DishEntity {
         dish.setPrice(this.getPrice());
         dish.setDescription(this.getDescription());
         dish.setUnit(this.getUnit());
+        dish.setUrl(this.url);
         return dish;
     }
 

@@ -144,11 +144,11 @@ function showEditForm() {
     $('#bang_mon_an').find('tr').click(function () {
         var idDish = $(this).find('td').eq(1).text();
         $('#idDish_edit').val(idDish);
-        var nameDish = $(this).find('td').eq(2).text();
+        var nameDish = $(this).find('td').eq(3).text();
         $('#nameDish_edit').val(nameDish);
-        var price = $(this).find('td').eq(3).text();
+        var price = $(this).find('td').eq(4).text();
         $('#price_edit').val(price);
-        var type = $(this).find('td').eq(4).text();
+        var type = $(this).find('td').eq(5).text();
 
         //console.log(type);
         if (type.trim() == 'Đồ xào') {
@@ -181,7 +181,7 @@ function showEditForm() {
             $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
         }
 
-        var unit = $(this).find('td').eq(5).text();
+        var unit = $(this).find('td').eq(6).text();
 
         if (unit.trim() == 'Đĩa') {
             $('#unit_edit').empty();
@@ -214,12 +214,21 @@ function showEditForm() {
             $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
             $('#unit_edit').append('<option value="Cốc">Cốc</option>');
         }
-        var description = $(this).find('td').eq(6).text();
+        var description = $(this).find('td').eq(7).text();
         $('#devices_edits').val(description);
     });
 
 }
 
+function showImage(fileInput){
+    file = fileInput.files[0];
+    reader = new FileReader();
+    reader.onload = function (e) {
+        $('#thumbnail_add').show();
+        $('#thumbnail_add').attr('src',e.target.result);
+    }
+    reader.readAsDataURL(file);
+}
 //Update user information
 $(function () {
     $("#edit_form").validate({
@@ -390,6 +399,7 @@ function showTable(data) {
                 + '<tr role="row" class="odd">'
                 + '<td>' + (i+1) + '</td>'
                 + '<td id="idDish" style="display: none">' + row.id + '</td>'
+                + '<td><img src="'+row.url+'">'  + '</td>'
                 + '<td>' + row.name + '</td>'
                 + '<td>' + row.price + '</td>'
                 + '<td>' + row.type + '</td>'

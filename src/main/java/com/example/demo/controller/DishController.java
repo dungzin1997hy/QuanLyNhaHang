@@ -6,15 +6,23 @@ import com.example.demo.dao.DishDAO;
 import com.example.demo.entity.DishEntity;
 import com.example.demo.model.Dish;
 import com.example.demo.service.DishService;
+import com.example.demo.util.FileDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class DishController {
 
+    @Autowired
+    private FileDir fileDir;
     @Autowired
     public DishDAO dishDAO;
 
@@ -66,11 +74,30 @@ public class DishController {
                                        @RequestParam("price_add") float price,
                                        @RequestParam("type_add") String type,
                                        @RequestParam("unit_add") String unit,
-                                       @RequestParam("devices_add") String des) {
+                                       @RequestParam("devices_add") String des,
+                                       @RequestParam("fileImage")MultipartFile file) {
         if (dishDAO.checkExistDish(nameDish) == true) return new ApiResponse<>(false, "", "Tên món ăn đã tồn tại");
-        DishEntity dishEntity = new DishEntity(nameDish,price,type,unit,"");
-        dishDAO.addDish(dishEntity);
-        return new ApiResponse<>(true,"Thêm món ăn thành công","");
+        try {
+            File uploadDir = new File(fileDir.getFileDir());
+            uploadDir.mkdirs();
+
+            if (file.isEmpty()) {
+
+            }
+            String uploadFilePath = fileDir.getFileDir() + "/" + file.getOriginalFilename();
+
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(uploadFilePath);
+            Files.write(path, bytes);
+
+            DishEntity dishEntity = new DishEntity(nameDish, price, type, unit, "");
+            dishEntity.setUrl(file.getOriginalFilename());
+            dishDAO.addDish(dishEntity);
+            return new ApiResponse<>(true, "Thêm món ăn thành công", "");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Lỗi");
+        }
     }
 
     @PostMapping("/deleteDish")

@@ -106,6 +106,7 @@
                                 <thead>
                                 <tr role="row">
                                     <th>STT</th>
+                                    <th>Ảnh</th>
                                     <th>Tên</th>
                                     <th>Giá</th>
                                     <th>Loại</th>
@@ -130,7 +131,7 @@
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
                             </li>
                             <hr>
-                            <form id="add_form">
+                            <form id="add_form" method="POST" enctype="multipart/form-data">
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Tên: <input id="nameDish_add" name="nameDish_add"
@@ -138,6 +139,16 @@
                                                 size="40">
                                     <label class="error"></label>
                                 </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ảnh <input id="fileImage_add" name="fileImage_add" type="file" accept="image/png,image/jpg"
+                                                style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImage(this)"
+                                                size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <img id="thumbnail_add" alt="ảnh preview" style="height: 100px;width: 100px;display: none">
+                                </li>
+
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Giá <input id="price_add" name="price_add" type="number"
                                                style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
@@ -193,7 +204,7 @@
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     <label>Mã:</label>
                                     <input name="idDish_edit" id="idDish_edit"
-                                           style="border: 1px #ececec solid; margin-left: 16px;" size="40" readonly>
+                                           style="border: 1px #ececec solid; margin-left: 16px;" size="40" readonly disabled>
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">

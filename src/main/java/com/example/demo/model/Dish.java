@@ -14,6 +14,7 @@ public class Dish {
     private float price;
     private String type;
     private String unit;
+    private String url;
     private String description;
 
     public Dish(String name, float price, String type, String unit, String description) {

@@ -36,6 +36,20 @@
                             event.preventDefault();
                         }
                     });
+                $("#submitButton").click(function (event) {
+                    // Stop default form Submit.
+                    event.preventDefault();
+                    // Call Ajax Submit.
+                    ajaxSubmitForm();
+
+                });
+                $("#submitButtonEdit").click(function (event) {
+                    // Stop default form Submit.
+                    event.preventDefault();
+                    // Call Ajax Submit.
+                    ajaxSubmitEditForm();
+
+                });
                 console.log("show dish table");
                 showDishTable();
                 console.log("abc");
@@ -181,10 +195,7 @@
                                 </li>
                                 <hr>
                                 <a href="#" data-toggle="tooltip" title="Edit">
-                                    <button class="btn btn-info center-block mb-1" id="btn-add-user"
-                                            style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
-                                        Thêm mới
-                                    </button>
+                                    <button type="submit" class="btn btn-success" id="submitButton">Lưu</button>
                                 </a>
                             </form>
                         </ul>
@@ -200,11 +211,11 @@
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
                             </li>
                             <hr>
-                            <form id="edit_form">
+                            <form id="edit_form" method="POST" enctype="multipart/form-data">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    <label>Mã:</label>
+
                                     <input name="idDish_edit" id="idDish_edit"
-                                           style="border: 1px #ececec solid; margin-left: 16px;" size="40" readonly disabled>
+                                           style="border: 1px #ececec solid; margin-left: 16px;display: none" size="40">
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
@@ -212,6 +223,15 @@
                                                 style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
                                                 size="40">
                                     <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ảnh <input id="fileImage_edit" name="fileImage_edit" type="file" accept="image/png,image/jpg"
+                                               style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImageEdit(this)"
+                                               size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <img id="thumbnail_edit" alt="ảnh preview" style="height: 100px;width: 100px">
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Giá <input id="price_edit" name="price_edit" type="number"
@@ -222,7 +242,7 @@
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Loại
-                                    <select id="type_edit">
+                                    <select id="type_edit" name="type_edit">
                                         <option value="Đồ xào">Đồ xào</option>
                                         <option value="Đồ chiên">Đồ chiên</option>
                                         <option value="Đồ uống">Đồ uống</option>
@@ -230,14 +250,14 @@
                                     </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Đơn vị <select id="unit_edit">
+                                    Đơn vị <select id="unit_edit" name="unit_edit">
                                     <option value="Đĩa">Đĩa</option>
                                     <option value="Bát">Bát</option>
                                     <option value="Cốc">Cốc</option>
                                     <option value="Chai">Chai</option>
                                 </select>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Chi tiết<input id="devices_edits" name="devices_add"
+                                    Chi tiết<input id="devices_edit" name="devices_edit"
                                                    style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
                                                    size="38"
                                 >
@@ -246,11 +266,7 @@
                                 <li>
                                     <hr>
                                     <a href="#" data-toggle="tooltip" title="Edit">
-                                        <button class="btn btn-info center-block mb-1"
-                                                id="btn-edit-user"
-                                                style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
-                                            Cập nhật
-                                        </button>
+                                        <button type="submit" class="btn btn-success" id="submitButtonEdit">Lưu</button>
                                     </a>
                                 </li>
                             </form>

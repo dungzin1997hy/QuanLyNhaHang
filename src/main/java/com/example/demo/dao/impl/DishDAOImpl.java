@@ -32,6 +32,18 @@ public class DishDAOImpl implements DishDAO {
         }
     }
 
+    @Override
+    public DishEntity searchDishById(int id) {
+        try{
+            String sql="Select u from DishEntity u where u.id = '"+id+"'";
+            Query query = entityManager.createQuery(sql);
+            return (DishEntity) query.getSingleResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public List<DishEntity> getAllDish() {

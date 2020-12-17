@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DishDAO {
     DishEntity searchDishByName(String dishName);
+    DishEntity searchDishById(int id);
     List<DishEntity> getAllDish();
     List<DishEntity> getAllDishByType(String type);
     List<String> getAllTypeDish();

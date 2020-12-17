@@ -20,6 +20,8 @@ function showDishTable() {
 }
 
 function showAddFormDish() {
+    $('#add_form')[0].reset();
+    $('#thumbnail_add').hide();
     $('.overlay_bang_mon_an').show();
     $('.nav__add-dish').show();
 }
@@ -142,6 +144,8 @@ function showEditForm() {
     $('.overlay_bang_mon_an').show();
     $('.nav__edit-dish').show();
     $('#bang_mon_an').find('tr').click(function () {
+        var url =$(this).find('td').eq(2).find('img').attr('src');
+        $('#thumbnail_edit').attr('src',url);
         var idDish = $(this).find('td').eq(1).text();
         $('#idDish_edit').val(idDish);
         var nameDish = $(this).find('td').eq(3).text();
@@ -215,9 +219,96 @@ function showEditForm() {
             $('#unit_edit').append('<option value="Cốc">Cốc</option>');
         }
         var description = $(this).find('td').eq(7).text();
-        $('#devices_edits').val(description);
+        $('#devices_edit').val(description);
     });
 
+}
+//add dish
+function ajaxSubmitForm() {
+    var form = $('#add_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "/addDish",
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 1000000,
+        success: function (data) {
+
+            $('.nav__add-dish').hide();
+            resetAddForm();
+
+            if (data.success == true) {
+                swal("Thành công", data.data, "success");
+                showDishTable();
+            } else {
+                swal("Lỗi", data.errorMessage, "warning");
+                showDishTable();
+            }
+        },
+        error: function (jqXHR) {
+            swal("Lỗi", jqXHR.responseText, "warning");
+            $('#modal-upload-file').modal('hide');
+        }
+    });
+}
+function ajaxSubmitEditForm() {
+
+    var idDishEdit = $('#idDish_edit').val().trim();
+    var nameDishEdit = $('#nameDish_edit').val().trim();
+    var priceEdit = $('#price_edit').val().trim();
+    var imageinput = $('#fileImage_edit').val();
+    console.log(imageinput);
+    var typeEdit = $('#type_edit option:selected').val().trim();
+    var unitEdit = $('#unit_edit option:selected').val().trim();
+    var devices_edits = $('#devices_edit').val().trim();
+    console.log(idDishEdit+" "+nameDishEdit+" "+priceEdit);
+    $.ajax({
+        url: "/searchDishByName",
+        type: "POST",
+        dataType: "json",
+        data: {
+            "nameDish": nameDishEdit,
+        },
+        success: function (data) {
+            var form = $('#edit_form')[0];
+            var datalog = new FormData(form);
+            if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit||imageinput != "") {
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/updateDish",
+                    data: datalog,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 1000000,
+                    success: function (data) {
+
+                        $('.nav__edit-dish').hide();
+                        $('.overlay_bang_mon_an').hide();
+                        swal("Thành công", data.data, "success");
+                        showDishTable();
+                    }, error: function (data) {
+                        // console.log("lỗi không cập nhật dc data");
+                        swal("Lỗi", data.errorMessage, "warning");
+                    }
+                });
+            } else {
+                $('.nav__edit-dish').hide();
+                $('.overlay_bang_mon_an').hide();
+                console.log("khong cap nhat");
+                swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
+            }
+        },
+        error: function (jqXHR) {
+            swal("Lỗi","SearchDish faile", "warning");
+            $('#modal-upload-file').modal('hide');
+        }
+    });
 }
 
 function showImage(fileInput){
@@ -226,6 +317,15 @@ function showImage(fileInput){
     reader.onload = function (e) {
         $('#thumbnail_add').show();
         $('#thumbnail_add').attr('src',e.target.result);
+    }
+    reader.readAsDataURL(file);
+}
+function showImageEdit(fileInput){
+    file = fileInput.files[0];
+    reader = new FileReader();
+    reader.onload = function (e) {
+        $('#thumbnail_edit').show();
+        $('#thumbnail_edit').attr('src',e.target.result);
     }
     reader.readAsDataURL(file);
 }
@@ -399,7 +499,7 @@ function showTable(data) {
                 + '<tr role="row" class="odd">'
                 + '<td>' + (i+1) + '</td>'
                 + '<td id="idDish" style="display: none">' + row.id + '</td>'
-                + '<td><img src="'+row.url+'">'  + '</td>'
+                + '<td><img id="'+row.url+'" src="/image/upload/' + row.url + '" alt="slider-image" style="width: 100px;height: 100px">'  + '</td>'
                 + '<td>' + row.name + '</td>'
                 + '<td>' + row.price + '</td>'
                 + '<td>' + row.type + '</td>'

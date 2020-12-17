@@ -71,7 +71,7 @@ function showCallDishTable(data) {
                 + '<td style="display: none">' + row.id + '</td>'
                 + '<td id="idDish"><img src="#"></td>'
                 + '<td>' + row.name + '</td>'
-                + '<td>' + row.type + '</td>'
+              //  + '<td>' + row.type + '</td>'
 
                 + '<td>' + row.price + '</td>'
                 + '<td><input type="number" name="'+row.price+'" id="'+row.id+'" onchange="changeTotal(this.value,this.id,this.name)" placeholder="Số lượng"></td>'

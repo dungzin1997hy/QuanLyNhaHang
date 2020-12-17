@@ -29,6 +29,7 @@ public class DishServiceImpl implements DishService {
             dish.setType(dishEntity.getType());
             dish.setUnit(dishEntity.getUnit());
             dish.setDescription(dishEntity.getDescription());
+            dish.setUrl(dishEntity.getUrl());
             dishes.add(dish);
         }
         return dishes;
@@ -46,6 +47,7 @@ public class DishServiceImpl implements DishService {
             dish.setType(dishEntity.getType());
             dish.setUnit(dishEntity.getUnit());
             dish.setDescription(dishEntity.getDescription());
+            dish.setUrl(dishEntity.getUrl());
             System.out.println(dish.toString());
             dishes.add(dish);
         }
@@ -56,13 +58,16 @@ public class DishServiceImpl implements DishService {
     public Dish searchDishByName(String name) {
         DishEntity dishEntity = dishDAO.searchDishByName(name);
         Dish dish = new Dish();
-        dish.setId(dishEntity.getId());
-        dish.setName(dishEntity.getName());
-        dish.setPrice(dishEntity.getPrice());
-        dish.setType(dishEntity.getType());
-        dish.setUnit(dishEntity.getUnit());
-        dish.setDescription(dishEntity.getDescription());
-        System.out.println(dish.toString());
+        if(dishEntity!= null) {
+            dish.setId(dishEntity.getId());
+            dish.setName(dishEntity.getName());
+            dish.setPrice(dishEntity.getPrice());
+            dish.setType(dishEntity.getType());
+            dish.setUnit(dishEntity.getUnit());
+            dish.setDescription(dishEntity.getDescription());
+            dish.setUrl(dishEntity.getUrl());
+            System.out.println(dish.toString());
+        }
         return  dish;
     }
 

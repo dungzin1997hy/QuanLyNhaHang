@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 public class FileDir {
-    @Value("C:\\Users\\tiz\\Desktop\\QLNHIMAGE")
+    @Value("D:\\DATA")
     private String fileDir;
 
 }

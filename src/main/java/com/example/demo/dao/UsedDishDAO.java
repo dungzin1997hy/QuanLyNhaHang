@@ -9,4 +9,5 @@ public interface UsedDishDAO {
     List<UsedDishEntity> getUsedDishByTable(String id);
     UsedDishEntity getUsedDishByID(int id);
     void updateTable(UsedDishEntity usedDishEntity);
+    void addUsedDish(UsedDishEntity usedDishEntity);
 }

@@ -438,8 +438,6 @@ function searchByType() {
 
         });
     }
-
-
 }
 
 function deleteDish() {

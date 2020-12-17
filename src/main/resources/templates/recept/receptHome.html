@@ -19,7 +19,11 @@
         /*thead {*/
         /*    width: calc( 100% - 1em )!* scrollbar is average 1em/16px width, remove it from thead width *!*/
         /*}*/
+        .imgDish {
+            height: 150px;
+            width: 175px;
 
+        }
 
         .datepicker {
             margin-left: 75px;
@@ -34,7 +38,7 @@
                 ready();
             });
             $(document).keypress(
-                function(event){
+                function (event) {
                     if (event.which == '13') {
                         event.preventDefault();
                     }
@@ -127,7 +131,9 @@
                             </tbody>
                         </table>
                         <div style="display:flex;justify-content:center; height: 200px">
-                            <button class="m-2" style="width: 30%;text-align: center;height: 40px">Gọi món</button>
+                            <button class="m-2" style="width: 30%;text-align: center;height: 40px"
+                                    onclick="showCallDish()">Gọi món
+                            </button>
                             <button id="btnThanh" class="m-2" style="width: 30%;text-align: center;height: 40px"
                                     onclick="showBillForm()" disabled>Thanh toán
                             </button>
@@ -204,45 +210,46 @@
                         </div>
                     </div>
                     <div class="col-lg-12" id="callDish" style="height: 100%;display: none;">
-                        <h1 style="text-align: center">Gọi món</h1>
+                        <div class="col-lg-12 row" style="display: flex;justify-content: center">
+                            <h1 style="text-align: center">Gọi món bàn : </h1>
+                            <h1> 2</h1>
+                        </div>
                         <div class="col-lg-12 row">
                             <div class="col-lg-8">
                                 <h3 style="text-align: center">
                                     Đồ ăn
                                 </h3>
-                                <div id="dish" style="display: flex" class="row">
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
+                                <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
+                                     style="margin-left: auto; margin-right: 60px">
+                                    <label class="mr-2 mb-0" for="dish_name_search">Tìm:</label>
+                                    <div style="position: relative">
+                                        <input type="text"
+                                               class="form-control text-dark flex-1 wmin-xl-100 border-bottom-1"
+                                               placeholder="Tên món ăn"
+                                               style="text-align: center"
+                                               id="dish_name_search" name="dish_name_search">
+                                        <label class="error"></label>
                                     </div>
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div>
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div>
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div>
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div>
-
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div>
-                                    <div  class="col-3" style="display: flex;flex-direction: column">
-                                        <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                        <div style="height: 10px;width: 50px;background-color: blue;"></div>
-                                    </div><div  class="col-3" style="display: flex;flex-direction: column">
-                                    <div style="height: 50px;width: 200px;background-color: #1e88e5"></div>
-                                    <div style="height: 10px;width: 50px;background-color: blue;"></div>
+                                    <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                            style="padding: 4px 4px 0 3px; border-radius: 10px"
+                                            onclick="searchDishByName()"><i
+                                            class="icon-search4 mb-1"></i></button>
                                 </div>
+                                <div style="width: 50%; height: 27px">
+                                <span>
+                                    Tìm theo loại:
+                                </span>
+                                    <select id="selectSearch"
+                                            class="selectSearch filterInput mt-2 ml-1" name="selectSearch"
+                                            onchange="searchDishByType()">
+                                        <option>Tất cả</option>
+                                        <option>Đồ uống</option>
+                                        <option>Đồ chiên</option>
+                                        <option>Đồ xào</option>
+                                        <option>Đồ tráng miệng</option>
+                                    </select>
+                                </div>
+                                <div id="dishToCall" style="display: flex" class="row">
 
                                 </div>
                             </div>
@@ -254,11 +261,12 @@
                                             <thead>
                                             <tr class="text-center" style="background-color: #f2f2f2">
 
-                                                <th style=" width: 9%;">Ảnh</th>
+                                                <th style=" width: 9%;">STT</th>
                                                 <th style=" width: 50%;">Tên món ăn</th>
                                                 <th style=" width: 8%;">Giá</th>
                                                 <th style=" width: 11%;">Số lượng</th>
                                                 <th style=" width: 12%;">Tiền</th>
+                                                <th>Tác vụ</th>
                                             </tr>
                                             </thead>
                                             <tbody id="callDishTable">

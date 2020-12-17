@@ -59,9 +59,9 @@ public class DishController {
 
     @PostMapping("/searchDishByType")
     @ResponseBody
-    public ApiResponse<List<DishEntity>> searchDishByType(@RequestParam("typeDish") String typeDish) {
-        List<DishEntity> dishEntities = new ArrayList<>();
-        dishEntities = dishDAO.getAllDishByType(typeDish);
+    public ApiResponse<List<Dish>> searchDishByType(@RequestParam("typeDish") String typeDish) {
+        List<Dish> dishEntities = new ArrayList<>();
+        dishEntities = dishService.searchDishByType(typeDish);
         if (dishEntities != null) {
             return new ApiResponse<>(true, dishEntities, "");
         } else return new ApiResponse<>(false, dishEntities, "Loại món ăn không tồn tại ");

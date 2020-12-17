@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.BillDAO;
+import com.example.demo.dao.DishDAO;
 import com.example.demo.dao.TableDAO;
 import com.example.demo.dao.UsedDishDAO;
 import com.example.demo.entity.BillEntity;
+import com.example.demo.entity.DishEntity;
 import com.example.demo.entity.TableEntity;
 import com.example.demo.entity.UsedDishEntity;
 import com.example.demo.model.Bill;
@@ -13,7 +15,9 @@ import com.example.demo.model.UsedDish;
 import com.example.demo.service.TableService;
 import com.example.demo.service.UsedDishService;
 import javafx.scene.control.Tab;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +36,8 @@ public class TableController {
     @Autowired
     public TableService tableService;
 
+    @Autowired
+    DishDAO dishDAO;
     @Autowired
     BillDAO billDAO;
 
@@ -160,7 +166,31 @@ public class TableController {
             return new ApiResponse<>(false, null, "Lỗi");
         }
     }
+
+    @PostMapping("/callDish")
+    public ApiResponse<String> callDish(@RequestBody CallDishList callDishList){
+        try{
+            TableEntity tableEntity = tableDAO.searchTableByID(callDishList.idTable+"");
+            for(CallDish callDish : callDishList.callDishes){
+                UsedDishEntity usedDishEntity = new UsedDishEntity();
+                usedDishEntity.setTableEntity(tableEntity);
+                usedDishEntity.setAmount(callDish.amount);
+                DishEntity dishEntity = dishDAO.searchDishById(callDish.idDish);
+                usedDishEntity.setDishEntity(dishEntity);
+                LocalDateTime now = LocalDateTime.now();
+                usedDishEntity.setTime(now);
+                usedDishDAO.addUsedDish(usedDishEntity);
+            }
+            return new ApiResponse<>(true,"Gọi món thành công","");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Lỗi");
+        }
+    }
 }
+
+
 
 @Data
 class Listinteger implements Serializable {
@@ -170,4 +200,19 @@ class Listinteger implements Serializable {
     int idCustomer;
     int idRecept;
     String nameTable;
+}
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class CallDish implements Serializable{
+    int idDish;
+    int amount;
+}
+
+@Data
+class CallDishList implements Serializable{
+    List<CallDish> callDishes;
+    int idTable;
 }

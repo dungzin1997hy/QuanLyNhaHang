@@ -137,15 +137,18 @@ public class TableController {
             billEntity.setTime(dt);
             billEntity.setTotal(listinteger.total);
             billEntity.setPaymentType("tiền mặt");
+            System.out.println(listinteger.nameTable);
+            TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
+
+            tableEntity.setStatus("free");
+            tableDAO.updateTable(tableEntity);
+            billEntity.setTableEntity(tableEntity);
             BillEntity billEntity1 = billDAO.addBill(billEntity);
             for (int i : listinteger.list) {
                 UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);
                 usedDishEntity.setBillEntity(billEntity1);
                 usedDishDAO.updateTable(usedDishEntity);
             }
-            TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
-            tableEntity.setStatus("free");
-            tableDAO.updateTable(tableEntity);
             return new ApiResponse<>(true, "Thanh toán thành công", "");
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,6 +170,7 @@ public class TableController {
         }
     }
 
+
     @PostMapping("/callDish")
     public ApiResponse<String> callDish(@RequestBody CallDishList callDishList){
         try{
@@ -184,6 +188,18 @@ public class TableController {
             return new ApiResponse<>(true,"Gọi món thành công","");
         }
         catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Lỗi");
+        }
+    }
+    @PostMapping("/setTable")
+    public ApiResponse<String> setTable(@RequestParam("nameTable") String name){
+        try{
+            TableEntity tableEntity = tableDAO.getTableByName(name);
+            tableEntity.setStatus("using");
+            tableDAO.updateTable(tableEntity);
+            return new ApiResponse<>(true,"Đặt bàn thành công","");
+        }catch (Exception e){
             e.printStackTrace();
             return new ApiResponse<>(false,"","Lỗi");
         }

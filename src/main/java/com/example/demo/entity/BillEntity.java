@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.Bill;
 import com.example.demo.model.UsedDish;
 import lombok.*;
 
@@ -52,5 +53,17 @@ public class BillEntity {
         this.total = total;
         this.paymentType = paymentType;
         this.time = time;
+    }
+
+    public Bill toBill(){
+        Bill bill = new Bill();
+        bill.setId(this.id);
+        bill.setNameTable(this.tableEntity.getName());
+        bill.setPaymentType(this.paymentType);
+        bill.setTotal(this.total);
+        bill.setTime(this.time);
+        bill.setNameStaff(this.staffEntity.getName());
+        bill.setNameCustomer(this.customerEntity.getName());
+        return bill;
     }
 }

@@ -26,4 +26,19 @@ public class BillServiceImpl implements BillService {
 
         return bills;
     }
+
+    @Override
+    public List<Bill> getBillByCustomer(int id) {
+        try{
+            List<BillEntity> billEntities = billDAO.getBillByCustomer(id);
+            List<Bill> bills = new ArrayList<>();
+            for(BillEntity billEntity : billEntities){
+                bills.add(billEntity.toBill());
+            }
+            return bills;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

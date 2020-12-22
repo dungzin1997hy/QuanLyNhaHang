@@ -25,7 +25,7 @@ public class TableDAOImpl implements TableDAO {
     private EntityManager entityManager;
     @Override
     public List<TableEntity> searchTableByType(String Type) {
-        String sql ="SELECT u FROM TableEntity u WHERE u.type='"+Type+"'";
+        String sql ="SELECT u FROM TableEntity u WHERE u.type='"+Type+"' order by u.area";
         Query query = entityManager.createQuery(sql);
         List<TableEntity> tableEntities = query.getResultList();
         return tableEntities;
@@ -34,7 +34,7 @@ public class TableDAOImpl implements TableDAO {
     @Override
     public List<TableEntity> getAllTable() {
         try {
-            String sql = "SELECT u FROM TableEntity u order by u.area,u.name,u.type asc";
+            String sql = "SELECT u FROM TableEntity u order by u.area,u.type,u.name asc";
             Query query = entityManager.createQuery(sql);
             List<TableEntity> tableEntities = query.getResultList();
             return tableEntities;
@@ -47,7 +47,7 @@ public class TableDAOImpl implements TableDAO {
     @Override
     public List<TableEntity> getTableByArea(String area) {
         try{
-            String sql ="SELECT u FROM TableEntity u WHERE u.area='"+area+"'";
+            String sql ="SELECT u FROM TableEntity u WHERE u.area='"+area+"' order by u.type";
             Query query = entityManager.createQuery(sql);
             List<TableEntity> tableEntities = query.getResultList();
             return tableEntities;
@@ -88,6 +88,19 @@ public class TableDAOImpl implements TableDAO {
             TableEntity list = (TableEntity) query.getSingleResult();
             return list;
         }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public TableEntity getTableById(int id) {
+        try{
+            String sql ="select u from TableEntity u where u.id ='"+id+"'";
+            Query query = entityManager.createQuery(sql);
+            TableEntity tableEntity = (TableEntity) query.getSingleResult();
+            return tableEntity;
+        }catch (Exception e){
             e.printStackTrace();
             return null;
         }

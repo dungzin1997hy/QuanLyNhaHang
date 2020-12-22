@@ -14,6 +14,7 @@ public interface TableDAO {
     List<TableEntity> searchTableBooking(String type, int idTime, Date date);
 
     TableEntity getTableByName(String name);
+    TableEntity getTableById(int id);
     Boolean checkExistTable(String tableName);
     TableEntity searchTableByID(String id);
 

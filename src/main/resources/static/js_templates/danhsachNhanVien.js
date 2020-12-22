@@ -12,7 +12,7 @@ function ready() {
                 for (var i = 0; i < data.data.length; i++) {
                     Role.push(data.data[i]);
                 }
-                console.log(Role);
+
                 searchReady();
             }
         }, error: function () {
@@ -46,7 +46,7 @@ function searchReady() {
 }
 
 function showDropDownEdit(roleID, roleName) {
-    console.log("roleName: " + roleName + ",  roleID = " + roleID);
+
     var RoleTemp = Role.slice();
     var pos = 0;
 
@@ -72,7 +72,7 @@ function showDropDownEdit(roleID, roleName) {
 }
 
 function showStaffTable() {
-    console.log("show lại list table");
+
     $('.overlay_bang_mon_an').hide();
     $('.nav__add-staff').hide();
     $('.nav__edit-staff').hide();
@@ -205,7 +205,7 @@ $(function () {
             var role = $("#role_add option:selected").val().trim();
             var username_add = $('#username_add').val().trim();
             var password_add = $('#password_add').val().trim();
-            console.log(username_add + " " + password_add);
+
             $.ajax({
                 url: "/addStaff",
                 type: "POST",
@@ -339,7 +339,7 @@ $(function () {
             var username_edit = $('#username_edit').val().trim();
             // var password_edit = $('#password_edit').val().trim();
             // var password_edit = $('#password_edit').val().trim();
-            console.log("id: "+idStaff_edit+" "+nameStaff_edit+" "+phoneNumber_edit+" "+role);
+
             $.ajax({
                 url: "/updateStaff",
                 type: "POST",
@@ -354,13 +354,13 @@ $(function () {
                     "username":username_edit
                 },
                 success: function (data) {
-                    console.log("abc");
+
                     $('.nav__edit-dish').hide();
                     $('.overlay_bang_mon_an').hide();
                     swal("Thành công", data.data, "success");
                     showStaffTable();
                 }, error: function (data) {
-                     console.log("lỗi không cập nhật dc data");
+
                     swal("Lỗi", data.errorMessage, "warning");
                 }
             });
@@ -372,7 +372,7 @@ $(function () {
 function searchByRole() {
     var selectItem = $("#selectSearch").val();
 
-    console.log(selectItem);
+
     if (selectItem == 0) {
         showStaffTable();
     } else {
@@ -383,7 +383,7 @@ function searchByRole() {
                 "idRole": selectItem
             },
             success: function (data) {
-                console.log(data);
+
                 showTable(data);
             }, error: function (data) {
                 swal("Lỗi", data.data, "warning");
@@ -398,7 +398,7 @@ function searchByRole() {
 function deleteStaff() {
     $('#bang_nhan_vien').find('tr').click(function () {
         var idTable = $(this).find('td').eq(1).text();
-        console.log(idTable);
+
         $("#idStaff_delete").text(idTable);
         var idTableDelete = $("#idStaff_delete").text();
 
@@ -443,7 +443,7 @@ function closeEditForm() {
 }
 
 function showTable(data) {
-    console.log("show table");
+
     var contentString = "";
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {

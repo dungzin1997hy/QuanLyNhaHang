@@ -27,8 +27,12 @@ public class CustomerSerivceImpl implements CustomerService {
     }
 
     @Override
-    public Customer searchCustomerByPhoneNumber(String phoneNumber) {
-        CustomerEntity customerEntity = customerDAO.searchCustomerByPhoneNumber(phoneNumber);
-        return customerEntity.toCustomer();
+    public List<Customer> searchCustomerByPhoneNumber(String phoneNumber) {
+        List<CustomerEntity> customerEntities = customerDAO.getListCustomerByPhone(phoneNumber);
+        List<Customer> customers = new ArrayList<>();
+        for(CustomerEntity customerEntity:customerEntities){
+            customers.add(customerEntity.toCustomer());
+        }
+        return customers;
     }
 }

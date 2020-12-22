@@ -46,6 +46,20 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
+    public List<CustomerEntity> getListCustomerByPhone(String phoneNumber) {
+        try{
+            String sql ="select u from CustomerEntity u where u.phoneNumber like '%"+phoneNumber+"%'";
+            Query query = entityManager.createQuery(sql);
+            List<CustomerEntity> customerEntities = query.getResultList();
+            return customerEntities;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
     public List<CustomerEntity> getAllCustomer() {
 
         try {

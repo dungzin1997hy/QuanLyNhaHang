@@ -1,17 +1,16 @@
 //Show user list
-function showDishTable() {
-    console.log("show lại list table");
+function showCustomerTable() {
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-dish').hide();
-    $('.nav__edit-dish').hide();
+    $('.nav__add-customer').hide();
+    $('.nav__edit-customer').hide();
     $.ajax({
-        url: "/getAllDish",
+        url: "/getAllCustomer",
         type: "POST",
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
                 showTable(data);
-                console.log(data);
+
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -33,31 +32,30 @@ jQuery.validator.addMethod("checkChar", function (value, element, param) {
 
 // tìm kiếm món ăn = tên
 $(function () {
-    $("#form_search_dish").validate({
+    $("#form_search_cus").validate({
         submitHandler: function () {
-            var nameDish = $("#dish_name_search").val().trim();
-            if (nameDish == "") {
-                showDishTable();
+            var phoneNumber = $("#phoneNumberSearch").val().trim();
+            if (phoneNumber == "") {
+                showCustomerTable();
             } else {
                 $.ajax({
-                    url: "/searchListDishByName",
+                    url: "/searchCustomerByPhoneNumber",
                     type: "POST",
                     dataType: "json",
                     data: {
-                        "nameDish": nameDish,
+                        "customerPhoneNumber": phoneNumber,
                     },
                     success: function (data) {
-                        if(data.success == true) {
+                        if (data.success == true) {
                             swal("Thành công", "Tìm thành công", "success");
-                            $('#dish_name_search').focus();
-                            $('#dish_name_search').val("");
+                            $('#phoneNumberSearch').focus();
+                            $('#phoneNumberSearch').val("");
                             showTable(data);
-                        }
-                        else {
-                            swal("Lỗi",data.errorMessage,"warning");
-                            $('#dish_name_search').val("");
-                            $('#dish_name_search').focus();
-                            showDishTable();
+                        } else {
+                            swal("Lỗi", data.errorMessage, "warning");
+                            $('#phoneNumberSearch').val("");
+                            $('#phoneNumberSearch').focus();
+                            showCustomerTable();
                         }
 
                     }, error: function (data) {
@@ -139,196 +137,183 @@ $(function () {
     });
 });
 
-// Nav form edit
-function showEditForm() {
+
+function showAddFormCustomer() {
     $('.overlay_bang_mon_an').show();
-    $('.nav__edit-dish').show();
-    $('#bang_mon_an').find('tr').click(function () {
-        var url =$(this).find('td').eq(2).find('img').attr('src');
-        $('#thumbnail_edit').attr('src',url);
-        var idDish = $(this).find('td').eq(1).text();
-        $('#idDish_edit').val(idDish);
-        var nameDish = $(this).find('td').eq(3).text();
-        $('#nameDish_edit').val(nameDish);
-        var price = $(this).find('td').eq(4).text();
-        $('#price_edit').val(price);
-        var type = $(this).find('td').eq(5).text();
-
-        //console.log(type);
-        if (type.trim() == 'Đồ xào') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ chiên') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ uống') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-        }
-        if (type.trim() == 'Đồ tráng miệng') {
-            $('#type_edit').empty();
-            $('#type_edit').append('<option value="Đồ tráng miệng">Đồ tráng miệng</option>');
-            $('#type_edit').append('<option value="Đồ xào">Đồ xào</option>');
-            $('#type_edit').append('<option value="Đồ uống">Đồ uống</option>');
-            $('#type_edit').append('<option value="Đồ chiên">Đồ chiên</option>');
-        }
-
-        var unit = $(this).find('td').eq(6).text();
-
-        if (unit.trim() == 'Đĩa') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Bát') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Cốc') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-        }
-        if (unit.trim() == 'Chai') {
-            $('#unit_edit').empty();
-            $('#unit_edit').append('<option value="Chai">Chai</option>');
-
-            $('#unit_edit').append('<option value="Bát">Bát</option>');
-            $('#unit_edit').append('<option value="Đĩa">Đĩa</option>');
-            $('#unit_edit').append('<option value="Cốc">Cốc</option>');
-        }
-        var description = $(this).find('td').eq(7).text();
-        $('#devices_edit').val(description);
-    });
+    $('.nav__add-customer').show();
+    $('#nameCus_add').val("");
+    $('#phoneNumberCusAdd').val("");
+    $('#emailCusAdd').val("");
 
 }
+
 //add dish
-function ajaxSubmitForm() {
-    var form = $('#add_form')[0];
-    var data = new FormData(form);
-    $.ajax({
-        type: "POST",
-        enctype: 'multipart/form-data',
-        url: "/addDish",
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 1000000,
-        success: function (data) {
-
-            $('.nav__add-dish').hide();
-            resetAddForm();
-
-            if (data.success == true) {
-                swal("Thành công", data.data, "success");
-                showDishTable();
-            } else {
-                swal("Lỗi", data.errorMessage, "warning");
-                showDishTable();
+$(function () {
+    $("#add_Customer_form").validate({
+        rules: {
+            nameCus_add: {
+                required: true,
+                checkChar: "[a-zA-Z]+",
+                maxlength: 20
+            },
+            phoneNumberCusAdd: {
+                digits: true,
+                required: true
+            },
+            emailCusAdd: {
+                maxlength: 50
             }
         },
-        error: function (jqXHR) {
-            swal("Lỗi", jqXHR.responseText, "warning");
-            $('#modal-upload-file').modal('hide');
-        }
-    });
-}
-function ajaxSubmitEditForm() {
+        messages: {
+            nameCus_add: {
+                required: "Vui lòng nhập tên khách hàng",
+            },
+            phoneNumberAdd: {
+                required: "Vui lòng nhập số điện thoại"
+            },
+            emailCusAdd: {
+                maxlength: "Vui lòng nhập nhỏ hơn 50 ký tự",
 
-    var idDishEdit = $('#idDish_edit').val().trim();
-    var nameDishEdit = $('#nameDish_edit').val().trim();
-    var priceEdit = $('#price_edit').val().trim();
-    var imageinput = $('#fileImage_edit').val();
-    console.log(imageinput);
-    var typeEdit = $('#type_edit option:selected').val().trim();
-    var unitEdit = $('#unit_edit option:selected').val().trim();
-    var devices_edits = $('#devices_edit').val().trim();
-    console.log(idDishEdit+" "+nameDishEdit+" "+priceEdit);
-    $.ajax({
-        url: "/searchDishByName",
-        type: "POST",
-        dataType: "json",
-        data: {
-            "nameDish": nameDishEdit,
+            }
+
         },
-        success: function (data) {
-            var form = $('#edit_form')[0];
-            var datalog = new FormData(form);
-            if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit||imageinput != "") {
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/updateDish",
-                    data: datalog,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 1000000,
-                    success: function (data) {
+        submitHandler: function () {
+            var name = $('#nameCus_add').val().trim();
+            var phoneNumber = $('#phoneNumberCusAdd').val().trim();
+            var email = $('#emailCusAdd').val().trim();
 
-                        $('.nav__edit-dish').hide();
-                        $('.overlay_bang_mon_an').hide();
+            $.ajax({
+                url: "/addCustomer",
+                type: "POST",
+                data: {
+                    "nameCus": name,
+                    "phoneNumber": phoneNumber,
+                    "email": email
+                },
+                success: function (data) {
+                    $('.nav__add-customer').hide();
+                    if (data.success == true) {
+                        $('#emailCusAdd').val("");
+                        $('#nameCus_add').val("");
+                        $('#phoneNumberSearchError').html("");
+                        $("#addCustomer").hide();
+                        $('#nameCus').val(name);
                         swal("Thành công", data.data, "success");
-                        showDishTable();
-                    }, error: function (data) {
-                        // console.log("lỗi không cập nhật dc data");
+                        showCustomerTable();
+                    } else {
                         swal("Lỗi", data.errorMessage, "warning");
+                        showCustomerTable();
                     }
-                });
-            } else {
-                $('.nav__edit-dish').hide();
-                $('.overlay_bang_mon_an').hide();
-                console.log("khong cap nhat");
-                swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
-            }
-        },
-        error: function (jqXHR) {
-            swal("Lỗi","SearchDish faile", "warning");
-            $('#modal-upload-file').modal('hide');
+                }, error: function (data) {
+                    swal("Fail", data.errorMessage, "warning");
+                }
+            });
         }
     });
-}
+});
 
-function showImage(fileInput){
+function showImage(fileInput) {
     file = fileInput.files[0];
     reader = new FileReader();
     reader.onload = function (e) {
         $('#thumbnail_add').show();
-        $('#thumbnail_add').attr('src',e.target.result);
+        $('#thumbnail_add').attr('src', e.target.result);
     }
     reader.readAsDataURL(file);
 }
-function showImageEdit(fileInput){
+
+//hiện bảng edit khách hàng
+function showEditCusForm() {
+    $('.overlay_bang_mon_an').show();
+    $('.nav__edit-customer').show();
+    $('#bang_khach_hang').find('tr').click(function () {
+        var id = $(this).find('td').eq(1).text();
+        var name = $(this).find('td').eq(2).text();
+        var phoneNumber = $(this).find('td').eq(3).text();
+        var email = $(this).find('td').eq(4).text();
+        console.log(email);
+
+        $('#idCus_edit').val(id);
+        $('#nameCus_edit').val(name);
+
+        $('#phoneNumber_edit').val(phoneNumber);
+        $('#email_edit').val(email);
+
+    })
+
+}
+
+//form khách hàng submit
+$(function () {
+    $("#edit_form").validate({
+        rules: {
+            nameCus_add: {
+                required: true,
+                checkChar: "[a-zA-Z]+",
+                maxlength: 20
+            },
+            phoneNumberCusAdd: {
+                digits: true,
+                required: true
+            },
+            emailCusAdd: {
+                maxlength: 50
+            }
+        },
+        messages: {
+            nameCus_add: {
+                required: "Vui lòng nhập tên khách hàng",
+            },
+            phoneNumberAdd: {
+                required: "Vui lòng nhập số điện thoại"
+            },
+            emailCusAdd: {
+                maxlength: "Vui lòng nhập nhỏ hơn 50 ký tự",
+            }
+
+        },
+        submitHandler: function () {
+            var id = $('#idCus_edit').val().trim();
+            var name = $('#nameCus_edit').val().trim();
+            var phoneNumber = $('#phoneNumber_edit').val().trim();
+            var email = $('#email_edit').val().trim();
+
+            $.ajax({
+                url: "/updateCustomer",
+                type: "POST",
+                data: {
+                    "id": id,
+                    "nameCus": name,
+                    "phoneNumber": phoneNumber,
+                    "email": email
+                },
+                success: function (data) {
+                    $('.nav__edit-customer').hide();
+                    if (data.success == true) {
+                        swal("Thành công", data.data, "success");
+                        showCustomerTable();
+                    } else {
+                        swal("Lỗi", data.errorMessage, "warning");
+                        showCustomerTable();
+                    }
+                }, error: function (data) {
+                    swal("Fail", data.errorMessage, "warning");
+                }
+            });
+        }
+    });
+});
+
+function showImageEdit(fileInput) {
     file = fileInput.files[0];
     reader = new FileReader();
     reader.onload = function (e) {
         $('#thumbnail_edit').show();
-        $('#thumbnail_edit').attr('src',e.target.result);
+        $('#thumbnail_edit').attr('src', e.target.result);
     }
     reader.readAsDataURL(file);
 }
+
 //Update user information
 $(function () {
     $("#edit_form").validate({
@@ -378,9 +363,7 @@ $(function () {
                     "nameDish": nameDishEdit,
                 },
                 success: function (data) {
-          //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
-           //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
-                    console.log(data);
+
 
                     if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit) {
                         $.ajax({
@@ -401,14 +384,14 @@ $(function () {
                                 swal("Thành công", data.data, "success");
                                 showDishTable();
                             }, error: function (data) {
-                               // console.log("lỗi không cập nhật dc data");
+
                                 swal("Lỗi", data.errorMessage, "warning");
                             }
                         });
                     } else {
                         $('.nav__edit-dish').hide();
                         $('.overlay_bang_mon_an').hide();
-                        console.log("khong cap nhat");
+
                         swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
                     }
                 }, error: function (data) {
@@ -425,10 +408,10 @@ function searchByType() {
         showDishTable();
     } else {
         $.ajax({
-            url : "/searchDishByType",
-            type : "POST",
+            url: "/searchDishByType",
+            type: "POST",
             data: {
-                "typeDish" : selectItem
+                "typeDish": selectItem
             },
             success: function (data) {
                 showTable(data);
@@ -479,38 +462,81 @@ function deleteDish() {
 
 function closeEditForm() {
     $('.overlay_bang_mon_an').hide();
-    $('.nav__add-dish').hide();
-    $('.nav__edit-dish').hide();
+    $('.nav__add-customer').hide();
+    $('.nav__edit-customer').hide();
     resetAddForm();
 }
 
 function showTable(data) {
-    console.log("show table");
     var contentString = "";
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
-            if (row.description == null) {
-                var string = "";
-            } else string = row.description;
             contentString = contentString
                 + '<tr role="row" class="odd">'
-                + '<td>' + (i+1) + '</td>'
-                + '<td id="idDish" style="display: none">' + row.id + '</td>'
-                + '<td><img id="'+row.url+'" src="/image/upload/' + row.url + '" alt="slider-image" style="width: 100px;height: 100px">'  + '</td>'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td id="idCustomer" style="display: none">' + row.id + '</td>'
                 + '<td>' + row.name + '</td>'
-                + '<td>' + row.price + '</td>'
-                + '<td>' + row.type + '</td>'
-                + '<td>' + row.unit + '</td>'
-                + '<td>' + string + '</td>'
+                + '<td>' + row.phoneNumber + '</td>'
+                + '<td>' + row.email + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
-                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditCusForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a>' +
+                '<a data-toggle="tooltip" title="Remove"><button onclick="showBillCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-download"></i></button></a>'
+                + '</td>'
                 + '</tr>';
         }
     }
     $("#soMonAn").html(data.data.length);
-    $("#bang_mon_an").html(contentString);
+    $("#bang_khach_hang").html(contentString);
+}
+
+function closeAddCusForm() {
+    $('#nameCus_add').val("");
+    $('#phoneNumberCusAdd').val("");
+    $('#emailCusAdd').val("");
+    $('.nav__add-customer').hide();
+    $('.overlay_bang_mon_an').hide();
+    $('.div__show-billCustomer').hide();
+}
+
+function showBillCustomer() {
+    $('.overlay_bang_mon_an').show();
+    $('.div__show-billCustomer').show();
+    $('#bang_khach_hang').find('tr').click(function () {
+        var id = $(this).find('td').eq(1).text();
+        var name = $(this).find('td').eq(2).text();
+        $('#cusName').text(name);
+        $.ajax({
+            url: "/getBillByCustomer",
+            type: "POST",
+            datatype: "json",
+            data: {
+                "idCus": id
+            },
+            success: function (data) {
+                var contentString = "";
+                var tong = 0;
+                if (data.data != null) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        var row = data.data[i];
+                        var time = row.time;
+                        var temp = time.split("T");
+                        tong+=row.total;
+                        contentString = contentString
+                            + '<tr role="row" class="odd">'
+                            + '<td>' + (i + 1) + '</td>'
+                            + '<td>' + row.nameTable + '</td>'
+                            + '<td>' + row.total + '</td>'
+                            + '<td>' + (temp[1]+' '+temp[0]) + '</td>'
+                            + '</tr>';
+                    }
+                }
+                $('#bang_bill_cus').html(contentString);
+                $('#totalBill').html(tong);
+            }
+        })
+    })
 }
 
 function resetAddForm() {

@@ -1,16 +1,19 @@
 var callDish = new Array(0);
 
 function ready() {
-    $('#usedDish').hide();
-    $('#callDish').show();
-    showCallDish();
+    // $('#usedDish').hide();
+    // $('#callDish').hide();
+    // $('#showBill').hide();
+    $('#khuAcontainer').html("");
+    $('#khuBcontainer').html("");
+    $('#khuCcontainer').html("");
     $.ajax({
         url: "/getTableByArea/A",
         type: "POST",
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
-                showTable("ban_khu_A", data);
+                showTable("khuAcontainer", data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -22,7 +25,7 @@ function ready() {
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
-                showTable("ban_khu_B", data);
+                showTable("khuBcontainer", data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -34,7 +37,7 @@ function ready() {
         dataType: "json",
         success: function (data) {
             if (data.success == true) {
-                showTable("ban_khu_C", data);
+                showTable("khuCcontainer", data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -43,6 +46,8 @@ function ready() {
 }
 
 function showCallDish() {
+
+    $('#callDish').show()
     $.ajax({
         url: "/getAllDish",
         type: "POST",
@@ -50,7 +55,6 @@ function showCallDish() {
         success: function (data) {
             if (data.success == true) {
                 showCallDishTable(data);
-                console.log(data);
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -61,7 +65,6 @@ function showCallDish() {
 function searchDishByName() {
     var nameDish = $("#dish_name_search").val().trim();
     $('#selectSearch').prop('selectedIndex', 0);
-    console.log(nameDish);
     if (nameDish == "") {
         showCallDishTable();
     } else {
@@ -95,19 +98,16 @@ var dem = 1;
 
 function chooseDish(id, name, price) {
     var a = false;
-    for(var i = 0;i<callDish.length;i++){
-        if(callDish[i].idDish == id){
+    for (var i = 0; i < callDish.length; i++) {
+        if (callDish[i].idDish == id) {
             a = true;
-        }
-        else continue;
+        } else continue;
     }
-    if(a == true){
-        var temp = $('#input-'+id).val().trim();
-        $('#input-'+id).val(parseInt(temp)+1);
-        $('#sum'+id).text((parseInt(temp)+1)*price);
-    }
-    else
-    {
+    if (a == true) {
+        var temp = $('#input-' + id).val().trim();
+        $('#input-' + id).val(parseInt(temp) + 1);
+        $('#sum' + id).text((parseInt(temp) + 1) * price);
+    } else {
         callDish.push({
             "idDish": id,
             "nameDish": name,
@@ -121,7 +121,7 @@ function chooseDish(id, name, price) {
             + '<td id="row' + id + '" style="display: none">' + id + '</td>'
             + '<td class="nr">' + name + '</td>'
             + '<td>' + price + '</td>'
-            + '<td>' + '<input id="input-' + id +'" name="' + price + '" type="number" value="1" min="0" onchange="changeValueCallDish(this.id,this.name,this.value)"style="width: 40px">' + '</td>'
+            + '<td>' + '<input id="input-' + id + '" name="' + price + '" type="number" value="1" min="0" onchange="changeValueCallDish(this.id,this.name,this.value)"style="width: 40px">' + '</td>'
             + '<td id="' + idtemp + '">' + (price) + '</td>'
             + '<td><a data-toggle="tooltip" title="Remove"><button onclick="deleteRow()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
             +
@@ -130,14 +130,23 @@ function chooseDish(id, name, price) {
         $('#callDishTable').append(contentString);
     }
 }
+
 //xoá hàng trong bảng gọi món
 function deleteRow() {
     $('#callDishTable').find('tr').click(function () {
+        var idDish = $(this).closest("tr").find('td:eq(1)').text();
+
+        for (var i = 0; i < callDish.length; i++) {
+            if (idDish == callDish[i].idDish) {
+                callDish.splice(i, 1);
+            }
+        }
         $(this).closest("tr").remove();
+
     });
 }
+
 function changeValueCallDish(id, name, value) {
-    console.log("id: " + id + " name: " + name + " value: " + value);
     var number = id.split("-");
     $('#' + 'sum' + number[1]).text(value * name);
 
@@ -148,7 +157,7 @@ function showCallDishTable(data) {
     var content = "";
     for (var i = 0; i < data.data.length; i++) {
         content = content + '<div  class="col-3" style="display: flex;flex-direction: column;align-items: center" >' +
-            '<button id="' + data.data[i].id + '" name="' + data.data[i].name + '" value="' + data.data[i].price + '" style="margin-top: 25px" onclick="chooseDish(this.id,this.name,this.value)"><div style="height: 150px;width: 175px;" >' +
+            '<button  id="' + data.data[i].id + '" name="' + data.data[i].name + '" value="' + data.data[i].price + '" style="margin-top: 25px" onclick="chooseDish(this.id,this.name,this.value)"><div style="height: 150px;width: 175px;" >' +
             '<img class="imgDish" src="/image/upload/' + data.data[i].url + '">' +
             '</div>' +
             '<div style="height: 25px;width: 175px;display: flex;justify-content: space-around">' +
@@ -165,7 +174,6 @@ function showCallDishTable(data) {
 
 function searchDishByType() {
     var selectItem = $("#selectSearch").val().trim();
-    console.log(selectItem);
     if (selectItem == 'Tất cả') {
         showCallDish();
     } else {
@@ -191,32 +199,62 @@ function showTable(id, data) {
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
-            contentString = contentString
-                + '<tr role="row" class="odd">'
-                // + '<td>' + (i + 1) + '</td>'
-                + '<td id="' + row.id + '" style="display: none">' + row.id + '</td>'
-                + '<td class="nr">' + row.name + '</td>'
-                // + '<td>' + row.phoneNumber + '</td>'
-                // + '<td>' + row.cmnd + '</td>'
-                // + '<td>' + row.email + '</td>'
-                // + '<td>' + row.address + '</td>'
-                // + '<td id="idRole" style="display: none">' + row.role.id + '</td>'
-                // + '<td>' + row.role.brand + '</td>'
-                + '<td>' + row.status + '</td>'
-                + '<td>' + ' ' + '</td>'
-                + '<td>' +
+            contentString = contentString +
+                '<div class="col-2" style=" display: flex;flex-direction: column;align-items: center">\n';
+            if(row.status == 'free') {
+                contentString +='<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
+                    contentString += '<img src="global_assets/images/freetable.png" style="width: 50px;height: 50px">';
+            }
+            else if(row.status =='using') {
+                contentString +='<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">';
 
-                // '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditStaffForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
-                // '<a data-toggle="tooltip" title="Remove"><button onclick="deleteStaff()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
-                // +
-                '<button id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">Click</button>' +
-                '</tr>';
+                contentString += '<img src="global_assets/images/usingtable.png" style="width: 50px;height: 50px">';
+            }
+            contentString = contentString + '</button>\n' +
+                '     <p>' + row.name + '</p>\n' +
+                '     <p>' + row.type + '</p>\n' +
+                '</div>';
         }
     }
 
-    $("#" + id).html(contentString);
+    $("#" + id).append(contentString);
 }
+function showSetTable(id,name) {
+    $('#usedDish').hide();
+    $('#callDish').hide();
+    $('#showBill').hide();
+    swal({
+            title: "Xác nhận !!!",
+            text: "Bạn có chắc đặt bàn này không ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "blue",
+            cancelButtonText: "Quay lại",
+            confirmButtonText: "Có",
 
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "/setTable",
+                    type: "POST",
+                    data: {
+                        "nameTable": name
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        swal("Done", data.data, "success");
+                        ready();
+                       showuseddish(id,name);
+                    }, error: function () {
+                        swal("Lỗi", "Không xóa được", "warning");
+                    }
+                });
+            }
+        });
+}
 //gọi món xong
 function bookDish() {
     var value = new Array();
@@ -233,22 +271,35 @@ function bookDish() {
     });
     $.ajax({
         type: "POST",
-        url:"/callDish",
+        url: "/callDish",
         contentType: "application/json",
-        data: JSON.stringify ({
-            "callDishes":value,
-            "idTable":3
+        data: JSON.stringify({
+            "callDishes": value,
+            "idTable": 3
         }),
         success: function (data) {
             swal("Thành công", data.data, "success");
+            showuseddish(3,"ban3");
+
         }, error: function (data) {
             swal("Lỗi", data.errorMessage, "warning");
         }
     })
+    $('#callDish').hide();
+    $('#callDishTable').html("");
+    callDish = [];
+    dem = 1;
+}
+
+function cancelBookDish() {
+    callDish = [];
+    dem = 1;
+    $('#callDish').hide();
+    $('#callDishTable').html("");
 }
 
 function showuseddish(id, name) {
-    console.log(name);
+
     $('#usedDish').show();
     $('#idTable').html(id);
     $('#nameTable').html(name);
@@ -259,7 +310,7 @@ function showuseddish(id, name) {
             "idTable": id
         },
         success: function (data) {
-            console.log(data);
+
             if (data.success == true) {
                 showTableUsedDish(data);
             }
@@ -271,28 +322,28 @@ function showuseddish(id, name) {
 }
 
 function showTableUsedDish(data) {
-    // console.log(data);
+
     var contentString = "";
     var total = 0;
     if (data.data != null) {
-        // console.log(data.data.usedDishList);
+
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
-            console.log(row);
+
             var time;
             if (row.time != null) {
-                time = row.time.replace("T", " ");
+                time = row.time.split("T");
             }
-                contentString = contentString
-                    + '<tr role="row" class="odd">'
-                    // + '<td>' + (i + 1) + '</td>'
-                    + '<td style="display: none">' + row.id + '</td>'
-                    + '<td style="display: none">' + row.dish.id + '</td>'
-                    + '<td class="nr">' + row.dish.name + '</td>'
-                    + '<td>' + row.dish.price + '</td>'
-                    + '<td>' + row.amount + '</td>'
-                    + '<td>' + time + '</td>'
-                    + '<td>' + (row.dish.price * row.amount) + '</td>'
+            contentString = contentString
+                + '<tr role="row" class="odd">'
+                // + '<td>' + (i + 1) + '</td>'
+                + '<td style="display: none">' + row.id + '</td>'
+                + '<td style="display: none">' + row.dish.id + '</td>'
+                + '<td class="nr">' + row.dish.name + '</td>'
+                + '<td>' + row.dish.price + '</td>'
+                + '<td>' + row.amount + '</td>'
+                + '<td>' + time[1] + '</td>'
+                + '<td>' + (row.dish.price * row.amount) + '</td>'
             '</tr>';
 
             total += (row.dish.price * row.amount);
@@ -311,7 +362,10 @@ function showTableUsedDish(data) {
 }
 
 function showBillForm() {
+    $('#showBill').show();
     $('#bill').show();
+    $('#inputCus').val("");
+    $('#backCus').html("");
     var idTable = $('#idTable').text();
     var currentdate = new Date();
     var hour = currentdate.getHours();
@@ -347,10 +401,10 @@ function showBillForm() {
 
 function changeValue(value) {
     var total = $('#TotalBill').text();
-    console.log(value + " " + total);
+
     if (parseInt(value) < parseInt(total)) {
         $('#inputCus').css('background-color', 'red');
-        console.log("thap hon gia");
+
     } else {
         $('#inputCus').css('background-color', 'white');
         $('#backCus').text(value - total);
@@ -359,12 +413,10 @@ function changeValue(value) {
 }
 
 function saveBill() {
-
     // $('#bill').hide();
     var value = new Array();
     $('#useddishTableBill > tr').each(function () {
         var id = $(this).find('td:eq(0)').text();
-        console.log(id);
         if (id != null) {
             value.push(id);
         }
@@ -373,9 +425,8 @@ function saveBill() {
     var total = $('#TotalBill').text();
     var idCustomer = $('#idCustomer').text();
     var idRecept = $('#idRecept').text();
-    var nameTable = $('#nameTable').text();
-    console.log(value + " " + time + " " + total);
-
+    var nameTable = $('#nameTable').text().trim();
+    console.log(nameTable);
     $.ajax({
         type: "POST",
         url: "/addPayBill",
@@ -392,6 +443,7 @@ function saveBill() {
             swal("Thành công", data.data, "success");
             $('#bill').hide();
             $('#usedDish').hide();
+            $('#showBill').hide();
             ready();
         }, error: function (data) {
             swal("Lỗi", data.errorMessage, "warning");
@@ -401,4 +453,6 @@ function saveBill() {
 
 function cancelBill() {
     $('#bill').hide();
+    $('#showBill').hide();
+
 }

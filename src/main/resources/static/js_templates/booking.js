@@ -40,7 +40,7 @@ function ready() {
                     Type.push(data.data[i]);
                 }
             }
-            // console.log(Type);
+
             $('#time_add').empty();
             for (let optObj of Type) {
                 let optEle = document.createElement("option");
@@ -64,7 +64,7 @@ function changePhoneNumber(value) {
     if (CustomerPhoneNumber.includes(value) == false) {
         $('#phoneNumberSearchError').html("Không có khách hàng này");
         $("#addCustomer").show();
-        $('#nameCus').val("");
+        $('#nameCus').ưval("");
         $('#phoneNumberCusAdd').val(value);
     } else {
         var i = CustomerPhoneNumber.indexOf(value);
@@ -72,18 +72,27 @@ function changePhoneNumber(value) {
     }
 }
 function closeAddCusForm() {
+    var arr = new Array(0);
+    var i =0;
+    $('#table > tr').each(function () {
+        var price =$(this).find('td:eq(3)').text();
+        i++;
+        arr.push(price);
+    });
+    console.log(arr);
+
+
     $('#nameCus_add').val("");
     $('#phoneNumberCusAdd').val("");
     $('#emailCusAdd').val("");
     $('.nav__add-customer').hide();
-
 }
 //tìm bàn trống trong khoảng đặt bàn
 function searchTableBooking() {
    // var type =$('#type_add option:selected').val().trim();
     var idTimeBook = $('#time_add option:selected').val().trim();
     var date = $('#date_add').val().trim();
-   // console.log(type+" "+idTimeBook);
+
     $.ajax({
         url: "/searchTableBooking",
         type: "POST",
@@ -147,7 +156,7 @@ function showBookingTable() {
         success: function (data) {
             if (data.success == true) {
                 showTable(data);
-               console.log(data);
+
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -168,7 +177,7 @@ function showAddFormBooking() {
 function showAddFormCustomer() {
     $('.overlay_bang_mon_an').show();
     $('.nav__add-customer').show();
-    ;
+
 
 }
 
@@ -217,7 +226,7 @@ $(function () {
             var phoneNumber = $("#phoneNumberSearch").val().trim();
             if (phoneNumber == "") {
                 showBookingTable();
-                console.log("null");
+
             } else {
                 $.ajax({
                     url: "/searchBookingByPhoneNumber",
@@ -227,7 +236,7 @@ $(function () {
                         "phoneNumber": phoneNumber,
                     },
                     success: function (data) {
-                        console.log("show");
+
                         if(data.data.length == 0){
                             swal("Fail", "Không tìm thấy!!!", "warning");
                             showBookingTable();
@@ -431,7 +440,7 @@ function showTable(data) {
             if (row.description == null) {
                 var string = "";
             } else string = row.description;
-            console.log(row.date);
+
             var date = row.date.split("T");
             var datetime = date[0].split("-");
             var year = datetime[0];

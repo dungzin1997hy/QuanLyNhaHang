@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,15 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Bill {
     private int id;
-    private TableEntity tableEntity;
-    private CustomerEntity customerEntity;
-    private StaffEntity staffEntity;
-    private List<UsedDish> usedDishList;
-
-    public Bill(TableEntity tableEntity, CustomerEntity customerEntity, StaffEntity staffEntity, List<UsedDish> usedDishList) {
-        this.tableEntity = tableEntity;
-        this.customerEntity = customerEntity;
-        this.staffEntity = staffEntity;
-        this.usedDishList = usedDishList;
-    }
+    private String nameTable;
+    private String nameCustomer;
+    private String nameStaff;
+    private int total;
+    private String paymentType;
+    private LocalDateTime time;
 }

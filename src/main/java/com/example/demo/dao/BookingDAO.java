@@ -7,6 +7,7 @@ import java.util.List;
 public interface BookingDAO {
     List<BookingEntity> getAllBooking();
     List<BookingEntity> getBookingByCustomer(String phoneNumber);
+    List<Integer> getListTableBooking();
 
     BookingEntity getBookingByID(int id);
     BookingEntity addBooking(BookingEntity bookingEntity);

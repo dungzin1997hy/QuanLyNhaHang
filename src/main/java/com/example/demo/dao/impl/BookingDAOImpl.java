@@ -45,6 +45,17 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
+    public List<Integer> getListTableBooking() {
+        String sql="select u.tableEntity.id from BookingEntity u where u.date = current_date and ";
+        Query query = entityManager.createQuery(sql);
+        List<Integer> list = query.getResultList();
+        return list;
+    }
+
+
+
+
+    @Override
     public BookingEntity getBookingByID(int id) {
         String sql ="select u from BookingEntity u where u.id = '"+id+"'";
         Query query = entityManager.createQuery(sql);

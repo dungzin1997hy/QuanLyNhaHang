@@ -33,6 +33,11 @@ public class LoginController {
         return "admin/staffManager";
     }
 
+    @GetMapping("/customerManager")
+    public String customer(){
+        return "admin/customerManager";
+    }
+
     @GetMapping("/warehouseManager")
     public String warehouse(){
         return "stock/warehouseManager";
@@ -48,5 +53,10 @@ public class LoginController {
         String errorMessage = "Sai username hoặc password";
         model.addAttribute("errorMessage", errorMessage);
         return "login";
+    }
+
+    @GetMapping("/accountHome")
+    public String accountant(){
+        return "accountant/accountantHome";
     }
 }

@@ -1,6 +1,6 @@
 //Show user list
 function showTableTable() {
-    console.log("show lại list table");
+
     $('.overlay_bang_mon_an').hide();
     $('.nav__add-table').hide();
     $('.nav__edit-table').hide();
@@ -12,7 +12,7 @@ function showTableTable() {
             if (data.success == true) {
 
                 showTable(data);
-                console.log(data);
+
             }
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
@@ -99,7 +99,7 @@ function showEditTableForm() {
 
         var type = $(this).find('td').eq(3).text();
 
-        //console.log(type);
+
         if (type.trim() == '2 người') {
             $('#type_edit').empty();
             $('#type_edit').append('<option value="2 người">2 người</option>');
@@ -176,9 +176,7 @@ $(function () {
                     "name": nameTable,
                 },
                 success: function (data) {
-                    //          console.log(idDishEdit + " " + nameDishEdit + " " + priceEdit + " " + typeEdit + " " + unitEdit);
-                    //         console.log(data.data.id + " " + data.data.name + " " + data.data.price + " " + data.data.type + " " + data.data.unit);
-                    console.log(data);
+
 
                     if (data.data.id != idTable || data.data.name != nameTable || data.data.type != typeEdit || data.data.area != areaEdit) {
                         $.ajax({
@@ -197,14 +195,13 @@ $(function () {
                                 swal("Thành công", data.data, "success");
                                 showTableTable();
                             }, error: function (data) {
-                                // console.log("lỗi không cập nhật dc data");
                                 swal("Lỗi", data.errorMessage, "warning");
                             }
                         });
                     } else {
                         $('.nav__edit-table').hide();
                         $('.overlay_bang_mon_an').hide();
-                        console.log("khong cap nhat");
+
                         swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
                     }
                 }, error: function (data) {
@@ -242,7 +239,8 @@ function deleteTable() {
     $('#bang_ban').find('tr').click(function () {
         var idTable = $(this).find('td').eq(1).text();
         $("#idTable_delete").text(idTable);
-        console.log(idTable);
+
+
         var idTableDelete = $("#idTable_delete").text();
         swal({
                 title: "Xác nhận !!!",
@@ -283,7 +281,7 @@ function closeEditForm() {
 }
 
 function showTable(data) {
-    console.log("show table");
+
     var contentString = "";
     if (data.data != null) {
         for (var i = 0; i < data.data.length; i++) {

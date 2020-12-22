@@ -36,6 +36,10 @@
         <script>
             $(document).ready(function () {
                 ready();
+                $('#callDish').hide();
+            });
+            $(".btnTable").on('click', function(){
+               console.log(1);
             });
             $(document).keypress(
                 function (event) {
@@ -51,57 +55,29 @@
             <div class="col-lg-12" style="height: 100%">
                 <div class="container-fluid row" style="height: 100%">
                     <div class="col-lg-4" style="height: 100%">
-                        <div id="khuAcontainer" style="height: 30%" class="scroll">
+                        <div>
                             <span>Khu A</span>
-                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
-                                   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"
-                                   style="height: 80%!important;">
-                                <thead>
-                                <tr role="row">
-                                    <th>Tên</th>
-                                    <th>Tình trạng</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                                </thead>
-                                <tbody id="ban_khu_A">
-                                </tbody>
-                            </table>
                         </div>
-                        <div id="khuBcontainer" style="height: 30%">
-                            <hr>
+                        <div id="khuAcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                             class="row">
+                        </div>
+
+                        <div>
                             <span>Khu B</span>
-                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
-                                   id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_0_info"
-                                   style="height: 80%;overflow-y: scroll;">
-                                <thead>
-                                <tr role="row">
-                                    <th>Tên</th>
-                                    <th>Tình trạng</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                                </thead>
-                                <tbody id="ban_khu_B" style="overflow-y: scroll">
-                                </tbody>
-                            </table>
                         </div>
-                        <div id="khuCcontainer" style="height: 30%">
-                            <hr>
+                        <div id="khuBcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                             class="row">
+
+                        </div>
+
+                        <div>
                             <span>Khu C</span>
-                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
-                                   id="DataTables_Table_2" role="grid" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                <tr role="row">
-                                    <th>Tên</th>
-                                    <th>Tình trạng</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                                </thead>
-                                <tbody id="ban_khu_C">
-                                </tbody>
-                            </table>
+                        </div>
+                        <div id="khuCcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                             class="row">
                         </div>
                     </div>
-                    <div id="usedDish" class="col-lg-4" style="height: 80%">
+                    <div id="usedDish" class="col-lg-4" style="height: 80%;display: none">
                         <span>Món ăn đã sử dụng</span>
                         <br>
                         <div style="display: flex;justify-content: space-between" class="mt-2">
@@ -127,7 +103,7 @@
                                 <th>Tiền</th>
                             </tr>
                             </thead>
-                            <tbody id="useddishTable">
+                            <tbody id="useddishTable" style="max-height: 450px">
                             </tbody>
                         </table>
                         <div style="display:flex;justify-content:center; height: 200px">
@@ -139,7 +115,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-lg-6" style=" height: 100%">
+                    <div class="col-lg-6" style=" height: 100%" id="showBill">
                         <div id="bill" style="height: 100%;display: none">
                             <div style="display: flex;justify-content: space-between">
                                 <div id="ttnhahang">
@@ -199,10 +175,10 @@
                                     </div>
 
                                     <div style="text-align: center">
-                                        <button id="btnThanhToan" style="width: 300px;text-align: center"
+                                        <button id="btnThanhToan" style="width: 150px;text-align: center"
                                                 onclick="saveBill()" disabled>Thanh toán
                                         </button>
-                                        <button style="width: 300px;text-align: center" onclick="cancelBill()">Huỷ
+                                        <button style="width: 150px;text-align: center" onclick="cancelBill()">Huỷ
                                         </button>
                                     </div>
                                 </div>
@@ -257,15 +233,15 @@
                             <div class="col-lg-4">
                                 <div class="card-body">
                                     <div class="table-responsive-1 row" id="callDishTemplate">
-                                        <table class="table table-bordered text-center">
+                                        <table class="table datatable-responsive dataTable no-footer dtr-inline">
                                             <thead>
                                             <tr class="text-center" style="background-color: #f2f2f2">
 
-                                                <th style=" width: 9%;">STT</th>
-                                                <th style=" width: 50%;">Tên món ăn</th>
-                                                <th style=" width: 8%;">Giá</th>
-                                                <th style=" width: 11%;">Số lượng</th>
-                                                <th style=" width: 12%;">Tiền</th>
+                                                <th>STT</th>
+                                                <th>Tên món ăn</th>
+                                                <th>Giá</th>
+                                                <th>Số lượng</th>
+                                                <th>Tiền</th>
                                                 <th>Tác vụ</th>
                                             </tr>
                                             </thead>

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CustomerService {
     List<Customer> getAllCustomer();
-    Customer searchCustomerByPhoneNumber(String phoneNumber);
+    List<Customer> searchCustomerByPhoneNumber(String phoneNumber);
 }

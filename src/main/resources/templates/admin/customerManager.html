@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/templateAdmin}">
+<head>
+    <title>Danh sách món ăn</title>
+    <style>
+        label.error {
+            color: red;
+            width: 200px;
+            position: absolute;
+        }
+
+        .dropdown-menu {
+            left: 30px !important;
+        }
+
+        .datepicker {
+            margin-left: 75px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <header layout:fragment="header" class="mt-3 ml-2 mr-2">
+        <script>
+            $(document).ready(function () {
+                $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
+                $(document).ajaxStart(function () {
+                    $('#loadingDiv').show();
+                }).ajaxStop(function () {
+                    $('#loadingDiv').remove();
+                });
+                $(document).keypress(
+                    function (event) {
+                        if (event.which == '13') {
+                            event.preventDefault();
+                        }
+                    });
+
+                showCustomerTable();
+                $("#customer_ID_search").focus();
+
+            });
+        </script>
+        <script th:src="@{/js_templates/danhsachKH.js}"></script>
+    </header>
+    <section class="container-fluid" layout:fragment="content_body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header header-elements-inline" style="padding-bottom: 0;">
+                        <div class="breadcrumb-elements-item dropdown p-0">
+                            <label class="breadcrumb-elements-item" aria-expanded="false">
+                                <i class="icon-arrow-right8 mr-2"></i>Tổng số món ăn
+                            </label>
+                            <label class="breadcrumb-elements-item ml-1" aria-expanded="false" id="soMonAn"></label>
+                            <button class="breadcrumb-elements-item dropdown p-0 ml-4" data-toggle="tooltip"
+                                    onclick="showCustomerTable()"
+                                    title="Xem danh sách khách hàng">
+                                <i class="icon-accessibility mr-1"></i><span class="mr-1">Xem danh sách</span>
+                            </button>
+                            <button onclick="showAddFormCustomer()" class="breadcrumb-elements-item dropdown p-0 ml-1"
+                                    data-toggle="tooltip" title="Thêm khách hàng">
+                                <i class="icon-plus-circle2"></i><span class="ml-1 mr-1">Thêm khách hàng</span>
+                            </button>
+                        </div>
+                        <form id="form_search_cus">
+                            <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
+                                 style="margin-left: auto; margin-right: 60px">
+                                <label class="mr-2 mb-0" for="phoneNumberSearch">Tìm:</label>
+                                <div style="position: relative">
+                                    <input type="text" class="form-control text-dark flex-1 wmin-xl-100 border-bottom-1"
+                                           placeholder="Số điện thoại"
+                                           style="text-align: center"
+                                           id="phoneNumberSearch" name="phoneNumberSearch">
+                                    <label class="error"></label>
+                                </div>
+                                <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                        style="padding: 4px 4px 0 3px; border-radius: 10px"><i
+                                        class="icon-search4 mb-1"></i></button>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                        <div class="datatable-scroll-wrap"
+                             style="overflow-y:scroll; max-height: 500px; text-align: center;">
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <div class="overlay_bang_mon_an"></div>
+                                <thead>
+                                <tr role="row">
+                                    <th>STT</th>
+                                    <th>Tên</th>
+                                    <th>SĐT</th>
+                                    <th>Email</th>
+                                    <th>Tác vụ</th>
+                                </tr>
+                                </thead>
+                                <tbody id="bang_khach_hang">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <nav class="nav__add-customer">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                    <span class="ml-3 mt-2"
+                                          style="font-size: 22px; color: #0f74a8;"
+                                    >Thêm khách hàng</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 260px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeAddCusForm()"></i>
+                            </li>
+                            <hr>
+                            <form id="add_Customer_form">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Tên KH: <input id="nameCus_add" name="name_add"
+                                                   style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                   size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Số điện thoại: <input id="phoneNumberCusAdd" name="phoneNumberCusAdd" type="number"
+                                                          style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                          size="40">
+                                    <label class="error"></label>
+                                </li>
+
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Email
+                                    <input id="emailCusAdd" name="emailCusAdd"
+                                           style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                           size="40">
+                                    <label class="error"></label>
+                                </li>
+
+                                <hr>
+                                <a href="#" data-toggle="tooltip" title="Edit">
+                                    <button class="btn btn-info center-block mb-1" id="btn-add-cus"
+                                            style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                        Thêm mới
+                                    </button>
+                                </a>
+                            </form>
+                        </ul>
+                    </nav>
+
+                    <nav class="nav__edit-customer">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                        <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8"
+                                              id="title_editUser">Cập nhật thông tin khách hàng</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
+                            </li>
+                            <hr>
+                            <form id="edit_form">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <input name="idCus_edit" id="idCus_edit"
+                                           style="border: 1px #ececec solid; margin-left: 16px;display: none" size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Tên: <input id="nameCus_edit" name="nameCus_edit" disabled
+                                                style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
+                                                size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    SĐT <input id="phoneNumber_edit" name="phoneNumber_edit" type="number"
+                                               style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                               size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Email <input id="email_edit" name="email_edit"
+                                                 style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                 size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li>
+                                    <hr>
+                                    <a href="#" data-toggle="tooltip" title="Edit">
+                                        <button type="submit" class="btn btn-success" id="submitButtonEdit">Lưu</button>
+                                    </a>
+                                </li>
+                            </form>
+                        </ul>
+                    </nav>
+
+                    <nav class="div__show-billCustomer">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                        <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8"
+                                        >Thống kê hoá đơn</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeAddCusForm()"></i>
+                            </li>
+                            <hr>
+                            <div style="display: flex;justify-content: space-around">
+                                <div style="display: flex;justify-items: left" >
+                                    <p>Khách hàng: </p>
+                                    <p id="cusName" style="margin-left: 15px">Anh</p>
+                                </div>
+                                <div style="display: flex;justify-items: left">
+                                    <p>Tổng thu:
+                                    </p>
+                                    <p id="totalBill" style="margin-left: 15px">121212</p>
+                                </div>
+                            </div>
+                            <li class="nav__edit-input mt-3" >
+                                <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                       role="grid" aria-describedby="DataTables_Table_0_info">
+
+                                    <thead>
+                                    <tr role="row">
+                                        <th>STT</th>
+                                        <th>Bàn</th>
+                                        <th>Tổng</th>
+                                        <th>Thời gian</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="bang_bill_cus">
+                                    </tbody>
+                                </table>
+
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <span id="idCustomer_delete" style="display: none"></span>
+    </section>
+</div>
+</body>
+</html>

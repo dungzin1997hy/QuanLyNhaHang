@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Staff {
-    private int id;
-    private String name;
-    private String phoneNumber;
-    private String email;
+public class Staff  extends Person{
+
     private String address;
     private Role role;
     private User user;

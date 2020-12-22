@@ -18,7 +18,7 @@ function ready() {
                     materialName.push(data.data[i].name);
                 }
             }
-            console.log(material);
+
             $("#nameSearch").autocomplete({
                 source: materialName
             });
@@ -261,9 +261,9 @@ $(function () {
 });
 
 function getNumber(value,id,name) {
-    console.log(value+" "+id+" "+name);
+
     var id1 = '#' + 'sum' + id;
-    console.log(id1 );
+
     $('#' + 'sum' + id).text(value * name);
 }
 
@@ -292,9 +292,9 @@ function saveBillInput() {
             });
         }
     });
-    console.log(value);
-    var total = $('#totalInput').text().trim();
-    console.log(total);
+   var total = $('#totalInput').text().trim();
+
+
     $.ajax({
         type: "POST",
         url:"/inputMaterial",
@@ -356,7 +356,7 @@ $(function () {
 
                 for(var i=0;i<material.length;i++){
                     if(material[i].name == name){
-                        console.log(name);
+
                         if(material[i].amount>=amount){
                             $('#nameSearchOutputError').html("");
                             $("#addMaterialOutput").hide();
@@ -422,7 +422,7 @@ function saveBillOutput() {
         var id =$(this).find('td:eq(1)').text();
         var amount = $(this).find('td:eq(5) input').val();
         var price =$(this).find('td:eq(3)').text();
-        console.log(id+" "+amount+" "+price);
+
         if(id!= null) {
             value.push({
                 'id': id,
@@ -432,7 +432,7 @@ function saveBillOutput() {
         }
     });
 
-    console.log("value output: " + value);
+
     $.ajax({
         type: "POST",
         url:"/outputMaterial",

@@ -5,13 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Access;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class Customer {
-    private int id;
-    private String name;
-    private String phoneNumber;
-    private String email;
+
+public class Customer extends Person{
 }

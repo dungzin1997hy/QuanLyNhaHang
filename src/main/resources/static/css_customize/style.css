@@ -185,6 +185,64 @@
     display: none;
 }
 
+#callDish{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    max-width: 100%;
+
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
+.nav__edit-customer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width:600px;
+    max-width: 100%;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
+.div__show-billCustomer{
+    position: fixed;
+    top: 10%;
+    left: 30%;
+    bottom: 0;
+    width:800px;
+    max-width: 100%;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
+#showBill{
+    position: fixed;
+    top: 0;
+    left: 30%;
+    bottom: 0;
+    max-width: 40%;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
+/*#showBill{*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    max-width: 50%;*/
+/*    background-color: white;*/
+/*    z-index: 100;*/
+/*    !*transform: translateX(100%);*!*/
+/*    display: none;*/
+/*}*/
 .nav__edit-list{
     margin-top: 24px;
 }
@@ -195,6 +253,23 @@
     display: block;
 }
 
+table {
+    width: 100%;
+}
+thead{
+    background-color: mistyrose;
+}
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+tbody {
+    display: block;
+    overflow-y: auto;
+    table-layout: fixed;
+    /*max-height: 200px;*/
+}
 
 @keyframes fadeIn {
     from{

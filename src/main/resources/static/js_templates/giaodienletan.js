@@ -261,7 +261,6 @@ function bookDish() {
     $('#callDishTable > tr').each(function () {
         var id = $(this).find('td:eq(1)').text();
         var amount = $(this).find('td:eq(4) input').val();
-
         if (amount != null && amount > 0 && amount != "") {
             value.push({
                 'idDish': id,
@@ -269,17 +268,20 @@ function bookDish() {
             });
         }
     });
+    var idTable = $('#idTable').text().trim();
+    var nameTable = $('#nameTable').text().trim();
+    console.log(idTable);
     $.ajax({
         type: "POST",
         url: "/callDish",
         contentType: "application/json",
         data: JSON.stringify({
             "callDishes": value,
-            "idTable": 3
+            "idTable": idTable
         }),
         success: function (data) {
             swal("Thành công", data.data, "success");
-            showuseddish(3,"ban3");
+            showuseddish(idTable,nameTable);
 
         }, error: function (data) {
             swal("Lỗi", data.errorMessage, "warning");

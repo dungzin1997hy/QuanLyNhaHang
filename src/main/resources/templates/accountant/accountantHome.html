@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/templateStock}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <title>Thống kê</title>
+    <style>
+        label.error {
+            color: red;
+            width: 200px;
+            position: absolute;
+        }
+
+        .dropdown-menu {
+            left: 30px !important;
+        }
+    </style>
 </head>
 <body>
-<h1>Kế toán</h1>
+<div class="content">
+    <header layout:fragment="header" class="mt-3 ml-2 mr-2">
+        <script>
+            $(document).ready(function () {
+                showChart();
+            });
+
+            $(document).keypress(
+                function (event) {
+                    if (event.which == '13') {
+                        event.preventDefault();
+                    }
+                });
+        </script>
+        <script th:src="@{/js_templates/thongke.js}"></script>
+    </header>
+    <section class="container-fluid" layout:fragment="content_body" style="height: 100%">
+        <div class="row" style="height: 100%">
+            <div class="col-lg-12" style="height: 100%">
+                <div class="card mt-3 card-dashboard" style="flex-direction: row;">
+                    <div class="col-7 d-flex flex-column justify-content-center align-items-center pt-2 pb-2 pl-4">
+                        <h1>Thống kê</h1>
+                    </div>
+                    <div class="col-5" style="bottom:15px;text-align: center;">
+                        <img src="/global_assets/images/diagram.svg" style="width: 100px;height: 100px">
+                    </div>
+                </div>
+                <div class="container-fluid row">
+                    <div class="col-lg-6" style="height: 100%;display: flex;flex-direction: column">
+                        <div style="display: flex;justify-content: flex-end">
+                            <div class="d-flex float-right align-items-center">
+                                <input id="start_date_input" class="ml-2" type="date"
+                                       onchange="dateInputChange('start')">
+                                <i class="ml-2 mr-2 icon-arrow-right5 text-grey"></i>
+                                <input id="end_date_input" type="date"
+                                       onchange="dateInputChange('end')">
+                                <button style="margin-left: 10px">Tìm kiếm</button>
+                            </div>
+                        </div>
+                        <div class="mt-1" id="curve_chart" style="height: 500px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span id="idMaterial_delete" style="display: none"></span>
+    </section>
+</div>
 </body>
 </html>

@@ -137,106 +137,160 @@ $(function () {
         }
     });
 });
-//thêm khách hàng
-$(function () {
-    $("#add_form").validate({
-        // rules: {
-        //     nameStaff_add: {
-        //         required: true,
-        //         checkChar: "[a-zA-Z]+",
-        //         maxlength: 50
-        //     },
-        //     phoneNumber_add: {
-        //         required: true,
-        //         minlength: 10,
-        //         maxlength: 10
-        //     },
-        //     cmnd_add: {
-        //         required: true,
-        //         digits: true,
-        //     },
-        //     role_add: {
-        //         required: true,
-        //         maxlength: 100
-        //     },
-        //     email_add: {
-        //         required: true,
-        //         email: true,
-        //         maxlength: 45
-        //     },
-        //     address_add: {
-        //         required: true
-        //     }
-        //
-        // },
-        messages: {
-            nameStaff_add: {
-                required: "Vui lòng nhập tên nhân viên",
-                checkChar: "Vui lòng chỉ nhập giá trị chữ",
-                maxlength: "Bạn nhập quá dài"
-            },
-            phoneNumber_add: {
-                required: "Vui lòng nhập số điện thoại",
-                minlength: "Chỉ nhập 10 chữ số",
-                maxlength: "Chỉ nhập 10 chữ số"
-            },
-            cmnd_add: {
-                required: "Vui lòng nhập số CMND",
-            },
-            role_add: {
-                required: true,
-                maxlength: 100
-            },
-            email_add: {
-                required: "Vui lòng nhập gmail",
-                email: "Nhập sai định dạng gmail",
-                maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
-            },
-            address_add: {
-                required: "Vui lòng nhập địa chỉ"
+
+//thêm nhân viên
+function showImage(fileInput) {
+    file = fileInput.files[0];
+    reader = new FileReader();
+    reader.onload = function (e) {
+        $('#thumbnail_add').show();
+        $('#thumbnail_add').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(file);
+}
+
+function showImageEdit(fileInput) {
+    file = fileInput.files[0];
+    reader = new FileReader();
+    reader.onload = function (e) {
+        $('#thumbnail_edit').show();
+        $('#thumbnail_edit').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(file);
+}
+
+// $(function () {
+//     $("#add_form").validate({
+//         // rules: {
+//         //     nameStaff_add: {
+//         //         required: true,
+//         //         checkChar: "[a-zA-Z]+",
+//         //         maxlength: 50
+//         //     },
+//         //     phoneNumber_add: {
+//         //         required: true,
+//         //         minlength: 10,
+//         //         maxlength: 10
+//         //     },
+//         //     cmnd_add: {
+//         //         required: true,
+//         //         digits: true,
+//         //     },
+//         //     role_add: {
+//         //         required: true,
+//         //         maxlength: 100
+//         //     },
+//         //     email_add: {
+//         //         required: true,
+//         //         email: true,
+//         //         maxlength: 45
+//         //     },
+//         //     address_add: {
+//         //         required: true
+//         //     }
+//         //
+//         // },
+//         messages: {
+//             nameStaff_add: {
+//                 required: "Vui lòng nhập tên nhân viên",
+//                 checkChar: "Vui lòng chỉ nhập giá trị chữ",
+//                 maxlength: "Bạn nhập quá dài"
+//             },
+//             phoneNumber_add: {
+//                 required: "Vui lòng nhập số điện thoại",
+//                 minlength: "Chỉ nhập 10 chữ số",
+//                 maxlength: "Chỉ nhập 10 chữ số"
+//             },
+//             cmnd_add: {
+//                 required: "Vui lòng nhập số CMND",
+//             },
+//             role_add: {
+//                 required: true,
+//                 maxlength: 100
+//             },
+//             email_add: {
+//                 required: "Vui lòng nhập gmail",
+//                 email: "Nhập sai định dạng gmail",
+//                 maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
+//             },
+//             address_add: {
+//                 required: "Vui lòng nhập địa chỉ"
+//             }
+//         },
+//         submitHandler: function () {
+//             var nameStaff_add = $('#nameStaff_add').val().trim();
+//             var phoneNumber_add = $('#phoneNumber_add').val().trim();
+//             var cmnd_add = $('#cmnd_add').val().trim();
+//             var email_add = $('#email_add').val().trim();
+//             var address_add = $('#address_add').val().trim();
+//             var role = $("#role_add option:selected").val().trim();
+//             var username_add = $('#username_add').val().trim();
+//             var password_add = $('#password_add').val().trim();
+//
+//             $.ajax({
+//                 url: "/addStaff",
+//                 type: "POST",
+//                 data: {
+//                     "nameStaff_add": nameStaff_add,
+//                     "phoneNumber_add": phoneNumber_add,
+//                     "cmnd_add": cmnd_add,
+//                     "email_add": email_add,
+//                     "role": role,
+//                     "address_add": address_add,
+//                     "username_add": username_add,
+//                     "password_add": password_add
+//                 },
+//                 success: function (data) {
+//                     $('.nav__add-staff').hide();
+//                     resetAddForm();
+//
+//                     if (data.success == true) {
+//                         swal("Thêm thành công", data.data, "success");
+//                         showStaffTable();
+//                     } else {
+//                         swal("Lỗi", data.errorMessage, "warning");
+//                         showStaffTable();
+//                     }
+//                 }, error: function (data) {
+//                     swal("Fail", data.errorMessage, "warning");
+//                 }
+//             });
+//         }
+//     });
+// });
+//add dish
+
+function ajaxSubmitForm() {
+    var form = $('#add_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "/addStaff",
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 1000000,
+        success: function (data) {
+
+            $('.nav__add-staff').hide();
+            resetAddForm();
+
+            if (data.success == true) {
+                swal("Thêm thành công", data.data, "success");
+                showStaffTable();
+            } else {
+                swal("Lỗi", data.errorMessage, "warning");
+                showStaffTable();
             }
         },
-        submitHandler: function () {
-            var nameStaff_add = $('#nameStaff_add').val().trim();
-            var phoneNumber_add = $('#phoneNumber_add').val().trim();
-            var cmnd_add = $('#cmnd_add').val().trim();
-            var email_add = $('#email_add').val().trim();
-            var address_add = $('#address_add').val().trim();
-            var role = $("#role_add option:selected").val().trim();
-            var username_add = $('#username_add').val().trim();
-            var password_add = $('#password_add').val().trim();
-
-            $.ajax({
-                url: "/addStaff",
-                type: "POST",
-                data: {
-                    "nameStaff_add": nameStaff_add,
-                    "phoneNumber_add": phoneNumber_add,
-                    "cmnd_add": cmnd_add,
-                    "email_add": email_add,
-                    "role": role,
-                    "address_add": address_add,
-                    "username_add": username_add,
-                    "password_add": password_add
-                },
-                success: function (data) {
-                    $('.nav__add-staff').hide();
-                    resetAddForm();
-
-                    if (data.success == true) {
-                        swal("Thêm thành công", data.data, "success");
-                        showStaffTable();
-                    } else {
-                        swal("Lỗi", data.errorMessage, "warning");
-                        showStaffTable();
-                    }
-                }, error: function (data) {
-                    swal("Fail", data.errorMessage, "warning");
-                }
-            });
+        error: function (jqXHR) {
+            swal("Lỗi", jqXHR.responseText, "warning");
+            $('#modal-upload-file').modal('hide');
         }
     });
-});
+}
 
 // Nav form edit
 function showEditStaffForm() {
@@ -245,23 +299,25 @@ function showEditStaffForm() {
     $('#bang_nhan_vien').find('tr').click(function () {
         var idStaff = $(this).find('td').eq(1).text();
         $('#idStaff_edit').val(idStaff);
-        var name = $(this).find('td').eq(2).text();
+        var url = $(this).find('td').eq(2).find('img').attr('src');
+        $('#thumbnail_edit').attr('src', url);
+        var name = $(this).find('td').eq(3).text();
         $('#nameStaff_edit').val(name);
-        var phoneNumber = $(this).find('td').eq(3).text();
+        var phoneNumber = $(this).find('td').eq(4).text();
         $('#phoneNumber_edit').val(phoneNumber);
-        var cmnd = $(this).find('td').eq(4).text();
+        var cmnd = $(this).find('td').eq(5).text();
         $('#cmnd_edit').val(cmnd);
-        var email = $(this).find('td').eq(5).text();
+        var email = $(this).find('td').eq(6).text();
         $('#email_edit').val(email);
-        var address = $(this).find('td').eq(6).text();
+        var address = $(this).find('td').eq(7).text();
         $('#address_edit').val(address);
 
         //xu li chuc vu
-        var roleId = $(this).find('td').eq(7).text();
-        var roleName = $(this).find('td').eq(8).text();
+        var roleId = $(this).find('td').eq(8).text();
+        var roleName = $(this).find('td').eq(9).text();
         showDropDownEdit(roleId, roleName);
         //
-        var username = $(this).find('td').eq(9).text();
+        var username = $(this).find('td').eq(10).text();
         $('#username_edit').val(username);
 
 
@@ -270,104 +326,155 @@ function showEditStaffForm() {
 
 
 //Update user information
-$(function () {
-    $("#edit_form").validate({
-        // rules: {
-        //     nameStaff_add: {
-        //         required: true,
-        //         checkChar: "[a-zA-Z]+",
-        //         maxlength: 50
-        //     },
-        //     phoneNumber_add: {
-        //         required: true,
-        //         minlength: 10,
-        //         maxlength: 10
-        //     },
-        //     cmnd_add: {
-        //         required: true,
-        //         digits: true,
-        //     },
-        //     role_add: {
-        //         required: true,
-        //         maxlength: 100
-        //     },
-        //     email_add: {
-        //         required: true,
-        //         email: true,
-        //         maxlength: 45
-        //     },
-        //     address_add: {
-        //         required: true
-        //     }
-        //
-        // },
-        messages: {
-            nameStaff_add: {
-                required: "Vui lòng nhập tên nhân viên",
-                checkChar: "Vui lòng chỉ nhập giá trị chữ",
-                maxlength: "Bạn nhập quá dài"
-            },
-            phoneNumber_add: {
-                required: "Vui lòng nhập số điện thoại",
-                minlength: "Chỉ nhập 10 chữ số",
-                maxlength: "Chỉ nhập 10 chữ số"
-            },
-            cmnd_add: {
-                required: "Vui lòng nhập số CMND",
-            },
-            role_add: {
-                required: true,
-                maxlength: 100
-            },
-            email_add: {
-                required: "Vui lòng nhập gmail",
-                email: "Nhập sai định dạng gmail",
-                maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
-            },
-            address_add: {
-                required: "Vui lòng nhập địa chỉ"
-            }
-        },
-        submitHandler: function () {
-            var idStaff_edit = $('#idStaff_edit').val().trim();
-            var nameStaff_edit = $('#nameStaff_edit').val().trim();
-            var phoneNumber_edit = $('#phoneNumber_edit').val().trim();
-            var cmnd_edit = $('#cmnd_edit').val().trim();
-            var email_edit = $('#email_edit').val().trim();
-            var address_edit = $('#address_edit').val().trim();
-            var role = $("#role_edit option:selected").val().trim();
-            var username_edit = $('#username_edit').val().trim();
-            // var password_edit = $('#password_edit').val().trim();
-            // var password_edit = $('#password_edit').val().trim();
+// $(function () {
+//     $("#edit_form").validate({
+//         // rules: {
+//         //     nameStaff_add: {
+//         //         required: true,
+//         //         checkChar: "[a-zA-Z]+",
+//         //         maxlength: 50
+//         //     },
+//         //     phoneNumber_add: {
+//         //         required: true,
+//         //         minlength: 10,
+//         //         maxlength: 10
+//         //     },
+//         //     cmnd_add: {
+//         //         required: true,
+//         //         digits: true,
+//         //     },
+//         //     role_add: {
+//         //         required: true,
+//         //         maxlength: 100
+//         //     },
+//         //     email_add: {
+//         //         required: true,
+//         //         email: true,
+//         //         maxlength: 45
+//         //     },
+//         //     address_add: {
+//         //         required: true
+//         //     }
+//         //
+//         // },
+//         messages: {
+//             nameStaff_add: {
+//                 required: "Vui lòng nhập tên nhân viên",
+//                 checkChar: "Vui lòng chỉ nhập giá trị chữ",
+//                 maxlength: "Bạn nhập quá dài"
+//             },
+//             phoneNumber_add: {
+//                 required: "Vui lòng nhập số điện thoại",
+//                 minlength: "Chỉ nhập 10 chữ số",
+//                 maxlength: "Chỉ nhập 10 chữ số"
+//             },
+//             cmnd_add: {
+//                 required: "Vui lòng nhập số CMND",
+//             },
+//             role_add: {
+//                 required: true,
+//                 maxlength: 100
+//             },
+//             email_add: {
+//                 required: "Vui lòng nhập gmail",
+//                 email: "Nhập sai định dạng gmail",
+//                 maxlength: "Vui lòng nhập nhỏ hơn 45 ký tự"
+//             },
+//             address_add: {
+//                 required: "Vui lòng nhập địa chỉ"
+//             }
+//         },
+//         submitHandler: function () {
+//             var idStaff_edit = $('#idStaff_edit').val().trim();
+//             var nameStaff_edit = $('#nameStaff_edit').val().trim();
+//             var phoneNumber_edit = $('#phoneNumber_edit').val().trim();
+//             var cmnd_edit = $('#cmnd_edit').val().trim();
+//             var email_edit = $('#email_edit').val().trim();
+//             var address_edit = $('#address_edit').val().trim();
+//             var role = $("#role_edit option:selected").val().trim();
+//             var username_edit = $('#username_edit').val().trim();
+//             // var password_edit = $('#password_edit').val().trim();
+//             // var password_edit = $('#password_edit').val().trim();
+//
+//             $.ajax({
+//                 url: "/updateStaff",
+//                 type: "POST",
+//                 data: {
+//                     "idStaff": idStaff_edit,
+//                     "nameStaff": nameStaff_edit,
+//                     "phoneNumber": phoneNumber_edit,
+//                     "cmnd": cmnd_edit,
+//                     "email": email_edit,
+//                     "idRole": role,
+//                     "address": address_edit,
+//                     "username": username_edit
+//                 },
+//                 success: function (data) {
+//
+//                     $('.nav__edit-dish').hide();
+//                     $('.overlay_bang_mon_an').hide();
+//                     swal("Thành công", data.data, "success");
+//                     showStaffTable();
+//                 }, error: function (data) {
+//
+//                     swal("Lỗi", data.errorMessage, "warning");
+//                 }
+//             });
+//
+//         }
+//     });
+// });
 
-            $.ajax({
-                url: "/updateStaff",
-                type: "POST",
-                data: {
-                    "idStaff" : idStaff_edit,
-                    "nameStaff": nameStaff_edit,
-                    "phoneNumber": phoneNumber_edit,
-                    "cmnd": cmnd_edit,
-                    "email":email_edit,
-                    "idRole":role,
-                    "address" :address_edit,
-                    "username":username_edit
-                },
-                success: function (data) {
+function ajaxSubmitEditForm() {
 
-                    $('.nav__edit-dish').hide();
-                    $('.overlay_bang_mon_an').hide();
-                    swal("Thành công", data.data, "success");
-                    showStaffTable();
-                }, error: function (data) {
 
-                    swal("Lỗi", data.errorMessage, "warning");
-                }
-            });
 
+    // $.ajax({
+    //     url: "/searchDishByName",
+    //     type: "POST",
+    //     dataType: "json",
+    //     data: {
+    //         "nameDish": nameDishEdit,
+    //     },
+    //     success: function (data) {
+    //         var form = $('#edit_form')[0];
+    //         var datalog = new FormData(form);
+    //         if (data.data.id != idDishEdit || data.data.name != nameDishEdit || data.data.price != priceEdit || data.data.type != typeEdit || data.data.description != devices_edits || data.data.unit != unitEdit||imageinput != "") {
+    var form = $('#edit_form')[0];
+    var datalog = new FormData(form);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "/updateStaff",
+        data: datalog,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 1000000,
+        success: function (data) {
+            $('.nav__edit-dish').hide();
+            $('.overlay_bang_mon_an').hide();
+            swal("Thành công", data.data, "success");
+            showStaffTable();
+        }, error: function (data) {
+
+            swal("Lỗi", data.errorMessage, "warning");
         }
     });
-});
+    //         } else {
+    //             $('.nav__edit-dish').hide();
+    //             $('.overlay_bang_mon_an').hide();
+    //
+    //             swal("Lỗi", "Không có thông tin nào được cập nhật", "warning");
+    //         }
+    //     },
+    //     error: function (jqXHR) {
+    //         swal("Lỗi","SearchDish faile", "warning");
+    //         $('#modal-upload-file').modal('hide');
+    //     }
+    // });
+}
+
 
 function searchByRole() {
     var selectItem = $("#selectSearch").val();
@@ -452,6 +559,7 @@ function showTable(data) {
                 + '<tr role="row" class="odd">'
                 + '<td>' + (i + 1) + '</td>'
                 + '<td id="idStaff" style="display: none">' + row.id + '</td>'
+                + '<td><img id="' + row.url + '" src="/image/upload/' + row.urlImage + '" alt="slider-image" style="width: 100px;height: 100px">' + '</td>'
                 + '<td>' + row.name + '</td>'
                 + '<td>' + row.phoneNumber + '</td>'
                 + '<td>' + row.cmnd + '</td>'

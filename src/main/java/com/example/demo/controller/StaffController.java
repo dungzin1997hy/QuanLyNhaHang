@@ -4,6 +4,7 @@ import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.RoleDAO;
 import com.example.demo.dao.StaffDAO;
 import com.example.demo.dao.UserDAO;
+import com.example.demo.entity.DishEntity;
 import com.example.demo.entity.RoleEntity;
 import com.example.demo.entity.StaffEntity;
 import com.example.demo.entity.UserEntity;
@@ -11,17 +12,29 @@ import com.example.demo.model.Role;
 import com.example.demo.model.Staff;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.StaffService;
+import com.example.demo.util.FileDir;
 import javafx.animation.ScaleTransition;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
 public class StaffController {
+    @Autowired
+    private FileDir fileDir;
     @Autowired
     private StaffDAO staffDAO;
     @Autowired
@@ -54,29 +67,39 @@ public class StaffController {
     }
 
     @PostMapping("/updateStaff")
-    public ApiResponse<String> updateStaff(@RequestParam("idStaff") int idStaff,
-                                           @RequestParam("nameStaff") String nameStaff,
-                                           @RequestParam("phoneNumber") String phoneNumber,
-                                           @RequestParam("email") String email,
-                                           @RequestParam("cmnd") String cmnd,
-                                           @RequestParam("idRole")String idRole,
-                                           @RequestParam("address") String address,
-                                           @RequestParam("username") String username) {
-        RoleEntity roleEntity = roleDAO.getRoleById(idRole);
-        StaffEntity staff = staffDAO.getStaffById(idStaff+"");
-        StaffEntity staffEntity = new StaffEntity(idStaff,nameStaff,phoneNumber,email,cmnd);
-        staffEntity.setRoleEntity(roleEntity);
-        staffEntity.setAddress(address);
-        UserEntity userEntity = new UserEntity(staff.getUserEntity().getId(),username,staff.getUserEntity().getPassword(),roleEntity.getRole());
-        staffEntity.setUserEntity(userEntity);
+    public ApiResponse<String> updateStaff(@ModelAttribute UpdateStaffForm form) {
         try {
+            //lỗi
+            RoleEntity roleEntity = roleDAO.getRoleById("1");
+            StaffEntity staff = staffDAO.getStaffById(form.getIdStaff_edit()+"");
+            StaffEntity staffEntity = new StaffEntity(form.getIdStaff_edit(),form.getNameStaff_edit(),form.getPhoneNumber_edit(),form.getEmail_edit(),form.getCmnd_edit());
+            staffEntity.setRoleEntity(roleEntity);
+            staffEntity.setAddress(form.getAddress_edit());
+            UserEntity userEntity = new UserEntity(staff.getUserEntity().getId(),form.getUsername_edit(),staff.getUserEntity().getPassword(),roleEntity.getRole());
+            staffEntity.setUserEntity(userEntity);
+
+            if (form.getFileImage_edit().isEmpty()) {
+                staffEntity.setUrl(staffEntity.getUrl());
+            } else {
+                staffEntity.setUrl(form.getFileImage_edit().getOriginalFilename());
+                File uploadDir = new File(fileDir.getFileDir());
+                uploadDir.mkdirs();
+
+                String uploadFilePath = fileDir.getFileDir() + "/" + form.getFileImage_edit().getOriginalFilename();
+                System.out.println(uploadFilePath);
+                byte[] bytes = form.getFileImage_edit().getBytes();
+                Path path = Paths.get(uploadFilePath);
+                Files.write(path, bytes);
+            }
+
+
             staffDAO.updateStaff(staffEntity);
-            return new ApiResponse<>(true,"Sửa thông tin nhân viên thành công","");
-        }
-        catch (Exception e){
+            return new ApiResponse<>(true, "Cập nhật nhân viên thành công", "");
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ApiResponse<>(false,"Sửa thông tin nhân viên thất bại","");
+            return new ApiResponse<>(false, "", "Error");
         }
+
     }
 
     @PostMapping("/deleteStaff")
@@ -92,37 +115,43 @@ public class StaffController {
     }
 
     @PostMapping("/addStaff")
-    public ApiResponse<String> addStaff(@RequestParam("nameStaff_add") String name,
-                                        @RequestParam("phoneNumber_add") String phoneNumber,
-                                        @RequestParam("cmnd_add") String cmnd,
-                                        @RequestParam("email_add") String email,
-                                        @RequestParam("role") String role,
-                                        @RequestParam("address_add") String address,
-                                        @RequestParam("username_add") String username,
-                                        @RequestParam("password_add") String password){
+    public ApiResponse<String> addStaff(@ModelAttribute UploadStaffForm form){
 
         List<String> strings = userDAO.getAllUsername();
-        if(strings.contains(username)) return new ApiResponse<>(false,"","Username đã tồn tại");
+        if(strings.contains(form.getNameStaff_add())) return new ApiResponse<>(false,"","Username đã tồn tại");
+        try {
+            File uploadDir = new File(fileDir.getFileDir());
+            uploadDir.mkdirs();
 
-        RoleEntity roleEntity = roleDAO.getRoleById(role);
-        List<StaffEntity> staffEntities = staffDAO.getAllStaff();
-        for(StaffEntity staffEntity:staffEntities){
-            if(staffEntity.getCmnd().equals(cmnd)) return new ApiResponse<>(false,"","Số cmnd đã tồn tại");
-            if(staffEntity.getEmail().equals(email)) return new ApiResponse<>(false,"","Email đã tồn tại");
-            if(staffEntity.getPhoneNumber().equals(phoneNumber)) return new ApiResponse<>(false,"","Số điện thoại đã tồn tại");
-        }
-        UserEntity userEntity = new UserEntity(username,password,roleEntity.getRole());
+            if (form.getFileImage_add().isEmpty()) {
+                return new ApiResponse<>(false, "", "Không thấy ảnh");
+            }
+            String uploadFilePath = fileDir.getFileDir() + "/" + form.getFileImage_add().getOriginalFilename();
+            System.out.println(uploadFilePath);
+            byte[] bytes = form.getFileImage_add().getBytes();
+            Path path = Paths.get(uploadFilePath);
+            Files.write(path, bytes);
+            RoleEntity roleEntity = roleDAO.getRoleById(form.getRole_add());
+            List<StaffEntity> staffEntities = staffDAO.getAllStaff();
+            for(StaffEntity staffEntity:staffEntities){
+                if(staffEntity.getCmnd().equals(form.getCmnd_add())) return new ApiResponse<>(false,"","Số cmnd đã tồn tại");
+                if(staffEntity.getEmail().equals(form.getEmail_add())) return new ApiResponse<>(false,"","Email đã tồn tại");
+                if(staffEntity.getPhoneNumber().equals(form.getPhoneNumber_add())) return new ApiResponse<>(false,"","Số điện thoại đã tồn tại");
+            }
+            UserEntity userEntity = new UserEntity(form.getUsername_add(),form.getPassword_add(),roleEntity.getRole());
 
-        StaffEntity staffEntity = new StaffEntity(name,phoneNumber,email,cmnd,address);
-        staffEntity.setRoleEntity(roleEntity);
-        staffEntity.setUserEntity(userEntity);
-        try{
+            StaffEntity staffEntity = new StaffEntity(form.getNameStaff_add(),form.getPhoneNumber_add(),form.getEmail_add(),form.getCmnd_add(),form.getAddress_add());
+            staffEntity.setRoleEntity(roleEntity);
+            staffEntity.setUserEntity(userEntity);
+            staffEntity.setUrl(form.getFileImage_add().getOriginalFilename());
             staffDAO.addStaff(staffEntity);
             return new ApiResponse<>(true,"Thêm thành công","");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ApiResponse<>(false,"","Không thêm được nhân viên này");
+            return new ApiResponse<>(false, "", "Lỗi");
         }
+
+
     }
 //    @PostMapping("/getStaffByName")
 //    public ApiResponse<Staff> getStaffByName(@RequestParam("nameStaff") String name){
@@ -145,3 +174,32 @@ public class StaffController {
     }
 }
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class UploadStaffForm {
+    private MultipartFile fileImage_add;
+    private String nameStaff_add;
+    private String phoneNumber_add;
+    private String role_add;
+    private String cmnd_add;
+    private String email_add;
+    private String address_add;
+    private String username_add;
+    private String password_add;
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class UpdateStaffForm {
+    private MultipartFile fileImage_edit;
+    private int idStaff_edit;
+    private String nameStaff_edit;
+    private String phoneNumber_edit;
+    private String role_edit;
+    private String cmnd_edit;
+    private String email_edit;
+    private String address_edit;
+    private String username_edit;
+}

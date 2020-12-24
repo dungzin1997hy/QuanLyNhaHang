@@ -4,12 +4,14 @@ import com.example.demo.dao.UsedDishDAO;
 import com.example.demo.entity.RoleEntity;
 import com.example.demo.entity.TableEntity;
 import com.example.demo.entity.UsedDishEntity;
+import com.example.demo.model.BillCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -40,6 +42,23 @@ public class UsedDishDAOImpl implements UsedDishDAO {
             UsedDishEntity list = (UsedDishEntity) query.getSingleResult();
             return list;
         }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> getUsedDishCount(LocalDateTime startDate, LocalDateTime stopDate) {
+        try{
+            String sql="select b.type, sum(a.amount) from DishEntity b left join b.usedDishEntities a where a.time <= :stopDate and a.time>=:startDate group by b.type";
+            Query query = entityManager.createQuery(sql);
+            query.setParameter("stopDate",stopDate);
+            query.setParameter("startDate",startDate);
+            List<String> billCountstemp = query.getResultList();
+            System.out.println(billCountstemp);
+            return billCountstemp;
+        }
+        catch (Exception e){
             e.printStackTrace();
             return null;
         }

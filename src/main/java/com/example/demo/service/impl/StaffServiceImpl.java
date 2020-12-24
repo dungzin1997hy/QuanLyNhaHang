@@ -25,6 +25,7 @@ public class StaffServiceImpl implements StaffService {
         for(StaffEntity staffEntity : staffEntities){
             Staff staff = new Staff();
             staff.setId(staffEntity.getId());
+            staff.setUrlImage(staffEntity.getUrl());
             staff.setName(staffEntity.getName());
             staff.setEmail(staffEntity.getEmail());
             staff.setPhoneNumber(staffEntity.getPhoneNumber());
@@ -34,7 +35,7 @@ public class StaffServiceImpl implements StaffService {
                 staff.setRole(staffEntity.getRoleEntity().toRole());
             }
             User user = new User();
-            user.setUsername(staffEntity.getUserEntity().getUsername());
+//            user.setUsername(staffEntity.getUserEntity().getUsername());
             staff.setUser(user);
             staffs.add(staff);
         }
@@ -50,6 +51,7 @@ public class StaffServiceImpl implements StaffService {
             staff.setId(staffEntity.getId());
             staff.setName(staffEntity.getName());
             staff.setEmail(staffEntity.getEmail());
+            staff.setUrlImage(staffEntity.getUrl());
             staff.setPhoneNumber(staffEntity.getPhoneNumber());
             staff.setCmnd(staffEntity.getCmnd());
             staff.setAddress(staffEntity.getAddress());
@@ -72,6 +74,7 @@ public class StaffServiceImpl implements StaffService {
             Staff staff = new Staff();
             staff.setId(staffEntity.getId());
             staff.setName(staffEntity.getName());
+            staff.setUrlImage(staffEntity.getUrl());
             staff.setEmail(staffEntity.getEmail());
             staff.setPhoneNumber(staffEntity.getPhoneNumber());
             staff.setCmnd(staffEntity.getCmnd());

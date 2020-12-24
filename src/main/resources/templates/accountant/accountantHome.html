@@ -23,7 +23,21 @@
     <header layout:fragment="header" class="mt-3 ml-2 mr-2">
         <script>
             $(document).ready(function () {
-                showChart();
+                ready();
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+                $('#end_date_input').val(today);
+                $('#end_date_input2').val(today);
+                var ddfirst = '01';
+                var firstday = yyyy + '-' + mm + '-' + ddfirst;
+                $('#start_date_input').val(firstday);
+                $('#start_date_input2').val(firstday);
+                changeDate();
+                changeDateChartPie();
+
             });
 
             $(document).keypress(
@@ -50,19 +64,31 @@
                     <div class="col-lg-6" style="height: 100%;display: flex;flex-direction: column">
                         <div style="display: flex;justify-content: flex-end">
                             <div class="d-flex float-right align-items-center">
-                                <input id="start_date_input" class="ml-2" type="date"
-                                       onchange="dateInputChange('start')">
+                                <input id="start_date_input" class="ml-2" type="date">
                                 <i class="ml-2 mr-2 icon-arrow-right5 text-grey"></i>
-                                <input id="end_date_input" type="date"
-                                       onchange="dateInputChange('end')">
-                                <button style="margin-left: 10px">Tìm kiếm</button>
+                                <input id="end_date_input" type="date">
+
+                                <button onclick="changeDate()" style="margin-left: 10px;width: 75px">Lọc</button>
                             </div>
                         </div>
-                        <div class="mt-1" id="curve_chart" style="height: 500px"></div>
+                        <div class="mt-1 chart" id="chart_div" style="height: 500px;width: 690px"></div>
+                    </div>
+                    <div class="col-lg-6" style="height: 100%;display: flex;flex-direction: column">
+                        <div style="display: flex;justify-content: flex-end">
+                            <div class="d-flex float-right align-items-center">
+                                <input id="start_date_input2" class="ml-2" type="date">
+                                <i class="ml-2 mr-2 icon-arrow-right5 text-grey"></i>
+                                <input id="end_date_input2" type="date">
+
+                                <button onclick="changeDateChartPie()" style="margin-left: 10px;width: 75px;">Lọc</button>
+                            </div>
+                        </div>
+                        <div class="mt-1 chart" id="piechart" style="height: 500px;width: 690px"></div>
                     </div>
                 </div>
             </div>
         </div>
+
         <span id="idMaterial_delete" style="display: none"></span>
     </section>
 </div>

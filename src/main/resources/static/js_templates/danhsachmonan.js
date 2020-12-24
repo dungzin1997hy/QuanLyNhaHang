@@ -320,6 +320,7 @@ function showImage(fileInput){
     }
     reader.readAsDataURL(file);
 }
+
 function showImageEdit(fileInput){
     file = fileInput.files[0];
     reader = new FileReader();

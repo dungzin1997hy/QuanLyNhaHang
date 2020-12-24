@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Staff  extends Person{
-
+    private String urlImage;
     private String address;
     private Role role;
     private User user;

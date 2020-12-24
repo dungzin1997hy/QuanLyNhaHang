@@ -37,6 +37,20 @@
                             event.preventDefault();
                         }
                     });
+                $("#submitButton").click(function (event) {
+                    // Stop default form Submit.
+                    event.preventDefault();
+                    // Call Ajax Submit.
+                    ajaxSubmitForm();
+
+                });
+                $("#submitButtonEdit").click(function (event) {
+                    // Stop default form Submit.
+                    event.preventDefault();
+                    // Call Ajax Submit.
+                    ajaxSubmitEditForm();
+
+                });
                 console.log("show staff table");
                 showStaffTable();
                 console.log("abc");
@@ -102,6 +116,7 @@
                                 <thead>
                                 <tr role="row">
                                     <th>STT</th>
+                                    <th>Ảnh</th>
                                     <th>Tên</th>
                                     <th>Số điện thoại</th>
                                     <th>CMND</th>
@@ -127,13 +142,22 @@
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
                             </li>
                             <hr>
-                            <form id="add_form">
+                            <form id="add_form" method="POST" enctype="multipart/form-data">
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Tên: <input id="nameStaff_add" name="nameStaff_add"
                                                 style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
                                                 size="40">
                                     <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ảnh <input id="fileImage_add" name="fileImage_add" type="file" accept="image/png,image/jpg"
+                                               style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImage(this)"
+                                               size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <img id="thumbnail_add" alt="ảnh preview" style="height: 100px;width: 100px;display: none">
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Số điện thoại <input id="phoneNumber_add" name="phoneNumber_add" type="number"
@@ -161,7 +185,7 @@
                                 </li>
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Chức vụ <select id="role_add">
+                                    Chức vụ <select id="role_add" name="role_add">
 
                                 </select>
 
@@ -180,10 +204,9 @@
 
                                 <hr>
                                 <a href="#" data-toggle="tooltip" title="Edit">
-                                    <button class="btn btn-info center-block mb-1" id="btn-add-user"
-                                            style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
-                                        Thêm mới
-                                    </button>
+                                    <a href="#" data-toggle="tooltip" title="Edit">
+                                        <button type="submit" class="btn btn-success" id="submitButton">Lưu</button>
+                                    </a>
                                 </a>
                             </form>
                         </ul>
@@ -194,13 +217,13 @@
                             <li class="nav__edit-input">
                                 <i class="icon-users">
                                         <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8"
-                                              id="title_editUser">Cập nhật thông tin món ăn</span></i>
+                                              id="title_editUser">Cập nhật thông tin nhân viên</span></i>
                                 <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
                                    data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
                             </li>
                             <hr>
-                            <form id="edit_form">
-                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                            <form id="edit_form" method="POST" enctype="multipart/form-data">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px;display: none">
                                     id: <input id="idStaff_edit" name="nameStaff_edit"
                                                 style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px;"
                                                 size="40">
@@ -211,6 +234,15 @@
                                                 style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
                                                 size="40">
                                     <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ảnh <input id="fileImage_edit" name="fileImage_edit" type="file" accept="image/png,image/jpg"
+                                               style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImageEdit(this)"
+                                               size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <img id="thumbnail_edit" alt="ảnh preview" style="height: 100px;width: 100px">
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Số điện thoại <input id="phoneNumber_edit" name="phoneNumber_edit" type="number"
@@ -237,8 +269,8 @@
                                     <label class="error"></label>
                                 </li>
 
-                                <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Chức vụ <select id="role_edit">
+                                <li class="nav__edit-input" style="padding-bottom: 5px">
+                                    Chức vụ <select id="role_edit" name="role_edit">
                                 </select>
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
@@ -250,11 +282,7 @@
                                 <li>
                                     <hr>
                                     <a href="#" data-toggle="tooltip" title="Edit">
-                                        <button class="btn btn-info center-block mb-1"
-                                                id="btn-edit-user"
-                                                style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
-                                            Cập nhật
-                                        </button>
+                                        <button type="submit" class="btn btn-success" id="submitButtonEdit">Cập nhật</button>
                                     </a>
                                 </li>
                             </form>

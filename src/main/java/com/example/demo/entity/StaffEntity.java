@@ -19,6 +19,9 @@ public class StaffEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column (name="urlimage")
+    private String url;
+
     @Column (name = "name")
     private String name;
 
@@ -65,6 +68,16 @@ public class StaffEntity {
         this.address = address;
         this.roleEntity = roleEntity;
 
+    }
+
+    public StaffEntity(int id, String url, String name, String phoneNumber, String email, String cmnd, String address) {
+        this.id = id;
+        this.url = url;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.cmnd = cmnd;
+        this.address = address;
     }
 
     public StaffEntity(String name, String phoneNumber, String email, String cmnd, String address) {

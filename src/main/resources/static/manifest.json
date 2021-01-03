@@ -1,0 +1,21 @@
+{
+  "name": "QLNH",
+  "short_name": "QLNH",
+  "start_url": "/dishManager",
+  "display": "standalone",
+  "background_color": "#FFE9D2",
+  "theme_color": "#FFE1C4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/global_assets/images/busytable.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/global_assets/images/busytable.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    }
+  ]
+}

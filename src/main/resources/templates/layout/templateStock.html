@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Template</title>
 
+        <script type="text/javascript" src="/app.js"></script>
+        <script type="text/javascript" src="/sw.js"></script>
+        <link rel="manifest" href="/manifest.json">
         <!-- Global stylesheets -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
               type="text/css">
@@ -64,7 +67,32 @@
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css">
+        <script type='text/javascript'>
+            $(document).ready(function () {
+                $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
+                $(document).ajaxStart(function () {
+                    $('#loadingDiv').show();
 
+                }).ajaxStop(function () {
+                    $('#loadingDiv').remove();
+                });
+                // $.ajax({
+                //     url:"/username",
+                //     type: "POST",
+                //     dataType:"json",
+                //     success : function (data) {
+                //         console.log(data);
+                //         $('#id_current_user').html(data.data.id);
+                //         $('#name_current_user').html(data.data.name);
+                //         $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
+                //
+                //     },error:function (data) {
+                //         swal("Lỗi", "warning");
+                //     }
+                // });
+
+            });
+        </script>
     </head>
     <body class="sidebar-xs" data-gr-c-s-loaded="true">
         <!-- Main navbar -->
@@ -134,11 +162,42 @@
                 <!-- /sidebar mobile toggler -->
                 <!-- Sidebar content -->
                 <div class="sidebar-content">
+                    <div class="sidebar-user-material">
+                        <div class="sidebar-user-material-body" style="background-image: none !important;">
+                            <div class="card-body text-center">
+                                <a href="#">
+                                    <img id="current-user-picture" class="img-fluid rounded-circle shadow-1 mb-3" style="width: 80px;height: 80px" alt="">
+                                </a>
+                                <h6 id="name_current_user" class="mb-0 text-white text-shadow-dark">Victoria Baker</h6>
+                                <p id="id_current_user" style="display: none"></p>
+                            </div>
 
+                            <div class="sidebar-user-material-footer">
+                                <a href="#user-nav" class="d-flex justify-content-between align-items-center text-shadow-dark dropdown-toggle legitRipple" data-toggle="collapse" aria-expanded="false"><span>Tài khoản</span></a>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="user-nav" style="">
+                            <ul class="nav nav-sidebar">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link legitRipple">
+                                        <i class="icon-cog5"></i>
+                                        <span>Đổi mật khẩu</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/logout" class="nav-link legitRipple">
+                                        <i class="icon-switch2" style="color: darkred"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                     <!-- Main navigation -->
                     <div class="card card-sidebar-mobile">
                         <ul class="nav nav-sidebar" data-nav-type="accordion">
-
                             <!-- Main -->
                             <li class="nav-item-header">
                                 <div class="text-uppercase font-size-xs line-height-xs">MAIN NAVIGATION</div>

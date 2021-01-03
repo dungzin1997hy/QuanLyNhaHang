@@ -22,4 +22,10 @@ public class ImageController {
         File serverFile = new File(fileDir.getFileDir()+"\\" + imageName);
         return Files.readAllBytes(serverFile.toPath());
     }
+    @RequestMapping(value = "/api/image/upload/{imageName}")
+    @ResponseBody
+    public byte[] up(@PathVariable(value = "imageName") String imageName) throws IOException {
+        File serverFile = new File(fileDir.getFileDir()+"\\" + imageName);
+        return Files.readAllBytes(serverFile.toPath());
+    }
 }

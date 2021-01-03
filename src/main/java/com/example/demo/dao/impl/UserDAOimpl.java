@@ -28,6 +28,7 @@ public class UserDAOimpl implements UserDAO {
             query.setParameter("username", username);
             return (UserEntity) query.getSingleResult();
         } catch (NoResultException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -51,9 +52,7 @@ public class UserDAOimpl implements UserDAO {
 
 
     @Override
-    public void addUser(User user) {
-//        String sql = "INSERT INTO thanhvien (MaKH,MaThang,SoDienCu,SoDienMoi,Status) VALUES ('" + user.getUsername() + "', '" + dienKe.getMaThang() + "', '" + dienKe.getSoDienCu() + "', '" + dienKe.getSoDienMoi() + "', '" + dienKe.getStatus() + "')";
-//        Query query = entityManager.createNativeQuery(sql);
-//        query.executeUpdate();
+    public void addUser(UserEntity user) {
+        entityManager.persist(user);
     }
 }

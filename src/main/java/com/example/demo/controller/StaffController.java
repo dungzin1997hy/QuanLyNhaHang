@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,8 @@ public class StaffController {
     RoleDAO roleDAO;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/getAllStaff")
     public ApiResponse<List<Staff>> getAllStaff() {
@@ -69,13 +72,21 @@ public class StaffController {
     @PostMapping("/updateStaff")
     public ApiResponse<String> updateStaff(@ModelAttribute UpdateStaffForm form) {
         try {
+            System.out.println(form.toString());
             //lỗi
-            RoleEntity roleEntity = roleDAO.getRoleById("1");
-            StaffEntity staff = staffDAO.getStaffById(form.getIdStaff_edit()+"");
-            StaffEntity staffEntity = new StaffEntity(form.getIdStaff_edit(),form.getNameStaff_edit(),form.getPhoneNumber_edit(),form.getEmail_edit(),form.getCmnd_edit());
+            RoleEntity roleEntity = roleDAO.getRoleById(form.getRole_edit());
+            StaffEntity staffEntity = staffDAO.getStaffById(form.getIdStaff_edit()+"");
+         //   StaffEntity staffEntity = new StaffEntity(form.getIdStaff_edit(),form.getNameStaff_edit(),form.getPhoneNumber_edit(),form.getEmail_edit(),form.getCmnd_edit());
+
+            staffEntity.setName(form.getNameStaff_edit());
+            staffEntity.setPhoneNumber(form.getPhoneNumber_edit());
             staffEntity.setRoleEntity(roleEntity);
+            staffEntity.setCmnd(form.getCmnd_edit());
+            staffEntity.setEmail(form.getEmail_edit());
             staffEntity.setAddress(form.getAddress_edit());
-            UserEntity userEntity = new UserEntity(staff.getUserEntity().getId(),form.getUsername_edit(),staff.getUserEntity().getPassword(),roleEntity.getRole());
+
+
+            UserEntity userEntity = new UserEntity(staffEntity.getUserEntity().getId(),form.getUsername_edit(),staffEntity.getUserEntity().getPassword(),roleEntity.getRole());
             staffEntity.setUserEntity(userEntity);
 
             if (form.getFileImage_edit().isEmpty()) {
@@ -138,7 +149,7 @@ public class StaffController {
                 if(staffEntity.getEmail().equals(form.getEmail_add())) return new ApiResponse<>(false,"","Email đã tồn tại");
                 if(staffEntity.getPhoneNumber().equals(form.getPhoneNumber_add())) return new ApiResponse<>(false,"","Số điện thoại đã tồn tại");
             }
-            UserEntity userEntity = new UserEntity(form.getUsername_add(),form.getPassword_add(),roleEntity.getRole());
+            UserEntity userEntity = new UserEntity(form.getUsername_add(),passwordEncoder.encode(form.getPassword_add()),roleEntity.getRole());
 
             StaffEntity staffEntity = new StaffEntity(form.getNameStaff_add(),form.getPhoneNumber_add(),form.getEmail_add(),form.getCmnd_add(),form.getAddress_add());
             staffEntity.setRoleEntity(roleEntity);

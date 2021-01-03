@@ -184,7 +184,17 @@
     /*transform: translateX(100%);*/
     display: none;
 }
-
+#changePassword_nav{
+    position: fixed;
+    top: 150px;
+    left: 40%;
+    bottom: 0;
+    width: 500px;
+    background-color: white;
+    z-index: 100;
+    /*transform: translateX(100%);*/
+    display: none;
+}
 #callDish{
     position: fixed;
     top: 0;
@@ -259,17 +269,7 @@ table {
 thead{
     background-color: mistyrose;
 }
-thead, tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-}
-tbody {
-    display: block;
-    overflow-y: auto;
-    table-layout: fixed;
-    /*max-height: 200px;*/
-}
+
 
 @keyframes fadeIn {
     from{

@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.DishEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DishDAO {
@@ -19,5 +20,7 @@ public interface DishDAO {
     void deleteDish(int idDish);
     void update(DishEntity dishEntity);
 
+
+    List<String> chartByDishType(String type, LocalDateTime startTime,LocalDateTime stopTime);
 
 }

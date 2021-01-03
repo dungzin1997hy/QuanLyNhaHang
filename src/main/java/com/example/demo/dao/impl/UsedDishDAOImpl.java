@@ -5,6 +5,7 @@ import com.example.demo.entity.RoleEntity;
 import com.example.demo.entity.TableEntity;
 import com.example.demo.entity.UsedDishEntity;
 import com.example.demo.model.BillCount;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,8 @@ public class UsedDishDAOImpl implements UsedDishDAO {
         return null;
     }
 
+
+
     @Override
     public UsedDishEntity getUsedDishByID(int id) {
         try{
@@ -59,6 +62,23 @@ public class UsedDishDAOImpl implements UsedDishDAO {
             return billCountstemp;
         }
         catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> getDishCount(LocalDateTime startDate, LocalDateTime stopDate, int idDish) {
+        try{
+            String sql ="select cast(b.time as LocalDate),sum(b.amount) from DishEntity a left join a.usedDishEntities b where b.time <= :stopDate and b.time>=:startDate and a.id ='"+idDish+"' GROUP BY cast(b.time as LocalDate),a.id";
+            Query query = entityManager.createQuery(sql);
+            query.setParameter("startDate",startDate);
+            query.setParameter("stopDate",stopDate);
+            List<String> list = query.getResultList();
+            System.out.println(list.toString());
+            return list;
+
+        }catch (Exception e){
             e.printStackTrace();
             return null;
         }

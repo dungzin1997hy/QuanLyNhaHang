@@ -12,7 +12,6 @@ function ready() {
                 for (var i = 0; i < data.data.length; i++) {
                     Role.push(data.data[i]);
                 }
-
                 searchReady();
             }
         }, error: function () {
@@ -34,6 +33,7 @@ function searchReady() {
         selectSearch.add(optEle);
         //role_add.add(optEle);
     }
+
 
     for (let optObj of Role) {
         let optEle = document.createElement("option");
@@ -92,6 +92,7 @@ function showStaffTable() {
 }
 
 function showAddFormStaff() {
+    $("#role_add").val($("#role_add option:first").val());
     $('.overlay_bang_mon_an').show();
     $('.nav__add-staff').show();
 }
@@ -588,7 +589,7 @@ function resetAddForm() {
     $('#username_add').val("");
     $('#password_add').val("");
 
-    $('#role_add').empty();
+    //$('#role_add').empty();
     $('#role_edit').empty();
 
 }

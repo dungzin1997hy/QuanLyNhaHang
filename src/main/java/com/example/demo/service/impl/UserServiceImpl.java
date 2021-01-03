@@ -29,7 +29,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             UserEntity userEntity = userDAO.getByUsername(username);
             User user = new User();
             user.setUsername(userEntity.getUsername());
-            System.out.println(user.toString());
+            user.setId(userEntity.getStaffEntity().getId());
+            user.setUrl(userEntity.getStaffEntity().getUrl());
+            user.setName(userEntity.getStaffEntity().getName());
             return user;
         } catch (Exception e) {
             return null;

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserDAO {
     UserEntity getByUsername(String username);
-    void addUser(User user);
+    void addUser(UserEntity user);
     List<UserEntity> getAllUser();
     List<String> getAllUsername();
 }

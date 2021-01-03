@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Template</title>
-
+    <script th:src="@{/js_templates/user.js}"></script>
+    <script type="text/javascript" src="/app.js"></script>
+    <script type="text/javascript" src="/sw.js"></script>
+    <link rel="manifest" href="/manifest.json">
     <!-- Global stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
           type="text/css">
@@ -64,9 +67,72 @@
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css">
+    <link rel="manifest" href="/static/manifest.json">
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
+            $(document).ajaxStart(function () {
+                $('#loadingDiv').show();
 
+            }).ajaxStop(function () {
+                $('#loadingDiv').remove();
+            });
+            // $.ajax({
+            //     url:"/username",
+            //     type: "POST",
+            //     dataType:"json",
+            //     success : function (data) {
+            //         console.log(data);
+            //         $('#id_current_user').html(data.data.id);
+            //         $('#name_current_user').html(data.data.name);
+            //         $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
+            //
+            //     },error:function (data) {
+            //         swal("Lỗi", "warning");
+            //     }
+            // });
+
+        });
+    </script>
 </head>
 <body class="sidebar-xs" data-gr-c-s-loaded="true">
+<div class="col-4" id="changePassword_nav">
+    <div class="tab-content card-body">
+        <div class="tab-pane fade show active" id="login-tab1">
+            <div class="text-center mb-3">
+                <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                <h5 class="mb-0">Đổi mật khẩu</h5>
+
+            </div>
+            <div class="form-group form-group-feedback form-group-feedback-left">
+                <input class="form-control" placeholder="Mật khẩu cũ" name="old_password" id="old_password" required>
+                <div class="form-control-feedback">
+                    <i class="icon-lock text-muted"></i>
+                </div>
+            </div>
+
+            <div class="form-group form-group-feedback form-group-feedback-left">
+                <input type="password" class="form-control" placeholder="Mật khẩu mới" id="new_password" name="new_password" required>
+                <div class="form-control-feedback">
+                    <i class="icon-lock2 text-muted"></i>
+                </div>
+            </div>
+
+            <div class="form-group form-group-feedback form-group-feedback-left">
+                <input type="password" class="form-control" placeholder="Mật khẩu mới" id="new_password_re" name="new_password_re" required>
+                <div class="form-control-feedback">
+                    <i class="icon-lock2 text-muted"></i>
+                </div>
+                <p id="errorMessage" style="display: none;color: red">2343</p>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-block" onclick="changePassword()">Đổi mật khẩu</button>
+            </div>
+
+            <span class="navbar-text ml-5">&copy; 2020. <a href="#">QuanLyNhaHang</a> by <a href="#" target="_blank">Dung</a></span>
+        </div>
+    </div>
+</div>
 <!-- Main navbar -->
 <div class="navbar navbar-expand-md navbar-light navbar-static">
     <!-- Header with logos -->
@@ -102,8 +168,8 @@
     </div>
     <!-- /mobile controls -->
     <!-- Navbar content -->
-    <div class="collapse navbar-collapse" id="navbar-mobile">
-        <ul class="navbar-nav">
+    <div class="collapse navbar-collapse" id="navbar-mobile" style="display: flex;justify-content: space-between">
+        <ul class="navbar-nav" style="display: flex;justify-content: space-between" >
             <li class="nav-item" style="display: flex">
                 <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
                     <i class="icon-paragraph-justify3"></i>
@@ -134,11 +200,42 @@
         <!-- /sidebar mobile toggler -->
         <!-- Sidebar content -->
         <div class="sidebar-content">
+            <div class="sidebar-user-material">
+                <div class="sidebar-user-material-body" style="background-image: none !important;">
+                    <div class="card-body text-center">
+                        <a href="#">
+                            <img id="current-user-picture" class="img-fluid rounded-circle shadow-1 mb-3" style="width: 80px;height: 80px" alt="">
+                        </a>
+                        <h6 id="name_current_user" class="mb-0 text-white text-shadow-dark">Victoria Baker</h6>
+                        <p id="id_current_user" style="display: none"></p>
+                    </div>
 
+                    <div class="sidebar-user-material-footer">
+                        <a href="#user-nav" class="d-flex justify-content-between align-items-center text-shadow-dark dropdown-toggle legitRipple" data-toggle="collapse" aria-expanded="false"><span>Tài khoản</span></a>
+                    </div>
+                </div>
+
+                <div class="collapse" id="user-nav" style="">
+                    <ul class="nav nav-sidebar">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link legitRipple" onclick="changePasswordForm()">
+                                <i class="icon-cog5"></i>
+                                <span>Đổi mật khẩu</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/logout" class="nav-link legitRipple">
+                                <i class="icon-switch2" style="color: darkred"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <!-- Main navigation -->
             <div class="card card-sidebar-mobile">
                 <ul class="nav nav-sidebar" data-nav-type="accordion">
-
                     <!-- Main -->
                     <li class="nav-item-header">
                         <div class="text-uppercase font-size-xs line-height-xs">MAIN NAVIGATION</div>

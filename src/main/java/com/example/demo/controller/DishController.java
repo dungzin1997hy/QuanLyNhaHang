@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.DishDAO;
+import com.example.demo.dao.UsedDishDAO;
 import com.example.demo.entity.DishEntity;
 import com.example.demo.model.Dish;
 import com.example.demo.service.DishService;
@@ -19,6 +20,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +32,19 @@ public class DishController {
     private FileDir fileDir;
     @Autowired
     public DishDAO dishDAO;
+    @Autowired
+    UsedDishDAO usedDishDAO;
 
     @Autowired
     public DishService dishService;
+
+    @PostMapping("/api/getAllDish")
+    @ResponseBody
+    public ApiResponse<List<Dish>> getpa() {
+        List<Dish> list = dishService.getAllDish();
+        return new ApiResponse<>(true, list, "");
+    }
+
 
     @PostMapping("/getAllDish")
     @ResponseBody
@@ -39,6 +52,7 @@ public class DishController {
         List<Dish> list = dishService.getAllDish();
         return new ApiResponse<>(true, list, "");
     }
+
 
     @PostMapping("/searchDishByName")
     public ApiResponse<Dish> searchDishByName(@RequestParam("nameDish") String name) {
@@ -77,7 +91,7 @@ public class DishController {
     @PostMapping("/addDish")
     @ResponseBody
     public ApiResponse<String> addDish(@ModelAttribute UploadForm form) {
-        System.out.println(form.getNameDish_add() + " " + form.getType_add());
+       // System.out.println(form.getNameDish_add() + " " + form.getType_add());
         if (dishDAO.checkExistDish(form.getNameDish_add()) == true)
             return new ApiResponse<>(false, "", "Tên món ăn đã tồn tại");
         try {
@@ -88,14 +102,14 @@ public class DishController {
                 return new ApiResponse<>(false, "", "Không thấy ảnh");
             }
             String uploadFilePath = fileDir.getFileDir() + "/" + form.getFileImage_add().getOriginalFilename();
-            System.out.println(uploadFilePath);
+           // System.out.println(uploadFilePath);
             byte[] bytes = form.getFileImage_add().getBytes();
             Path path = Paths.get(uploadFilePath);
             Files.write(path, bytes);
 
             DishEntity dishEntity = new DishEntity(form.getNameDish_add(), form.getPrice_add(), form.getType_add(), form.getUnit_add(), form.getDevices_add());
             dishEntity.setUrl(form.getFileImage_add().getOriginalFilename());
-            System.out.println(dishEntity.getUrl());
+         //   System.out.println(dishEntity.getUrl());
             dishDAO.addDish(dishEntity);
             return new ApiResponse<>(true, "Thêm món ăn thành công", "");
         } catch (Exception e) {
@@ -115,7 +129,7 @@ public class DishController {
     @PostMapping("/updateDish")
     public ApiResponse<String> updateDish(@ModelAttribute UpdateForm form) {
         try {
-            System.out.println(form.toString());
+           // System.out.println(form.toString());
             DishEntity dishEntity = dishDAO.searchDishById(form.getIdDish_edit());
 
             if (form.getFileImage_edit().isEmpty()) {
@@ -126,14 +140,14 @@ public class DishController {
                 uploadDir.mkdirs();
 
                 String uploadFilePath = fileDir.getFileDir() + "/" + form.getFileImage_edit().getOriginalFilename();
-                System.out.println(uploadFilePath);
+              //  System.out.println(uploadFilePath);
                 byte[] bytes = form.getFileImage_edit().getBytes();
                 Path path = Paths.get(uploadFilePath);
                 Files.write(path, bytes);
             }
 
 
-            System.out.println(dishEntity.getUrl());
+         //   System.out.println(dishEntity.getUrl());
             dishEntity.setName(form.getNameDish_edit());
             dishEntity.setDescription(form.getDevices_edit());
             dishEntity.setPrice(form.getPrice_edit());
@@ -148,6 +162,41 @@ public class DishController {
             return new ApiResponse<>(false, "", "Error");
         }
 
+    }
+    @PostMapping("/getDishCount")
+    public ApiResponse<List<String>> getDishCount(@RequestParam("startDate")String startDate,
+                                                  @RequestParam("stopDate")String stopDate,
+                                                  @RequestParam("idDish")int idDish){
+        try{
+            startDate = startDate + " 00:00";
+            stopDate = stopDate + " 23:59";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+            LocalDateTime stop = LocalDateTime.parse(stopDate, formatter);
+            List<String> list = usedDishDAO.getDishCount(start,stop,idDish);
+            return new ApiResponse<>(true,list,"");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,null,"");
+        }
+    }
+
+    @PostMapping("/chartDishByType")
+    public ApiResponse<List<String>> getDishCountByType(@RequestParam("startDate")String startDate,
+                                                  @RequestParam("stopDate")String stopDate,
+                                                  @RequestParam("type")String type){
+        try{
+            startDate = startDate + " 00:00";
+            stopDate = stopDate + " 23:59";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+            LocalDateTime stop = LocalDateTime.parse(stopDate, formatter);
+            List<String> list = dishDAO.chartByDishType(type,start,stop);
+            return new ApiResponse<>(true,list,"");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,null,"");
+        }
     }
 }
 

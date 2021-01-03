@@ -47,9 +47,9 @@ public class StaffDAOImpl implements StaffDAO {
     }
 
     @Override
-    public StaffEntity getStaffById(String nameStaff) {
+    public StaffEntity getStaffById(String idStaff) {
         try {
-            String sql = "SELECT u FROM StaffEntity u where u.id = '" + nameStaff + "'";
+            String sql = "SELECT u FROM StaffEntity u where u.id = '" + idStaff + "'";
             return (StaffEntity) entityManager.createQuery(sql).getSingleResult();
         }catch (Exception e){
             e.printStackTrace();

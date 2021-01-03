@@ -59,6 +59,9 @@
             });
         </script>
         <script th:src="@{/js_templates/danhsachNhanVien.js}"></script>
+        <script type="text/javascript" src="/app.js"></script>
+        <script type="text/javascript" src="/sw.js"></script>
+        <link rel="manifest" href="/manifest.json">
     </header>
     <section class="container-fluid" layout:fragment="content_body">
         <div class="row">
@@ -124,6 +127,7 @@
                                     <th>Địa chỉ</th>
                                     <th>Chức vụ</th>
                                     <th>Tài khoản</th>
+                                    <th>Tác vụ</th>
                                 </tr>
                                 </thead>
                                 <tbody id="bang_nhan_vien">
@@ -186,9 +190,8 @@
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Chức vụ <select id="role_add" name="role_add">
-
                                 </select>
-
+                                </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Tài khoản <input id="username_add" name="username_add"
                                                  style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
@@ -224,7 +227,7 @@
                             <hr>
                             <form id="edit_form" method="POST" enctype="multipart/form-data">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px;display: none">
-                                    id: <input id="idStaff_edit" name="nameStaff_edit"
+                                    id: <input id="idStaff_edit" name="idStaff_edit"
                                                 style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px;"
                                                 size="40">
                                     <label class="error"></label>

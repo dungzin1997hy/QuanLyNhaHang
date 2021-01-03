@@ -9,7 +9,7 @@ public interface StaffDAO {
     List<StaffEntity> searchStaffByName(String nameStaff);
 
     List<StaffEntity> getAllStaff();
-    StaffEntity getStaffById(String nameStaff);
+    StaffEntity getStaffById(String idStaff);
     List<StaffEntity> searchStaffByRole(String role);
 
     Boolean checkExistStaff(String phoneNumber);

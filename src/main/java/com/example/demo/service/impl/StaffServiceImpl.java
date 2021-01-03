@@ -35,7 +35,7 @@ public class StaffServiceImpl implements StaffService {
                 staff.setRole(staffEntity.getRoleEntity().toRole());
             }
             User user = new User();
-//            user.setUsername(staffEntity.getUserEntity().getUsername());
+            user.setUsername(staffEntity.getUserEntity().getUsername());
             staff.setUser(user);
             staffs.add(staff);
         }

@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -24,6 +25,8 @@ public class DemoApplication extends WebSecurityConfigurerAdapter implements Web
 
     @Autowired
     private static DishDAO dishDAO;
+
+
 
     public static void main(String[] args) {
 
@@ -54,8 +57,8 @@ public class DemoApplication extends WebSecurityConfigurerAdapter implements Web
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("username").passwordParameter("password")
-                .failureUrl("/").successHandler(urlAuthenSuccessHandler)
-                .and().logout().logoutUrl("/").logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID").invalidateHttpSession(true);
+                .failureUrl("/loginError").successHandler(urlAuthenSuccessHandler)
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+               // .deleteCookies("JSESSIONID").invalidateHttpSession(true);
     }
 }

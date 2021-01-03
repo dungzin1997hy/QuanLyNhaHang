@@ -1,3 +1,5 @@
+
+
 //Show user list
 function showDishTable() {
 
@@ -452,7 +454,7 @@ function deleteDish() {
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Xoá",
                 cancelButtonText: "Quay lại",
-                closeOnConfirm: false,
+                closeOnConfirm: true,
                 closeOnCancel: true
             },
             function (isConfirm) {
@@ -467,7 +469,6 @@ function deleteDish() {
                             swal("Done", data.data, "success");
                             showDishTable();
                         }, error: function () {
-
                             swal("Lỗi", "Không xóa được", "warning");
                         }
                     });
@@ -503,8 +504,10 @@ function showTable(data) {
                 + '<td>' + row.unit + '</td>'
                 + '<td>' + string + '</td>'
                 + '<td>' +
-                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
-                '<a data-toggle="tooltip" title="Remove"><button onclick="deleteDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                '<button data-toggle="tooltip" title="Cập nhật" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
+                '<a data-toggle="tooltip" title="Xoá"><button onclick="deleteDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a>'
+               // +'<button class="btn btn-info center-block mb-1" data-toggle="tooltip" title="Thống kê" onclick="showChart()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="icon-chart"></button>' 
+                +'</td>'
                 + '</tr>';
         }
     }

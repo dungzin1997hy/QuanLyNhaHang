@@ -27,9 +27,11 @@
                 $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
                 $(document).ajaxStart(function () {
                     $('#loadingDiv').show();
+
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
+
                 $(document).keypress(
                     function(event){
                         if (event.which == '13') {
@@ -58,6 +60,9 @@
             });
         </script>
         <script th:src="@{/js_templates/danhsachmonan.js}"></script>
+        <script type="text/javascript" src="/app.js"></script>
+        <script type="text/javascript" src="/sw.js"></script>
+        <link rel="manifest" href="/manifest.json">
     </header>
     <section class="container-fluid" layout:fragment="content_body">
         <div class="row">
@@ -272,6 +277,17 @@
                             </form>
                         </ul>
                     </nav>
+                    <div class="col-lg-6" style="height: 100%;display: flex;flex-direction: column;display: none">
+                        <div style="display: flex;justify-content: flex-end">
+                            <div class="d-flex float-right align-items-center">
+                                <input id="start_date_input" class="ml-2" type="date">
+                                <i class="ml-2 mr-2 icon-arrow-right5 text-grey"></i>
+                                <input id="end_date_input" type="date">
+                                <button onclick="changeDate()" style="margin-left: 10px;width: 75px">Lọc</button>
+                            </div>
+                        </div>
+                        <div class="mt-1 chart" id="chart_div" style="height: 500px;width: 690px"></div>
+                    </div>
                 </div>
             </div>
         </div>

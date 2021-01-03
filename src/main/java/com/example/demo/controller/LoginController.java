@@ -8,9 +8,26 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LoginController {
-    @GetMapping({"/login","/"})
+
+
+    @GetMapping("/home-admin")
+    public String a(){
+       return "admin/dishManager";
+    }
+    @GetMapping("/home-letan")
+    public String letan(){
+        return "recept/booking";
+    }
+
+
+    @GetMapping({"/login"})
     public  String login(){
-        return "admin/dishManager";
+        return "login";
+    }
+
+    @GetMapping("/")
+    public String temp(){
+        return "/client/clientcall.html";
     }
 
     @GetMapping("/dishManager")
@@ -53,6 +70,10 @@ public class LoginController {
         String errorMessage = "Sai username hoặc password";
         model.addAttribute("errorMessage", errorMessage);
         return "login";
+    }
+    @GetMapping("/clientcall")
+    public String clientCall(){
+        return "client/clientcall.html";
     }
 
     @GetMapping("/accountHome")

@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     private String username;
+    private String name;
+    private int id;
+    private String url;
 }

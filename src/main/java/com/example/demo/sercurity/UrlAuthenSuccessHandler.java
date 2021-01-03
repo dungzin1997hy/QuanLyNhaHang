@@ -30,7 +30,30 @@ public class UrlAuthenSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 
         String targetUrl;
         if (roles.contains("ROLE_ADMIN")) {
-            targetUrl = "/trangchu";
+            targetUrl = "/home-admin";
+            if (response.isCommitted()) {
+                return;
+            }
+            redirectStrategy.sendRedirect(request, response, targetUrl);
+        }
+
+        if (roles.contains("ROLE_RECEPT")) {
+            targetUrl = "/home-letan";
+            if (response.isCommitted()) {
+                return;
+            }
+            redirectStrategy.sendRedirect(request, response, targetUrl);
+        }
+
+        if (roles.contains("ROLE_STOCK")) {
+            targetUrl = "/home-stock";
+            if (response.isCommitted()) {
+                return;
+            }
+            redirectStrategy.sendRedirect(request, response, targetUrl);
+        }
+        if (roles.contains("ROLE_ACCOUNTANT")) {
+            targetUrl = "/home-accountant";
             if (response.isCommitted()) {
                 return;
             }

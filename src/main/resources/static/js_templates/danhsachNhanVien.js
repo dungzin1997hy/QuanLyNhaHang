@@ -9,6 +9,7 @@ function ready() {
         success: function (data) {
             if (data.success == true) {
                 // showTable(data);
+                console.log(data);
                 for (var i = 0; i < data.data.length; i++) {
                     Role.push(data.data[i]);
                 }

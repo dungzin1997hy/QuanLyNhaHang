@@ -2,18 +2,38 @@ var allDish = new Array(0);
 
 function ready() {
     allDish = [];
-    $.ajax({
-        url: "/getAllDish",
-        type: "POST",
-        dataType: "json",
-        success: function (data) {
-            //console.log(data);
-            for (var i = 0; i < data.data.length; i++) {
-                allDish.push(data.data[i].id);
-            }
-            showDish(data);
-        }
-    })
+    fetch('/getAllDish',{
+        method: 'post',
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        },
+        body: 'foo=bar&lorem=ipsum'})
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+                    for (var i = 0; i < data.data.length; i++) {
+                        allDish.push(data.data[i].id);
+                    }
+                    showDish(data);
+        });
+    // $.ajax({
+    //     url: "/getAllDish",
+    //     type: "POST",
+    //     dataType: "json",
+    //     success: function (data) {
+    //         console.log(data);
+    //         for (var i = 0; i < data.data.length; i++) {
+    //             allDish.push(data.data[i].id);
+    //         }
+    //         showDish(data);
+    //     },
+    //     error : function (data) {
+    //         console.log(data);
+    //         console.log('cant request');
+    //     }
+    // })
 }
 
 function showDish(data) {

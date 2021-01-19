@@ -14,11 +14,13 @@ import com.example.demo.model.Table;
 import com.example.demo.model.UsedDish;
 import com.example.demo.service.TableService;
 import com.example.demo.service.UsedDishService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.control.Tab;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -50,7 +52,7 @@ public class TableController {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
 
-    @PostMapping("/getAllTable")
+    @PostMapping("/api/getAllTable")
     public ApiResponse<List<Table>> getAllTable() {
         List<Table> tables = tableService.getAllTable();
         return new ApiResponse<>(true, tables, "");
@@ -62,7 +64,7 @@ public class TableController {
         return new ApiResponse<>(true, tables, "");
     }
 
-    @PostMapping("/getTableByArea/{area}")
+    @PostMapping("api/getTableByArea/{area}")
     public ApiResponse<List<Table>> getTableByArea(@PathVariable String area) {
         List<Table> tables = tableService.getTableByArea(area);
         return new ApiResponse<>(true, tables, "");
@@ -178,7 +180,7 @@ public class TableController {
             for(CallDish callDish : callDishList.callDishes){
                 UsedDishEntity usedDishEntity = new UsedDishEntity();
                 usedDishEntity.setTableEntity(tableEntity);
-                usedDishEntity.setAmount(callDish.amount);
+                usedDishEntity.setAmount(Integer.parseInt(callDish.amount));
                 DishEntity dishEntity = dishDAO.searchDishById(callDish.idDish);
                 usedDishEntity.setDishEntity(dishEntity);
                 LocalDateTime now = LocalDateTime.now();
@@ -192,6 +194,8 @@ public class TableController {
             return new ApiResponse<>(false,"","Lỗi");
         }
     }
+
+
     @PostMapping("/setTable")
     public ApiResponse<String> setTable(@RequestParam("nameTable") String name){
         try{
@@ -224,11 +228,15 @@ class Listinteger implements Serializable {
 @NoArgsConstructor
 class CallDish implements Serializable{
     int idDish;
-    int amount;
+    String amount;
 }
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+
 class CallDishList implements Serializable{
+
     List<CallDish> callDishes;
     int idTable;
 }

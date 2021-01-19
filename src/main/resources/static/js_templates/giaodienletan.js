@@ -8,7 +8,7 @@ function ready() {
     $('#khuBcontainer').html("");
     $('#khuCcontainer').html("");
     $.ajax({
-        url: "/getTableByArea/A",
+        url: "/api/getTableByArea/A",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -20,7 +20,7 @@ function ready() {
         }
     });
     $.ajax({
-        url: "/getTableByArea/B",
+        url: "/api/getTableByArea/B",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -32,7 +32,7 @@ function ready() {
         }
     });
     $.ajax({
-        url: "/getTableByArea/C",
+        url: "/api/getTableByArea/C",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -49,7 +49,7 @@ function showCallDish() {
 
     $('#callDish').show()
     $.ajax({
-        url: "/getAllDish",
+        url: "/api/getAllDish",
         type: "POST",
         dataType: "json",
         success: function (data) {

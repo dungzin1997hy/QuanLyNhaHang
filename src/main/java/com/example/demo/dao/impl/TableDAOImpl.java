@@ -143,9 +143,11 @@ public class TableDAOImpl implements TableDAO {
 
     @Override
     public void deleteTable(int idTable) {
-        String sql ="delete from TableEntity b where b.id="+idTable;
-        Query query = entityManager.createQuery(sql);
-        query.executeUpdate();
+//        String sql ="delete from TableEntity b where b.id="+idTable;
+//        Query query = entityManager.createQuery(sql);
+//        query.executeUpdate();
+        TableEntity tableEntity = getTableById(idTable);
+        entityManager.remove(tableEntity);
     }
 
     @Override

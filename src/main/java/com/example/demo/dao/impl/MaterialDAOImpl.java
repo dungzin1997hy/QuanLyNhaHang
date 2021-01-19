@@ -68,9 +68,8 @@ public class MaterialDAOImpl implements MaterialDAO {
 
     @Override
     public void deleteMaterial(int id) {
-        String sql = "delete from MaterialEntity b where b.id=" + id;
-        Query query = entityManager.createQuery(sql);
-        query.executeUpdate();
+        MaterialEntity materialEntity = getMaterialById(id);
+        entityManager.remove(materialEntity);
     }
 
     @Override

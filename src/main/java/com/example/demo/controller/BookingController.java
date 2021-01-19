@@ -32,7 +32,7 @@ public class BookingController {
     @Autowired
     TableDAO tableDAO;
 
-    @PostMapping("/getAllBooking")
+    @PostMapping("/api/getAllBooking")
     public ApiResponse<List<Booking>> getAllBooking() {
         try {
             List<Booking> list = bookingService.getAllBooking();

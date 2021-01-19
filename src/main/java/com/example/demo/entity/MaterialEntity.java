@@ -39,6 +39,13 @@ public class MaterialEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materialEntity")
     private List<InputMaterialEntity> inputMaterialEntities;
 
+    @PreRemove
+    public void PreRemove(){
+        for (InputMaterialEntity inputMaterialEntity : inputMaterialEntities) {
+            inputMaterialEntity.setMaterialEntity(null);
+        }
+    }
+
     public Material toMaterial(){
         Material material = new Material();
         material.setId(this.id);

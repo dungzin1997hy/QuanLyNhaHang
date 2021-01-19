@@ -6,7 +6,7 @@ var totalInput = 0;
 
 function ready() {
     $.ajax({
-        url: "/getAllMaterial",
+        url: "/api/getAllMaterial",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -41,7 +41,7 @@ function showMaterialTable() {
     $('.nav__output-material').hide();
 
     $.ajax({
-        url: "/getAllMaterial",
+        url: "/api/getAllMaterial",
         type: "POST",
         dataType: "json",
         success: function (data) {

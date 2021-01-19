@@ -36,7 +36,7 @@ public class MaterialController {
     InputMaterialDAO inputMaterialDAO;
 
 
-    @PostMapping("/getAllMaterial")
+    @PostMapping("/api/getAllMaterial")
     @ResponseBody
     public ApiResponse<List<Material>> getAllMaterial() {
         List<Material> list = materialService.getAllMaterial();

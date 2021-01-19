@@ -46,6 +46,19 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
+    public CustomerEntity getCustomerById(int id) {
+        try{
+            String sql = "SELECT u from CustomerEntity u where u.id='"+id+"'";
+            Query query = entityManager.createQuery(sql);
+            return (CustomerEntity) query.getSingleResult();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public List<CustomerEntity> getListCustomerByPhone(String phoneNumber) {
         try{
             String sql ="select u from CustomerEntity u where u.phoneNumber like '%"+phoneNumber+"%'";
@@ -96,9 +109,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public void deleteCustomer(int idCustomer) {
-        String sql = "delete from CustomerEntity b where b.id="+idCustomer;
-        Query query = entityManager.createQuery(sql);
-        query.executeUpdate();
+        CustomerEntity customerEntity = getCustomerById(idCustomer);
+        entityManager.remove(customerEntity);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class StaffController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @PostMapping("/getAllStaff")
+    @PostMapping("/api/getAllStaff")
     public ApiResponse<List<Staff>> getAllStaff() {
 
         try {
@@ -178,7 +178,7 @@ public class StaffController {
     }
 
 
-    @PostMapping("/getAllRole")
+    @PostMapping("/api/getAllRole")
     public ApiResponse<List<Role>> getAllRole(){
         List<Role> roles= roleService.getAllRole();
         return new ApiResponse<>(true,roles,"");

@@ -5,7 +5,7 @@ function showTableTable() {
     $('.nav__add-table').hide();
     $('.nav__edit-table').hide();
     $.ajax({
-        url: "/getAllTable",
+        url: "/api/getAllTable",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -220,6 +220,7 @@ function searchTableByType() {
         $.ajax({
             url: "/searchTableByType",
             type: "POST",
+            dataType:"JSON",
             data: {
                 "type": selectItem
             },

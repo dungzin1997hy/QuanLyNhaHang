@@ -26,7 +26,7 @@ public class CustomerController {
     @Autowired
     BillService billService;
 
-    @PostMapping("/getAllCustomer")
+    @PostMapping("/api/getAllCustomer")
     public ApiResponse<List<Customer>> getAllCustomer() {
         List<Customer> customers = customerService.getAllCustomer();
         return new ApiResponse<>(true, customers, "");

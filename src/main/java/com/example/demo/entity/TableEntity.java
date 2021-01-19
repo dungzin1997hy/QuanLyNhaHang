@@ -44,6 +44,17 @@ public class TableEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
     private List<BookingEntity> bookingEntities;
 
+    @PreRemove
+    public void preRemove(){
+        usedDishEntities.forEach(UsedDishEntity -> UsedDishEntity.setTableEntity(null));
+        for (BillEntity billEntity : billEntities) {
+            billEntity.setTableEntity(null);
+        }
+        for (BookingEntity bookingEntity : bookingEntities) {
+            bookingEntity.setTableEntity(null);
+        }
+    }
+
     public TableEntity(String name, String type,String status, String area) {
         this.name = name;
         this.type = type;

@@ -7,7 +7,7 @@ function showDishTable() {
     $('.nav__add-dish').hide();
     $('.nav__edit-dish').hide();
     $.ajax({
-        url: "/getAllDish",
+        url: "/api/getAllDish",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -454,7 +454,7 @@ function deleteDish() {
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Xoá",
                 cancelButtonText: "Quay lại",
-                closeOnConfirm: true,
+                closeOnConfirm: false,
                 closeOnCancel: true
             },
             function (isConfirm) {

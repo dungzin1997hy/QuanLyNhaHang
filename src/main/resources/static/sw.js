@@ -28,18 +28,15 @@ function readtheDatafromIndexedDb(dbName, storeName, key) {
         var openRequest = indexedDB.open(dbName, 1);
 
         openRequest.onsuccess = function (e) {
-            console.log("Success!");
+
             db = e.target.result;
             var transaction = db.transaction([storeName], "readwrite");
             var store = transaction.objectStore(storeName);
             var request = store.get(key);
             request.onerror = function () {
-                console.log("Error");
                 reject("unexpected error happened");
             }
             request.onsuccess = function (e) {
-                console.log("return the respose from db");
-                console.log(request.result);
                 resolve(new Response(request.result, {"status": 200, "statusText": "MyCustomResponse!"}));
             }
         }
@@ -48,15 +45,70 @@ function readtheDatafromIndexedDb(dbName, storeName, key) {
             console.dir(e);
         }
     });
-
 }
 
+var callsToCache = new Array(0);
 self.addEventListener('fetch', function (event) {
     let response;
-
-
     if (event.request.method == 'POST') {
-        if (event.request.url.includes('/getAllDish')) {
+        if (event.request.url.includes("/callDish")) {
+           // console.log(event.request);
+            var request = event.request;
+            var headers = {};
+            for (var entry of request.headers.entries()) {
+                headers[entry[0]] = entry[1];
+            }
+            var serialized = {
+                url: request.url,
+                headers: headers,
+                method: request.method,
+                mode: request.mode,
+                credentials: request.credentials,
+                cache: request.cache,
+                redirect: request.redirect,
+                referrer: request.referrer
+            };
+            request.clone().text().then(function (body) {
+                serialized.body = body;
+                console.log(serialized.body);
+                callsToCache.push(serialized);
+                console.log(callsToCache);
+                let saveDB = indexedDB.open('fetchEvent', 1);
+                saveDB.onsuccess = function (event1) {
+                    var db = event1.target.result;
+                    var tx = db.transaction(['fetchEvent'], 'readwrite');
+                    var store = tx.objectStore('fetchEvent');
+                    store.add(serialized, Math.floor(Math.random() * 10));
+
+                }
+            });
+
+            request.onupgradeneeded = function (event) {
+                var db = event.target.result;
+                var objectStore = db.createObjectStore('responseDB');
+            };
+        }
+        if (event.request.url.includes('/api/getAll')) {
+            fetch(event.request).then(function (response) {
+                return response.json();
+            })
+                .then(function (data) {
+                    const items = data;
+                    let request = indexedDB.open('mydatabase', 1);
+                    request.onsuccess = function (event1) {
+                        var db = event1.target.result;
+                        var tx = db.transaction(['responseDB'], 'readwrite');
+                        var store = tx.objectStore('responseDB');
+                        console.log()
+                        store.delete(event.request.url);
+                        store.add(JSON.stringify(items), event.request.url);
+                    }
+                    request.onupgradeneeded = function (event) {
+                        var db = event.target.result;
+                        var objectStore = db.createObjectStore('responseDB');
+                    };
+
+                })
             event.respondWith(
                 fetch(event.request).catch(function (result) {
                     return readtheDatafromIndexedDb('mydatabase', 'responseDB', event.request.url).then(function (response) {
@@ -166,6 +218,14 @@ self.addEventListener('fetch', function (event) {
 
 self.addEventListener('install', evt => {
     console.log('serviceworker has been installed');
+    let request = indexedDB.open('fetchEvent', 1);
+    request.onsuccess = function (event1) {
+
+    }
+    request.onupgradeneeded = function (event) {
+        var db = event.target.result;
+        var objectStore = db.createObjectStore('fetchEvent');
+    };
     // evt.waitUntil(
     //     caches.open(staticCacheName).then(cache=>{
     //         console.log('caching shell assets');
@@ -190,5 +250,60 @@ self.addEventListener('activate', evt => {
     );
 });
 
+self.addEventListener('sync', function (event) {
+    if (event.tag == 'myFirstSync') {
+        event.waitUntil(doSomeStuff('fetchEvent', 'fetchEvent'));
+    }
+});
 
+function doSomeStuff(dbName, storeName) {
+    console.log("dfsadf");
+    // callsToCache.forEach(function (signatureRequest) {
+    //     fetch(signatureRequest.url, {
+    //         method: signatureRequest.method,
+    //         body: signatureRequest.body
+    //     })
+    // });
+    // callsToCache = [];
+
+    var openRequest = indexedDB.open(dbName, 1);
+    openRequest.onsuccess = function (e) {
+        db = e.target.result;
+        var transaction = db.transaction([storeName], "readwrite");
+        var store = transaction.objectStore(storeName);
+        var request = store.getAll();
+        request.onsuccess = function() {
+            console.log(request.result);
+            for(var i=0;i<request.result.length;i++){
+                signatureRequest = request.result[i];
+                console.log('body: '+signatureRequest.body);
+                fetch(signatureRequest.url, {
+                    method: signatureRequest.method,
+                    body: signatureRequest.body,
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+            }
+        };
+    }
+    openRequest.onerror = function (e) {
+        console.log("Error");
+        console.dir(e);
+    }
+
+    // fetch('/api/getAllDish',{
+    //     method: 'post',
+    //     headers: {
+    //         "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+    //     },
+    //     body: 'foo=bar&lorem=ipsum'})
+    //     .then(function(response) {
+    //         return response.json();
+    //     })
+    //     .then(function(data) {
+    //         console.log(data);
+    //     });
+}
 

@@ -4,7 +4,7 @@ function showCustomerTable() {
     $('.nav__add-customer').hide();
     $('.nav__edit-customer').hide();
     $.ajax({
-        url: "/getAllCustomer",
+        url: "/api/getAllCustomer",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -515,6 +515,7 @@ function showBillCustomer() {
                 "idCus": id
             },
             success: function (data) {
+
                 var contentString = "";
                 var tong = 0;
                 if (data.data != null) {

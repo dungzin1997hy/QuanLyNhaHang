@@ -29,7 +29,7 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-    @PostMapping("/getAllBill")
+    @PostMapping("/api/getAllBill")
     public ApiResponse<List<Bill>> getAllBill() {
         List<Bill> bills = billService.getAllBill();
         try {

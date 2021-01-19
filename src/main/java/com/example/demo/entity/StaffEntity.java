@@ -51,6 +51,16 @@ public class StaffEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "staffEntity")
     private List<InputMaterialBillEntity> inputMaterialEntities;
 
+    @PreRemove
+    public void preRemove(){
+        for (BillEntity billEntity : billEntities) {
+            billEntity.setStaffEntity(null);
+        }
+        for (InputMaterialBillEntity inputMaterialEntity : inputMaterialEntities) {
+            inputMaterialEntity.setStaffEntity(null);
+        }
+    }
+
     public StaffEntity(int id, String name, String phoneNumber, String email, String cmnd) {
         this.id = id;
         this.name = name;

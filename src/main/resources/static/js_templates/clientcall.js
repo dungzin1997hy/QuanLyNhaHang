@@ -2,7 +2,7 @@ var allDish = new Array(0);
 
 function ready() {
     allDish = [];
-    fetch('/getAllDish',{
+    fetch('/api/getAllDish',{
         method: 'post',
         headers: {
             "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -92,7 +92,7 @@ function ConfirmCallDish() {
             cancelButtonText: "Quay lại",
             confirmButtonText: "Có",
 
-            closeOnConfirm: true,
+            closeOnConfirm: false,
             closeOnCancel: true
         },
         function (isConfirm) {
@@ -108,15 +108,20 @@ function ConfirmCallDish() {
                     }
                 }
                 console.log(value);
+                console.log(JSON.stringify({
+                    "callDishes": value,
+                    "idTable": 29
+                }))
                 $.ajax({
                     type: "POST",
                     url: "/callDish",
                     contentType: "application/json",
                     data: JSON.stringify({
                         "callDishes": value,
-                        "idTable": 3
+                        "idTable": 29
                     }),
                     success: function (data) {
+                        console.log(data);
                         swal("Thành công", data.data, "success");
                         for (var i = 0; i < allDish.length; i++) {
                             $('#amount_' + allDish[i]).html(0);

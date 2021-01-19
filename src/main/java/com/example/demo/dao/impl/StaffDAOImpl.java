@@ -92,9 +92,8 @@ public class StaffDAOImpl implements StaffDAO {
 
     @Override
     public void deleteStaff(int idStaff) {
-        String sql ="delete from StaffEntity b where b.id="+idStaff;
-        Query query = entityManager.createQuery(sql);
-        query.executeUpdate();
+        StaffEntity staffEntity = getStaffById(idStaff+"");
+        entityManager.remove(staffEntity);
     }
 
     @Override

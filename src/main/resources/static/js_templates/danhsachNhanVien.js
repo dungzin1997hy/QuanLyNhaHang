@@ -3,7 +3,7 @@ var Role = new Array(0);
 
 function ready() {
     $.ajax({
-        url: "/getAllRole",
+        url: "/api/getAllRole",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -78,7 +78,7 @@ function showStaffTable() {
     $('.nav__add-staff').hide();
     $('.nav__edit-staff').hide();
     $.ajax({
-        url: "/getAllStaff",
+        url: "/api/getAllStaff",
         type: "POST",
         dataType: "json",
         success: function (data) {

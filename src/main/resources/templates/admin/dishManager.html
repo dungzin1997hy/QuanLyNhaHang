@@ -159,8 +159,8 @@
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Ảnh <input id="fileImage_add" name="fileImage_add" type="file" accept="image/png,image/jpg"
-                                                style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImage(this)"
+                                    Ảnh <input id="fileImage_add" name="fileImage_add" type="file"
+                                               accept="image/*" style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" onchange="showImage(this)"
                                                 size="40">
                                     <label class="error"></label>
                                 </li>
@@ -177,7 +177,7 @@
 
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Loại
-                                    <select id="type_add">
+                                    <select id="type_add" name="type_add">
                                         <option value="1">Đồ xào</option>
                                         <option value="2">Đồ chiên</option>
                                         <option value="3">Đồ uống</option>
@@ -185,7 +185,7 @@
                                     </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Đơn vị <select id="unit_add">
+                                    Đơn vị <select id="unit_add" name="unit_add">
                                     <option value="1">Đĩa</option>
                                     <option value="2">Bát</option>
                                     <option value="3">Cốc</option>

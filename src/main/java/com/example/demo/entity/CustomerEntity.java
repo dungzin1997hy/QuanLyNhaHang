@@ -31,15 +31,29 @@ public class CustomerEntity {
     @Column (name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "billEntity")
-    private List<UsedDishEntity> usedDishEntities;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private List<BillEntity> billEntities;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
     private List<BookingEntity> bookingEntities;
 
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
     private List<TableEntity> tableEntities;
+
+    @PreRemove
+    public void PreRemove(){
+        for (BillEntity billEntity : billEntities) {
+            billEntity.setCustomerEntity(null);
+        }
+        for (BookingEntity bookingEntity : bookingEntities) {
+            bookingEntity.setCustomerEntity(null);
+        }
+        for (TableEntity tableEntity : tableEntities) {
+            tableEntity.setCustomerEntity(null);
+        }
+    }
 
     public CustomerEntity(String name, String phoneNumber, String email) {
         this.name = name;

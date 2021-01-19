@@ -4,7 +4,7 @@ var Type = new Array(0);
 
 function ready() {
     $.ajax({
-        url: "/getAllCustomer",
+        url: "/api/getAllCustomer",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -30,7 +30,7 @@ function ready() {
     });
 
     $.ajax({
-        url: "/getAllTimeBook",
+        url: "/api/getAllTimeBook",
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -150,7 +150,7 @@ function showBookingTable() {
     $('.nav__add-booking').hide();
     $('.nav__edit-booking').hide();
     $.ajax({
-        url: "/getAllBooking",
+        url: "/api/getAllBooking",
         type: "POST",
         dataType: "json",
         success: function (data) {

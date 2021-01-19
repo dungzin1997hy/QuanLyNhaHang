@@ -14,7 +14,7 @@ import java.util.List;
 public class TimeBookController {
     @Autowired
     TimeBookService timeBookService;
-    @PostMapping("/getAllTimeBook")
+    @PostMapping("/api/getAllTimeBook")
     public ApiResponse<List<TimeBook>> getAllTimeBook(){
         try{
             List<TimeBook> timeBooks = timeBookService.getAllTimeBook();

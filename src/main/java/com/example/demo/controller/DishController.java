@@ -42,6 +42,7 @@ public class DishController {
     @ResponseBody
     public ApiResponse<List<Dish>> getpa() {
         List<Dish> list = dishService.getAllDish();
+
         return new ApiResponse<>(true, list, "");
     }
 

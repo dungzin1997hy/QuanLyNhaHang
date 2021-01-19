@@ -37,8 +37,16 @@ public class DishEntity {
     private String description;
 
    // @Transient
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "dishEntity")
+   @OneToMany(mappedBy = "dishEntity")
    private List<UsedDishEntity> usedDishEntities;
+
+    @PreRemove
+    private void preRemove() {
+        for (UsedDishEntity s : usedDishEntities) {
+            System.out.println("delete");
+            s.setDishEntity(null);
+        }
+    }
 
     public DishEntity(String name, Float price, String type, String unit, String description) {
         this.name = name;

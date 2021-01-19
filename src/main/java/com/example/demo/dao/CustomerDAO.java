@@ -8,6 +8,7 @@ import java.util.List;
 public interface CustomerDAO {
     List<CustomerEntity> searchCustomerByName(String nameCustomer);
     CustomerEntity searchCustomerByPhoneNumber(String phoneNumber);
+    CustomerEntity getCustomerById(int id);
     List<CustomerEntity> getListCustomerByPhone(String phoneNumber);
     List<CustomerEntity> getAllCustomer();
 

@@ -3,11 +3,13 @@ var CustomerPhoneNumber = new Array(0);
 var Type = new Array(0);
 
 function ready() {
+    console.log("ready");
     $.ajax({
         url: "/api/getAllCustomer",
         type: "POST",
         dataType: "json",
         success: function (data) {
+            console.log(data);
             Customer = [];
             CustomerPhoneNumber = [];
             if (data.success == true) {
@@ -60,17 +62,17 @@ function ready() {
 
 }
 
-function changePhoneNumber(value) {
-    if (CustomerPhoneNumber.includes(value) == false) {
-        $('#phoneNumberSearchError').html("Không có khách hàng này");
-        $("#addCustomer").show();
-        $('#nameCus').ưval("");
-        $('#phoneNumberCusAdd').val(value);
-    } else {
-        var i = CustomerPhoneNumber.indexOf(value);
-        $('#nameCus').val(Customer[i].name);
+    function changePhoneNumber(value) {
+        if (CustomerPhoneNumber.includes(value) == false) {
+            $('#phoneNumberSearchError').html("Không có khách hàng này");
+            $("#addCustomer").show();
+            $('#nameCus').val("");
+            $('#phoneNumberCusAdd').val(value);
+        } else {
+            var i = CustomerPhoneNumber.indexOf(value);
+            $('#nameCus').val(Customer[i].name);
+        }
     }
-}
 function closeAddCusForm() {
     var arr = new Array(0);
     var i =0;
@@ -446,7 +448,7 @@ function showTable(data) {
             var year = datetime[0];
             var month = datetime[1];
             var day = parseInt(datetime[2])+1;
-            if(month<10) month = '0'+month;
+            if(month<10) month = month;
             if(day<10) day = '0'+day;
             var time = day+"-"+month+"-"+year;
             var currentdate = new Date();

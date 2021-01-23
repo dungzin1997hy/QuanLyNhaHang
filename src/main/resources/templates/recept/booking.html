@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/templateStock}">
+      layout:decorate="~{layout/templateAdmin}">
 <head>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -34,7 +34,7 @@
                 $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
                 $(document).ajaxStart(function () {
                     $('#loadingDiv').show();
-                    ready();
+
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
@@ -52,6 +52,7 @@
                     }
                 );
                 console.log("show dish table");
+                ready();
                 showBookingTable();
                 console.log("abc");
                 $("#customer_ID_search").focus();

@@ -1,15 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
-import com.example.demo.dao.BillDAO;
-import com.example.demo.dao.DishDAO;
-import com.example.demo.dao.TableDAO;
-import com.example.demo.dao.UsedDishDAO;
-import com.example.demo.entity.BillEntity;
-import com.example.demo.entity.DishEntity;
-import com.example.demo.entity.TableEntity;
-import com.example.demo.entity.UsedDishEntity;
+import com.example.demo.dao.*;
+import com.example.demo.entity.*;
 import com.example.demo.model.Bill;
+import com.example.demo.model.Customer;
 import com.example.demo.model.Table;
 import com.example.demo.model.UsedDish;
 import com.example.demo.service.TableService;
@@ -36,13 +31,16 @@ public class TableController {
     @Autowired
     TableDAO tableDAO;
     @Autowired
+    StaffDAO staffdao;
+    @Autowired
     public TableService tableService;
 
     @Autowired
     DishDAO dishDAO;
     @Autowired
     BillDAO billDAO;
-
+    @Autowired
+    CustomerDAO customerDAO;
     @Autowired
     UsedDishDAO usedDishDAO;
 
@@ -92,6 +90,21 @@ public class TableController {
             e.printStackTrace();
             return new ApiResponse<>(false, "", "Không thêm được bàn này");
         }
+    }
+    @PostMapping("getTableById")
+    public ApiResponse<Customer> getCus(@RequestParam("idTable") int idTable){
+
+
+        try {
+            TableEntity tableEntity = tableDAO.searchTableByID(idTable+"");
+            Customer customer = tableEntity.getCustomerEntity().toCustomer();
+
+            return new ApiResponse<>(true, customer, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse<>(false, null, "Không thêm được bàn này");
+        }
+
     }
 
     @PostMapping("/updateTable")
@@ -143,8 +156,22 @@ public class TableController {
             TableEntity tableEntity = tableDAO.getTableByName(listinteger.nameTable);
 
             tableEntity.setStatus("free");
+            tableEntity.setCustomerEntity(null);
             tableDAO.updateTable(tableEntity);
+
+            StaffEntity staffEntity = staffdao.getStaffById(listinteger.idRecept+"");
+            if(staffEntity!= null){
+                billEntity.setStaffEntity(staffEntity);
+            }
+
             billEntity.setTableEntity(tableEntity);
+            CustomerEntity customerEntity = customerDAO.getCustomerById(listinteger.idCustomer);
+            if(customerEntity!= null){
+                billEntity.setCustomerEntity(customerEntity);
+            }
+
+
+
             BillEntity billEntity1 = billDAO.addBill(billEntity);
             for (int i : listinteger.list) {
                 UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);

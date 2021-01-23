@@ -343,7 +343,6 @@ $(function () {
             },
 
             devices_edit: {
-
                 maxlength: "Nhỏ hơn 50 kí tự"
             }
         },
@@ -423,14 +422,14 @@ function searchByType() {
     }
 }
 
-function deleteDish() {
-    $('#bang_mon_an').find('tr').click(function () {
+function deleteCustomer() {
+    $('#bang_khach_hang').find('tr').click(function () {
         var idDish = $(this).find('td').eq(1).text();
-        $("#idDish_delete").text(idDish);
+        console.log(idDish);
         var idDishDelete = $("#idDish_delete").text();
         swal({
                 title: "Xác nhận !!!",
-                text: "Bạn có chắc xoá món ăn này không ?",
+                text: "Bạn có chắc xoá khách hàng này không ?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -442,14 +441,14 @@ function deleteDish() {
             function (isConfirm) {
                 if (isConfirm) {
                     $.ajax({
-                        url: "/deleteDish",
+                        url: "/deleteCustomer",
                         type: "POST",
                         data: {
-                            "idDish": idDishDelete
+                            "idCustomer": idDish
                         },
                         success: function (data) {
                             swal("Done", data.data, "success");
-                            showDishTable();
+                            showCustomerTable();
                         }, error: function () {
 
                             swal("Lỗi", "Không xóa được", "warning");
@@ -506,6 +505,7 @@ function showBillCustomer() {
     $('#bang_khach_hang').find('tr').click(function () {
         var id = $(this).find('td').eq(1).text();
         var name = $(this).find('td').eq(2).text();
+        console.log("id : "+id);
         $('#cusName').text(name);
         $.ajax({
             url: "/getBillByCustomer",

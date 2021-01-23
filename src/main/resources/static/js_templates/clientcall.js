@@ -98,6 +98,8 @@ function ConfirmCallDish() {
         function (isConfirm) {
             if (isConfirm) {
                 var value = new Array();
+                var idTable = $('#tablenumber').val().trim();
+                console.log(idTable);
                 for (var i = 0; i < allDish.length; i++) {
                     var amount = $('#amount_' + allDish[i]).text();
                     if (amount != 0) {
@@ -110,7 +112,7 @@ function ConfirmCallDish() {
                 console.log(value);
                 console.log(JSON.stringify({
                     "callDishes": value,
-                    "idTable": 29
+                    "idTable": idTable
                 }))
                 $.ajax({
                     type: "POST",
@@ -118,7 +120,7 @@ function ConfirmCallDish() {
                     contentType: "application/json",
                     data: JSON.stringify({
                         "callDishes": value,
-                        "idTable": 29
+                        "idTable": idTable
                     }),
                     success: function (data) {
                         console.log(data);
@@ -127,8 +129,23 @@ function ConfirmCallDish() {
                             $('#amount_' + allDish[i]).html(0);
                         }
                         $('#totalCallDish').html(0);
+                        var openRequest = indexedDB.open("fetchEvent", 1);
+                        openRequest.onsuccess = function (e) {
+                            db = e.target.result;
+                            var transaction = db.transaction("fetchEvent", "readwrite");
+                            var store = transaction.objectStore("fetchEvent");
+                            var clear = store.clear();
+                        }
+
                     }, error: function (data) {
-                        swal("Lỗi", data.errorMessage, "warning");
+                        swal("Thành công", "Đang đợi mạng", "success");
+                        for (var i = 0; i < allDish.length; i++) {
+                            $('#amount_' + allDish[i]).html(0);
+                        }
+                        $('#totalCallDish').html(0);
+
+
+
                     }
                 })
             }

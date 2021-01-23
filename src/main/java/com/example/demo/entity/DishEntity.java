@@ -37,7 +37,7 @@ public class DishEntity {
     private String description;
 
    // @Transient
-   @OneToMany(mappedBy = "dishEntity")
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "dishEntity")
    private List<UsedDishEntity> usedDishEntities;
 
     @PreRemove

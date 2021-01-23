@@ -78,7 +78,7 @@ $(function () {
 
             nameDish_add: {
                 required: true,
-                checkChar: "[a-zA-Z]+",
+
                 maxlength: 20
             },
             price_add: {
@@ -92,7 +92,7 @@ $(function () {
         messages: {
             nameDish_add: {
                 required: "Vui lòng nhập tên món ăn",
-                checkChar: "Vui lòng chỉ nhập kí tự chữ",
+
                 maxlength: "Tên món ăn quá dài"
             },
             price_add: {

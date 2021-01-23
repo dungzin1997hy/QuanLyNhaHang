@@ -76,21 +76,20 @@
                 }).ajaxStop(function () {
                     $('#loadingDiv').remove();
                 });
-                // $.ajax({
-                //     url:"/username",
-                //     type: "POST",
-                //     dataType:"json",
-                //     success : function (data) {
-                //         console.log(data);
-                //         $('#id_current_user').html(data.data.id);
-                //         $('#name_current_user').html(data.data.name);
-                //         $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
-                //
-                //     },error:function (data) {
-                //         swal("Lỗi", "warning");
-                //     }
-                // });
+                $.ajax({
+                    url:"/api/username",
+                    type: "POST",
+                    dataType:"json",
+                    success : function (data) {
+                        console.log(data);
+                        $('#id_current_user').html(data.data.id);
+                        $('#name_current_user').html(data.data.name);
+                        $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
 
+                    },error:function (data) {
+                        swal("Lỗi", "warning");
+                    }
+                });
             });
         </script>
     </head>

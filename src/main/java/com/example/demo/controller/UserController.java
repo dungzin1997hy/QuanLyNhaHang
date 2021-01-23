@@ -31,7 +31,7 @@ public class UserController {
     @Autowired
     StaffDAO staffDAO;
 
-    @PostMapping("/username")
+    @PostMapping("/api/username")
     public ApiResponse<User> getUsername(Principal principal){
         try {
             String username = principal.getName();

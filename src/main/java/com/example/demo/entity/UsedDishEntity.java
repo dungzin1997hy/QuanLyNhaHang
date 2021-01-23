@@ -47,7 +47,9 @@ public class UsedDishEntity {
         UsedDish usedDish = new UsedDish();
         //com.example.demo.model.Table table = this.tableEntity.toTable();
         usedDish.setId(this.id);
-        usedDish.setDish(this.dishEntity.toDish());
+        if(dishEntity!= null) {
+            usedDish.setDish(this.dishEntity.toDish());
+        }
         usedDish.setAmount(this.amount);
         usedDish.setTime(this.time);
        // usedDish.setTable(table);

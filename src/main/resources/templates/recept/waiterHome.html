@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/templateWaiter}">
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Giao diện lễ tân</title>
+    <style>
+        label.error {
+            color: red;
+            width: 200px;
+            position: absolute;
+        }
+
+        .dropdown-menu {
+            left: 30px !important;
+        }
+
+        /*thead {*/
+        /*    width: calc( 100% - 1em )!* scrollbar is average 1em/16px width, remove it from thead width *!*/
+        /*}*/
+        .imgDish {
+            height: 150px;
+            width: 175px;
+
+        }
+
+        .datepicker {
+            margin-left: 75px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <header layout:fragment="header" class="mt-3 ml-2 mr-2">
+        <script>
+            $(document).ready(function () {
+                ready();
+                $('#callDish').hide();
+                $('.nav__checkin').hide();
+            });
+            $(".btnTable").on('click', function(){
+                console.log(1);
+            });
+            $(document).keypress(
+                function (event) {
+                    if (event.which == '13') {
+                        event.preventDefault();
+                    }
+                });
+
+        </script>
+        <script th:src="@{/js_templates/giaodienletan.js}"></script>
+    </header>
+    <section class="container-fluid" layout:fragment="content_body" style="height: 100%">
+        <div class="row" style="height: 100%">
+            <div class="col-lg-12" style="height: 100%">
+                <div class="card">
+                    <div class="card-header header-elements-inline" style="padding-bottom: 0;">
+                        <div class="breadcrumb-elements-item dropdown p-0">
+                            <button onclick="showCheckin()" class="breadcrumb-elements-item dropdown p-0 ml-1"
+                                    data-toggle="tooltip" title="Checkin">
+                                <i class="icon-person"></i><span class="ml-1 mr-1">Checkin</span>
+                            </button>
+                        </div>
+                    </div>
+                    <nav class="nav__checkin">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                    <span class="ml-3 mt-2"
+                                          style="font-size: 22px; color: #0f74a8;"
+                                          id="title_addUser">Checkin</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 260px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
+                            </li>
+                            <hr>
+                            <form id="add_form">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Số điện thoại: <input id="phoneNumberAdd" name="phoneNumberAdd"
+                                                          style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" type="number"
+                                                          size="40" onchange="changePhoneNumber(this.value)">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Tên KH: <input id="nameCus" name="nameCus"
+                                                   style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                                   size="40" disabled>
+                                    <label class="error"></label>
+                                </li>
+                                <p style="color: red" id="phoneNumberSearchError" name="phoneNumberSearchError"></p>
+                                <button class="btn btn-info center-block mb-1" id="addCustomer"
+                                        onclick="showAddFormCustomer()"
+                                        type="button"
+                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
+                                    Thêm
+                                </button>
+
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <button onclick="searchBooking()" type="button">Tìm bàn</button>
+                                </li>
+
+                                <li class="nav__edit-input" style="padding-bottom: 5px">
+                                    <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                           role="grid" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>STT</th>
+                                            <th>Tên bàn</th>
+                                            <th>Loại</th>
+                                            <th>Thời gian</th>
+                                            <th>Tác vụ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="bang_booking">
+                                        </tbody>
+                                    </table>
+                                    <span id="idban_booking" style="display: none"></span>
+                                </li>
+                                <hr>
+                                <a href="#" data-toggle="tooltip" title="Edit">
+                                    <button class="btn btn-info center-block mb-1" id="btn-add-user"
+                                            style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                        Thêm mới
+                                    </button>
+                                </a>
+                            </form>
+                        </ul>
+                    </nav>
+                    <div class="container-fluid row mt-1" style="height: 100%">
+                        <div class="col-lg-4" style="height: 100%">
+                            <div>
+                                <span>Khu A</span>
+                            </div>
+                            <div id="khuAcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                                 class="row">
+                            </div>
+
+                            <div>
+                                <span>Khu B</span>
+                            </div>
+                            <div id="khuBcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                                 class="row">
+
+                            </div>
+
+                            <div>
+                                <span>Khu C</span>
+                            </div>
+                            <div id="khuCcontainer" style="max-height: 500px;display: flex;justify-items: flex-start"
+                                 class="row">
+                            </div>
+                        </div>
+                        <div id="usedDish" class="col-lg-4" style="height: 80%;display: none">
+                            <span>Món ăn đã sử dụng</span>
+                            <br>
+                            <div style="display: flex;justify-content: space-between" class="mt-2">
+                                <div style="display: flex">
+                                    <label for="nameTable">Tên bàn:</label>
+                                    <p id="nameTable" class="ml-1"></p>
+                                    <p id="idTable" style="display: none"></p>
+                                    <p id="idCustomerTable" style="display: none" ></p>
+                                    <p id="nameCustomerTable" style="display: none"></p>
+
+                                </div>
+                                <div style="display: flex">
+                                    <label for="total">Tổng tiền: </label>
+                                    <p id="total" class="ml-1" style="width: 50px"></p>
+                                </div>
+                            </div>
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_4" role="grid" aria-describedby="DataTables_Table_0_info"
+                                   style="height: 350px">
+                                <thead>
+                                <tr role="row">
+                                    <th>Tên món ăn</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thời gian</th>
+                                    <th>Tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody id="useddishTable" style="max-height: 450px">
+                                </tbody>
+                            </table>
+                            <div style="display:flex;justify-content:center; height: 200px">
+                                <button class="m-2" style="width: 30%;text-align: center;height: 40px"
+                                        onclick="showCallDish()">Gọi món
+                                </button>
+                                <button id="btnThanh" class="m-2" style="width: 30%;text-align: center;height: 40px"
+                                        onclick="showBillForm()" disabled>Thanh toán
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" style=" height: 100%" id="showBill">
+                            <div id="bill" style="height: 100%;display: none">
+                                <div style="display: flex;justify-content: space-between">
+                                    <div id="ttnhahang">
+                                        <h1>Nhà hàng</h1>
+                                        <h1>Yến Yến</h1>
+                                        <span>SĐT: 0365253647</span>
+                                    </div>
+                                    <div id="nameBill">
+                                        <h1>Hoá đơn thanh toán</h1>
+                                    </div>
+                                </div>
+                                <div class="mt-1" style="display: flex">
+                                    <p>Tên khách hàng: </p>
+                                    <p id="nameCustomer"></p>
+                                    <p id="idCustomer" style="display: none"></p>
+                                </div>
+                                <div class="mt-1" style="display: flex;">
+                                    <p>Thu ngân: </p>
+                                    <p id="receptName" class="ml-2">Dũng</p>
+                                    <p id="idRecept" style="display: none"></p>
+                                </div>
+                                <div class="mt-1" style="display: flex">
+                                    <p>Thời gian: </p>
+                                    <p id="time"></p>
+                                </div>
+                                <hr>
+                                <div class="mt-1">
+                                    <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                           role="grid" aria-describedby="DataTables_Table_0_info"
+                                           style="height: 350px">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>Tên món ăn</th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thời gian</th>
+                                            <th>Tiền</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="useddishTableBill">
+                                        </tbody>
+                                    </table>
+                                    <div style="display: flex;justify-content: flex-end" class="mt-2">
+                                        <p style="width: 150px">Tổng tiền: </p>
+                                        <p id="TotalBill" style="width: 150px"></p>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex;justify-content: flex-end">
+                                            <p style="width: 150px">Khách thanh toán:</p>
+                                            <input type="number" style="width: 150px" onchange="changeValue(this.value)"
+                                                   id="inputCus">
+                                            <p id="inputError" style="color: red"></p>
+                                        </div>
+                                        <div class="mt-1" style="display: flex;justify-content: flex-end">
+                                            <p style="width: 150px">Số tiền trả lại:</p>
+                                            <p id="backCus" style="width: 150px"></p>
+                                        </div>
+
+                                        <div style="text-align: center">
+                                            <button id="btnThanhToan" style="width: 150px;text-align: center"
+                                                    onclick="saveBill()" disabled>Thanh toán
+                                            </button>
+                                            <button style="width: 150px;text-align: center" onclick="cancelBill()">Huỷ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" id="callDish" style="height: 100%;display: none;">
+                            <div class="col-lg-12 row" style="display: flex;justify-content: center">
+                                <h1 style="text-align: center">Gọi món bàn : </h1>
+                                <h1 id="nameTableCallDish"></h1>
+                            </div>
+                            <div class="col-lg-12 row">
+                                <div class="col-lg-8">
+                                    <h3 style="text-align: center">
+                                        Đồ ăn
+                                    </h3>
+                                    <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
+                                         style="margin-left: auto; margin-right: 60px">
+                                        <label class="mr-2 mb-0" for="dish_name_search">Tìm:</label>
+                                        <div style="position: relative">
+                                            <input type="text"
+                                                   class="form-control text-dark flex-1 wmin-xl-100 border-bottom-1"
+                                                   placeholder="Tên món ăn"
+                                                   style="text-align: center"
+                                                   id="dish_name_search" name="dish_name_search">
+                                            <label class="error"></label>
+                                        </div>
+                                        <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                                style="padding: 4px 4px 0 3px; border-radius: 10px"
+                                                onclick="searchDishByName()"><i
+                                                class="icon-search4 mb-1"></i></button>
+                                    </div>
+                                    <div style="width: 50%; height: 27px">
+                                <span>
+                                    Tìm theo loại:
+                                </span>
+                                        <select id="selectSearch"
+                                                class="selectSearch filterInput mt-2 ml-1" name="selectSearch"
+                                                onchange="searchDishByType()">
+                                            <option>Tất cả</option>
+                                            <option>Đồ uống</option>
+                                            <option>Đồ chiên</option>
+                                            <option>Đồ xào</option>
+                                            <option>Đồ tráng miệng</option>
+                                        </select>
+                                    </div>
+                                    <div id="dishToCall" style="display: flex" class="row">
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="card-body">
+                                        <div class="table-responsive-1 row" id="callDishTemplate">
+                                            <table class="table datatable-responsive dataTable no-footer dtr-inline">
+                                                <thead>
+                                                <tr class="text-center" style="background-color: #f2f2f2">
+
+                                                    <th>STT</th>
+                                                    <th>Tên món ăn</th>
+                                                    <th>Giá</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Tiền</th>
+                                                    <th>Tác vụ</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="callDishTable">
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;justify-content: center">
+                                        <button style="width: 100px" id="bookDish" onclick="bookDish()">Đặt món</button>
+                                        <button style="width: 100px; margin-left: 50px" onclick="cancelBookDish()">Huỷ
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span id="idMaterial_delete" style="display: none"></span>
+    </section>
+</div>
+</body>
+</html>

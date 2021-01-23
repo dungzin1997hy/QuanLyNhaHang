@@ -108,8 +108,8 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public void deleteCustomer(int idCustomer) {
-        CustomerEntity customerEntity = getCustomerById(idCustomer);
+    public void deleteCustomer(int id ) {
+        CustomerEntity customerEntity = getCustomerById(id);
         entityManager.remove(customerEntity);
     }
 

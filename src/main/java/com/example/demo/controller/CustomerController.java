@@ -87,7 +87,17 @@ public class CustomerController {
             return new ApiResponse<>(false,"","Lỗi");
         }
     }
-
+    @PostMapping("/deleteCustomer")
+    public ApiResponse<String> deleteCus(@RequestParam("idCustomer")int id){
+        try
+        {
+            customerDAO.deleteCustomer(id);
+            return new ApiResponse<>(true,"Xoá khách hàng thành công","");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Lỗi");
+        }
+    }
     @PostMapping("/getBillByCustomer")
     public ApiResponse<List<Bill>> getBill(@RequestParam("idCus") int id){
         try {

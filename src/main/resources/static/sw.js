@@ -53,6 +53,7 @@ self.addEventListener('fetch', function (event) {
     if (event.request.method == 'POST') {
         if (event.request.url.includes("/callDish")) {
            // console.log(event.request);
+
             var request = event.request;
             var headers = {};
             for (var entry of request.headers.entries()) {
@@ -70,15 +71,15 @@ self.addEventListener('fetch', function (event) {
             };
             request.clone().text().then(function (body) {
                 serialized.body = body;
-                console.log(serialized.body);
+             //   console.log(serialized.body);
                 callsToCache.push(serialized);
-                console.log(callsToCache);
+              //  console.log(callsToCache);
                 let saveDB = indexedDB.open('fetchEvent', 1);
                 saveDB.onsuccess = function (event1) {
                     var db = event1.target.result;
                     var tx = db.transaction(['fetchEvent'], 'readwrite');
                     var store = tx.objectStore('fetchEvent');
-                    store.add(serialized, Math.floor(Math.random() * 10));
+                    store.add(serialized,Math.floor(Math.random() * 100));
 
                 }
             });
@@ -88,7 +89,7 @@ self.addEventListener('fetch', function (event) {
                 var objectStore = db.createObjectStore('responseDB');
             };
         }
-        if (event.request.url.includes('/api/getAll')) {
+        if (event.request.url.includes('/api/')) {
             fetch(event.request).then(function (response) {
                 return response.json();
             })
@@ -273,10 +274,10 @@ function doSomeStuff(dbName, storeName) {
         var store = transaction.objectStore(storeName);
         var request = store.getAll();
         request.onsuccess = function() {
-            console.log(request.result);
+        //    console.log(request.result);
             for(var i=0;i<request.result.length;i++){
                 signatureRequest = request.result[i];
-                console.log('body: '+signatureRequest.body);
+              //  console.log('body: '+signatureRequest.body);
                 fetch(signatureRequest.url, {
                     method: signatureRequest.method,
                     body: signatureRequest.body,
@@ -285,8 +286,12 @@ function doSomeStuff(dbName, storeName) {
                         // 'Content-Type': 'application/x-www-form-urlencoded',
                     }
                 })
+
+
             }
+            var clear = store.clear();
         };
+
     }
     openRequest.onerror = function (e) {
         console.log("Error");

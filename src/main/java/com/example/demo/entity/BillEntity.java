@@ -62,8 +62,12 @@ public class BillEntity {
         bill.setPaymentType(this.paymentType);
         bill.setTotal(this.total);
         bill.setTime(this.time);
-        bill.setNameStaff(this.staffEntity.getName());
-        bill.setNameCustomer(this.customerEntity.getName());
+        if(this.staffEntity!= null) {
+            bill.setNameStaff(this.staffEntity.getName());
+        }
+        if(this.customerEntity!= null){
+            bill.setNameCustomer(this.customerEntity.getName());
+        }
         return bill;
     }
 }

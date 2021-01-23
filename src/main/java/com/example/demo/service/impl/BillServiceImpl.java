@@ -32,6 +32,7 @@ public class BillServiceImpl implements BillService {
         try{
             List<BillEntity> billEntities = billDAO.getBillByCustomer(id);
             List<Bill> bills = new ArrayList<>();
+            System.out.println(billEntities.size());
             for(BillEntity billEntity : billEntities){
                 bills.add(billEntity.toBill());
             }

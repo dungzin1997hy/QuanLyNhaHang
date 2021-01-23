@@ -15,6 +15,6 @@ public interface CustomerDAO {
     Boolean checkExistCustomer(String phoneNumber);
 
     void addCustomer(CustomerEntity customerEntity);
-    void deleteCustomer(int idCustomer);
+    void deleteCustomer(int id);
     void updateCustomer(CustomerEntity customerEntity);
 }

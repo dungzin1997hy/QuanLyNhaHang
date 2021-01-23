@@ -4,10 +4,8 @@ import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.InputMaterialBillDAO;
 import com.example.demo.dao.InputMaterialDAO;
 import com.example.demo.dao.MaterialDAO;
-import com.example.demo.entity.BillEntity;
-import com.example.demo.entity.InputMaterialBillEntity;
-import com.example.demo.entity.InputMaterialEntity;
-import com.example.demo.entity.MaterialEntity;
+import com.example.demo.dao.StaffDAO;
+import com.example.demo.entity.*;
 import com.example.demo.model.Dish;
 import com.example.demo.model.Material;
 import com.example.demo.service.MaterialService;
@@ -31,6 +29,8 @@ public class MaterialController {
     MaterialService materialService;
     @Autowired
     InputMaterialBillDAO inputMaterialBillDAO;
+    @Autowired
+    StaffDAO staffDAO;
 
     @Autowired
     InputMaterialDAO inputMaterialDAO;
@@ -104,6 +104,10 @@ public class MaterialController {
             inputMaterialBillEntity.setTime(now);
             inputMaterialBillEntity.setTotal(materList.total);
             inputMaterialBillEntity.setType("input");
+            StaffEntity staffEntity = staffDAO.getStaffById(materList.idStaff+"");
+            if(staffEntity!= null){
+                inputMaterialBillEntity.setStaffEntity(staffEntity);
+            }
             InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
 
 
@@ -141,6 +145,11 @@ public class MaterialController {
             inputMaterialBillEntity.setTime(now);
             inputMaterialBillEntity.setTotal(materList.total);
             inputMaterialBillEntity.setType("output");
+            StaffEntity staffEntity = staffDAO.getStaffById(materList.idStaff+"");
+            System.out.println(materList.idStaff);
+            if(staffEntity!= null){
+                inputMaterialBillEntity.setStaffEntity(staffEntity);
+            }
             InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
 
 
@@ -182,4 +191,5 @@ class Mater implements Serializable{
 class MaterList implements Serializable{
     public List<Mater> maters = new ArrayList<>();
     int total;
+    int idStaff;
 }

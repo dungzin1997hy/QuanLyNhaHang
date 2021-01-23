@@ -36,7 +36,7 @@ public class MaterialEntity {
     @Column (name = "description")
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materialEntity")
+    @OneToMany(mappedBy = "materialEntity")
     private List<InputMaterialEntity> inputMaterialEntities;
 
     @PreRemove

@@ -34,7 +34,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public List<BookingEntity> getBookingByCustomer(String phoneNumber) {
         try {
-            String sql = "SELECT u FROM BookingEntity u where u.customerEntity.phoneNumber like '%"+phoneNumber+"%' order by u.date,u.timeBookEntity.id";
+            String sql = "SELECT u FROM BookingEntity u where u.customerEntity.phoneNumber = '"+phoneNumber+"' and u.status='notcomplete' order by u.date,u.timeBookEntity.id";
             Query query = entityManager.createQuery(sql);
             List<BookingEntity> bookingEntities = query.getResultList();
             return bookingEntities;

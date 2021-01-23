@@ -293,15 +293,16 @@ function saveBillInput() {
         }
     });
    var total = $('#totalInput').text().trim();
-
-
+    var idRecept = $('#id_current_user').text();
+    console.log(idRecept);
     $.ajax({
         type: "POST",
         url:"/inputMaterial",
         contentType: "application/json",
         data: JSON.stringify ({
             "maters":value,
-            "total":total
+            "total":total,
+            "idStaff":idRecept
         }),
         success: function (data) {
             swal("Thành công", data.data, "success");
@@ -432,14 +433,16 @@ function saveBillOutput() {
         }
     });
 
-
+    var idRecept = $('#id_current_user').text();
+    console.log(idRecept);
     $.ajax({
         type: "POST",
         url:"/outputMaterial",
         contentType: "application/json",
         data: JSON.stringify ({
             "maters":value,
-            "total":0
+            "total":0,
+            "idStaff":idRecept
         }),
         success: function (data) {
             swal("Thành công", data.data, "success");

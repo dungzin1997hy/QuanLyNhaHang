@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/templateStock}">
+      layout:decorate="~{layout/templateAdmin}">
 <head>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -37,6 +37,7 @@
             $(document).ready(function () {
                 ready();
                 $('#callDish').hide();
+                $('.nav__checkin').hide();
             });
             $(".btnTable").on('click', function(){
                console.log(1);
@@ -47,13 +48,86 @@
                         event.preventDefault();
                     }
                 });
+
         </script>
         <script th:src="@{/js_templates/giaodienletan.js}"></script>
     </header>
     <section class="container-fluid" layout:fragment="content_body" style="height: 100%">
         <div class="row" style="height: 100%">
             <div class="col-lg-12" style="height: 100%">
-                <div class="container-fluid row" style="height: 100%">
+                <div class="card">
+                <div class="card-header header-elements-inline" style="padding-bottom: 0;">
+                    <div class="breadcrumb-elements-item dropdown p-0">
+                        <button onclick="showCheckin()" class="breadcrumb-elements-item dropdown p-0 ml-1"
+                                data-toggle="tooltip" title="Checkin">
+                            <i class="icon-person"></i><span class="ml-1 mr-1">Checkin</span>
+                        </button>
+                    </div>
+                </div>
+                <nav class="nav__checkin">
+                    <ul class="nav__edit-list" style="padding-top: 16px">
+                        <li class="nav__edit-input">
+                            <i class="icon-users">
+                                    <span class="ml-3 mt-2"
+                                          style="font-size: 22px; color: #0f74a8;"
+                                          id="title_addUser">Checkin</span></i>
+                            <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 260px;"
+                               data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
+                        </li>
+                        <hr>
+                        <form id="add_form">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                Số điện thoại: <input id="phoneNumberAdd" name="phoneNumberAdd"
+                                                      style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px" type="number"
+                                                      size="40" onchange="changePhoneNumber(this.value)">
+                                <label class="error"></label>
+                            </li>
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                Tên KH: <input id="nameCus" name="nameCus"
+                                               style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px"
+                                               size="40" disabled>
+                                <label class="error"></label>
+                            </li>
+                            <p style="color: red" id="phoneNumberSearchError" name="phoneNumberSearchError"></p>
+                            <button class="btn btn-info center-block mb-1" id="addCustomer"
+                                    onclick="showAddFormCustomer()"
+                                    type="button"
+                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; display: none">
+                                Thêm
+                            </button>
+
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                <button onclick="searchBooking()" type="button">Tìm bàn</button>
+                            </li>
+
+                            <li class="nav__edit-input" style="padding-bottom: 5px">
+                                <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                       role="grid" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th>STT</th>
+                                        <th>Tên bàn</th>
+                                        <th>Loại</th>
+                                        <th>Thời gian</th>
+                                        <th>Tác vụ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="bang_booking">
+                                    </tbody>
+                                </table>
+                                <span id="idban_booking" style="display: none"></span>
+                            </li>
+                            <hr>
+                            <a href="#" data-toggle="tooltip" title="Edit">
+                                <button class="btn btn-info center-block mb-1" id="btn-add-user"
+                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                    Thêm mới
+                                </button>
+                            </a>
+                        </form>
+                    </ul>
+                </nav>
+                <div class="container-fluid row mt-1" style="height: 100%">
                     <div class="col-lg-4" style="height: 100%">
                         <div>
                             <span>Khu A</span>
@@ -85,6 +159,9 @@
                                 <label for="nameTable">Tên bàn:</label>
                                 <p id="nameTable" class="ml-1"></p>
                                 <p id="idTable" style="display: none"></p>
+                                <p id="idCustomerTable" style="display: none" ></p>
+                                <p id="nameCustomerTable" style="display: none"></p>
+
                             </div>
                             <div style="display: flex">
                                 <label for="total">Tổng tiền: </label>
@@ -129,7 +206,7 @@
                             </div>
                             <div class="mt-1" style="display: flex">
                                 <p>Tên khách hàng: </p>
-                                <p>fjdsljal</p>
+                                <p id="nameCustomer"></p>
                                 <p id="idCustomer" style="display: none"></p>
                             </div>
                             <div class="mt-1" style="display: flex;">
@@ -261,6 +338,7 @@
                         </div>
                     </div>
 
+                </div>
                 </div>
             </div>
         </div>

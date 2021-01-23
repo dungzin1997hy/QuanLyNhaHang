@@ -53,6 +53,23 @@ public class BookingController {
             return new ApiResponse<>(false,null,"Lỗi");
         }
     }
+
+    @PostMapping("/checkin")
+    public ApiResponse<String> checkIn(@RequestParam("idbooking") int idBooking){
+        try{
+            BookingEntity bookingEntity = bookingDAO.getBookingByID(idBooking);
+            bookingEntity.setStatus("complete");
+            bookingDAO.updateBooking(bookingEntity);
+            TableEntity tableEntity = bookingEntity.getTableEntity();
+            tableEntity.setStatus("using");
+            tableEntity.setCustomerEntity(bookingEntity.getCustomerEntity());
+            tableDAO.updateTable(tableEntity);
+            return new ApiResponse<>(true,"Check in thành công","");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","");
+        }
+    }
     @PostMapping("/checkinBooking")
     public ApiResponse<String> checkinBooking(@RequestParam("idBooking") int id){
         try {

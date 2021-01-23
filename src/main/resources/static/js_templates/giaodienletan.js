@@ -43,10 +43,149 @@ function ready() {
             swal("Fail", "Không có dữ liệu", "error");
         }
     });
+    $.ajax({
+        url: "/api/getAllCustomer",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            Customer = [];
+            CustomerPhoneNumber = [];
+            if (data.success == true) {
+                for (var i = 0; i < data.data.length; i++) {
+                    Customer.push(data.data[i]);
+                    CustomerPhoneNumber.push(data.data[i].phoneNumber);
+                }
+            }
+
+            $("#phoneNumberAdd").autocomplete({
+                source: CustomerPhoneNumber
+            });
+            // $("#nameSearchOutput").autocomplete({
+            //     source:materialName
+            // })
+
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
 }
 
-function showCallDish() {
+function changePhoneNumber(value) {
+    if (CustomerPhoneNumber.includes(value) == false) {
+        $('#phoneNumberSearchError').html("Không có khách hàng này");
+        $("#addCustomer").show();
+        $('#nameCus').val("");
+        $('#phoneNumberCusAdd').val(value);
+    } else {
+        var i = CustomerPhoneNumber.indexOf(value);
+        $('#nameCus').val(Customer[i].name);
+    }
+}
 
+function searchBooking() {
+    var phoneNumber = $('#phoneNumberAdd').val();
+    console.log(phoneNumber);
+    $.ajax({
+        url: "/searchBookingByPhoneNumber",
+        type: "POST",
+        dataType: "json",
+        data:{
+            "phoneNumber" : phoneNumber
+        },
+        success: function (data) {
+            var contentString = "";
+            console.log(data);
+            if(data.data.length ==0){
+                swal("Fail","Không tìm thấy đặt bàn","error");
+            }
+            for (var i = 0; i < data.data.length; i++) {
+                var row = data.data[i];
+                if (row.description == null) {
+                    var string = "";
+                } else string = row.description;
+                contentString = contentString
+                    + '<tr id="row'+(row.id)+'" role="row" class="odd">'
+                    + '<td>' + (i + 1) + '</td>'
+                    + '<td id="idTable" style="display: none">' + row.table.id + '</td>'
+                    + '<td>' + row.table.name + '</td>'
+                    + '<td>' + row.table.type + '</td>'
+                    + '<td>' + row.timeBook.startTime+' - '+row.timeBook.stopTime + '</td>'
+                    + '<td>' +
+                    '<button type="button" name="'+(row.id)+'" data-toggle="tooltip" title="Chọn" class="btn btn-info center-block mb-1" onclick="chooseTable(this.name)" style="padding:1px 1px 1px 1px; border-radius: 20px">Chọn</button></td>'
+                    + '</tr>';
+            }
+            $("#bang_booking").html(contentString);
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
+}
+
+$(function () {
+    $("#add_form").validate({
+        rules: {
+            phoneNumberAdd: {
+                required: true
+
+            },
+            nameCus: {
+                required: true
+            },
+            // devices_add: {
+            //     maxlength: 50
+            // }
+        },
+        messages: {
+            phoneNumberAdd: {
+                required: "Vui lòng nhập số điện thoại",
+            },
+            nameCus:{
+                required: "Vui lòng nhập thông tin khách hàng"
+            }
+        },
+        submitHandler: function () {
+            var idbooking = $('#idban_booking').text();
+
+
+            $.ajax({
+                url: "/checkin",
+                type: "POST",
+                data: {
+                    "idbooking": idbooking
+                },
+                success: function (data) {
+                    $('.nav__checkin').hide();
+                    swal("Thành công", data.data, "success");
+                    ready();
+                }, error: function (data) {
+                    swal("Fail", data.errorMessage, "warning");
+                }
+            });
+        }
+    });
+});
+function chooseTable(name) {
+    var temp = $('#idban_booking').text();
+    $('#row'+temp).css({'background-color':'white'});
+    $('#idban_booking').html(name);
+    console.log("id booking :"+ name);
+    $('#row'+name).css({'background-color':'red'});
+}
+function showCheckin() {
+    console.log("show");
+    $("#bang_booking").html("");
+    $('#phoneNumberAdd').val("");
+    $('#nameCus').val("");
+    $('.nav__checkin').show();
+}
+
+function closeEditForm() {
+    $('.nav__checkin').hide();
+}
+function showCallDish() {
+    var name = $('#nameTable').text();
+    console.log(name);
+    $('#nameTableCallDish').html(name);
     $('#callDish').show()
     $.ajax({
         url: "/api/getAllDish",
@@ -282,9 +421,16 @@ function bookDish() {
         success: function (data) {
             swal("Thành công", data.data, "success");
             showuseddish(idTable,nameTable);
+            var openRequest = indexedDB.open("fetchEvent", 1);
+            openRequest.onsuccess = function (e) {
+                db = e.target.result;
+                var transaction = db.transaction("fetchEvent", "readwrite");
+                var store = transaction.objectStore("fetchEvent");
+                var clear = store.clear();
+            }
 
         }, error: function (data) {
-            swal("Lỗi", data.errorMessage, "warning");
+            swal("Thành công", "Đang đợi mạng", "success");
         }
     })
     $('#callDish').hide();
@@ -301,9 +447,12 @@ function cancelBookDish() {
 }
 
 function showuseddish(id, name) {
-
+    console.log("show useddidhs");
+    console.log(id);
     $('#usedDish').show();
+
     $('#idTable').html(id);
+
     $('#nameTable').html(name);
     $.ajax({
         url: "/getUsedDishByTable",
@@ -312,7 +461,7 @@ function showuseddish(id, name) {
             "idTable": id
         },
         success: function (data) {
-
+            console.log(data);
             if (data.success == true) {
                 showTableUsedDish(data);
             }
@@ -321,6 +470,30 @@ function showuseddish(id, name) {
             swal("Fail", "Không có dữ liệu", "error");
         }
     });
+    // $.ajax({
+    //     url: "/getTableById",
+    //     type: "POST",
+    //     data: {
+    //         "idTable": id
+    //     },
+    //     success: function (data) {
+    //         console.log(data);
+    //         if(data.data!= null){
+    //             $('#idCustomerTable').html(data.data.id);
+    //             $('#nameCustomerTable').html(data.data.name);
+    //         }
+    //         else {
+    //             $('#idCustomerTable').html("");
+    //             $('#nameCustomerTable').html("");
+    //         }
+    //         if (data.success == true) {
+    //             showTableUsedDish(data);
+    //         }
+    //
+    //     }, error: function () {
+    //         swal("Fail", "Không có dữ liệu", "error");
+    //     }
+    // });
 }
 
 function showTableUsedDish(data) {
@@ -368,6 +541,12 @@ function showBillForm() {
     $('#bill').show();
     $('#inputCus').val("");
     $('#backCus').html("");
+    var customername = $('#nameCustomerTable').text();
+    $('#nameCustomer').html(customername);
+    var customerid = $('#idCustomerTable').text();
+    $('#idCustomer').html(customerid);
+
+
     var idTable = $('#idTable').text();
     var currentdate = new Date();
     var hour = currentdate.getHours();
@@ -376,12 +555,22 @@ function showBillForm() {
     if (minute < 10) minute = "0" + minute;
     var second = currentdate.getSeconds();
     if (second < 10) second = "0" + second;
+    var date = currentdate.getDate();
+    var month = currentdate.getMonth()+1;
+    var year = currentdate.getFullYear();
 
+    if(date <10){
+        date = '0'+date;
+    }
+
+    if(month <10){
+        month = '0'+month;
+    }
     var datetime = hour + ":"
         + minute + ":"
-        + second + " " + currentdate.getDate() + "-"
-        + (currentdate.getMonth() + 1) + "-"
-        + currentdate.getFullYear();
+        + second + " " + date + "-"
+        + month + "-"
+        + year;
 
 
     $('#time').html(datetime);
@@ -392,6 +581,7 @@ function showBillForm() {
             "idTable": idTable
         },
         success: function (data) {
+            console.log(data);
             if (data.success == true) {
                 showTableUsedDish(data);
             }
@@ -426,7 +616,8 @@ function saveBill() {
     var time = $('#time').text();
     var total = $('#TotalBill').text();
     var idCustomer = $('#idCustomer').text();
-    var idRecept = $('#idRecept').text();
+    var idRecept = $('#id_current_user').text();
+    console.log(idRecept);
     var nameTable = $('#nameTable').text().trim();
     console.log(nameTable);
     $.ajax({

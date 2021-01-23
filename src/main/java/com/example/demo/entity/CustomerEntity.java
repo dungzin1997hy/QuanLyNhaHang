@@ -31,7 +31,7 @@ public class CustomerEntity {
     @Column (name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    @OneToMany( mappedBy = "customerEntity")
     private List<BillEntity> billEntities;
 
 
@@ -39,7 +39,7 @@ public class CustomerEntity {
     private List<BookingEntity> bookingEntities;
 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    @OneToMany(mappedBy = "customerEntity")
     private List<TableEntity> tableEntities;
 
     @PreRemove

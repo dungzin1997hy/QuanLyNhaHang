@@ -84,7 +84,7 @@
                         console.log(data);
                         $('#id_current_user').html(data.data.id);
                         $('#name_current_user').html(data.data.name);
-                        $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
+                        $('#current-user-picture').attr('src', '/image/upload/'+data.data.urlImage);
 
                     },error:function (data) {
                         swal("Lỗi", "warning");
@@ -203,31 +203,35 @@
                             <li class="nav-item-header">
                                 <div class="text-uppercase font-size-xs line-height-xs">MAIN NAVIGATION</div>
                                 <i class="icon-menu" title="Main"></i></li>
-                            <li class="nav-item">
-                                <a th:href="@{/dishManager}" data-toggle="tooltip" title="Danh sách món ăn"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách món ăn</span></a>
-                            </li>
+<!--                            <li class="nav-item">-->
+<!--                                <a th:href="@{/dishManager}" data-toggle="tooltip" title="Danh sách món ăn"-->
+<!--                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách món ăn</span></a>-->
+<!--                            </li>-->
 
+<!--                            <li class="nav-item">-->
+<!--                                <a th:href="@{/tableManager}" data-toggle="tooltip" title="Danh sách bàn"-->
+<!--                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách bàn</span></a>-->
+<!--                            </li>-->
+<!--                            <li class="nav-item">-->
+<!--                                <a th:href="@{/staffManager}" data-toggle="tooltip" title="Danh sách nhân viên"-->
+<!--                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách nhân viên</span></a>-->
+<!--                            </li>-->
+<!--                            <li class="nav-item">-->
+<!--                                <a th:href="@{/warehouseManager}" data-toggle="tooltip" title="Quản lí kho"-->
+<!--                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Warehouse</span></a>-->
+<!--                            </li>-->
                             <li class="nav-item">
-                                <a th:href="@{/tableManager}" data-toggle="tooltip" title="Danh sách bàn"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách bàn</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a th:href="@{/staffManager}" data-toggle="tooltip" title="Danh sách nhân viên"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách nhân viên</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a th:href="@{/warehouseManager}" data-toggle="tooltip" title="Quản lí kho"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Warehouse</span></a>
+                                <a th:href="@{/receptHome}" data-toggle="tooltip" title="Danh sách nhân viên"
+                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Lễ tân</span></a>
                             </li>
                             <li class="nav-item">
                                 <a th:href="@{/booking}" data-toggle="tooltip" title="Đặt bàn"
                                    class="nav-link"><i class="icon-color-sampler"></i> <span>Đặt bàn</span></a>
                             </li>
-                            <li class="nav-item">
-                                <a th:href="@{/customerManager}" data-toggle="tooltip" title="Quản lí khách hàng"
-                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Quản lí khách hàng</span></a>
-                            </li>
+<!--                            <li class="nav-item">-->
+<!--                                <a th:href="@{/customerManager}" data-toggle="tooltip" title="Quản lí khách hàng"-->
+<!--                                   class="nav-link"><i class="icon-color-sampler"></i> <span>Quản lí khách hàng</span></a>-->
+<!--                            </li>-->
                             <li class="nav-item">
                                 <a th:href="@{/accountHome}" data-toggle="tooltip" title="Quản lí khách hàng"
                                    class="nav-link"><i class="icon-add"></i> <span>Thống kê</span></a>

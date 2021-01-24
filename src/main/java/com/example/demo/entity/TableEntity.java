@@ -34,6 +34,10 @@ public class TableEntity {
     @JoinColumn(name = "customerid")
     private CustomerEntity customerEntity;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurantid")
+    private RestaurantEntity restaurantEntity;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tableEntity")
     private List<UsedDishEntity> usedDishEntities;
 

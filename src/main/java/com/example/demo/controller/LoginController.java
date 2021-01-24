@@ -16,9 +16,16 @@ public class LoginController {
     }
     @GetMapping("/home-letan")
     public String letan(){
-        return "recept/booking";
+        return "recept/receptHome";
     }
-
+    @GetMapping("/home-stock")
+    public String stock(){
+        return "stock/warehoseManager";
+    }
+    @GetMapping("/home-waiter")
+    public String waiter(){
+        return "waiter/waiterHome";
+    }
 
     @GetMapping({"/login"})
     public  String login(){

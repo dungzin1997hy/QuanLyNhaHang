@@ -21,7 +21,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public List<BookingEntity> getAllBooking() {
         try {
-            String sql = "SELECT u FROM BookingEntity u where u.status = 'notcomplete' order by u.date,u.timeBookEntity.id";
+            String sql = "SELECT u FROM BookingEntity u where u.status = 'notcomplete' and u.customerEntity is not null and u.tableEntity is not null order by u.date,u.timeBookEntity.id";
             Query query = entityManager.createQuery(sql);
             List<BookingEntity> bookingEntities = query.getResultList();
             return bookingEntities;

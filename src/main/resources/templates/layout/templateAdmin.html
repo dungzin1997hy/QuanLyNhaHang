@@ -85,7 +85,7 @@
                     console.log(data);
                     $('#id_current_user').html(data.data.id);
                     $('#name_current_user').html(data.data.name);
-                    $('#current-user-picture').attr('src', '/image/upload/'+data.data.url);
+                    $('#current-user-picture').attr('src', '/image/upload/'+data.data.urlImage);
 
                 },error:function (data) {
                     swal("Lỗi", "warning");

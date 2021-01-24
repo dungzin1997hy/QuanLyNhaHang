@@ -39,6 +39,10 @@ public class MaterialEntity {
     @OneToMany(mappedBy = "materialEntity")
     private List<InputMaterialEntity> inputMaterialEntities;
 
+
+    @ManyToOne
+    @JoinColumn(name = "stock")
+    private StockEntity stockEntity;
     @PreRemove
     public void PreRemove(){
         for (InputMaterialEntity inputMaterialEntity : inputMaterialEntities) {
@@ -72,5 +76,24 @@ public class MaterialEntity {
         this.unit = unit;
         this.amount = amount;
         this.description = description;
+    }
+
+    public MaterialEntity(String name, Float price, String unit, int amount, String description, StockEntity stockEntity) {
+        this.name = name;
+        this.price = price;
+        this.unit = unit;
+        this.amount = amount;
+        this.description = description;
+        this.stockEntity = stockEntity;
+    }
+
+    public MaterialEntity(int id, String name, Float price, String unit, int amount, String description, StockEntity stockEntity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.unit = unit;
+        this.amount = amount;
+        this.description = description;
+        this.stockEntity = stockEntity;
     }
 }

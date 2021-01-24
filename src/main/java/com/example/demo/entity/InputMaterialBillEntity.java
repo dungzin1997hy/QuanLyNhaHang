@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.InputMaterial;
+import com.example.demo.model.InputMaterialBill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,4 +41,12 @@ public class InputMaterialBillEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inputMaterialBillEntity")
     private List<InputMaterialEntity> inputMaterialEntities;
 
+
+    public InputMaterialBill toInputBill(){
+        InputMaterialBill input = new InputMaterialBill();
+        input.setId(this.id);
+        input.setTime(this.time);
+        input.setTotal(this.Total);
+        return input;
+    }
 }

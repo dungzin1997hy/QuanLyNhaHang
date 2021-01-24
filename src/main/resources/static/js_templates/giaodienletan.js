@@ -1,48 +1,74 @@
 var callDish = new Array(0);
-
+var Booking = new Array(0);
 function ready() {
     // $('#usedDish').hide();
+    $.ajax({
+        url: "/api/getAllBooking",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            Booking =[];
+            if (data.success == true) {
+                for(var i=0;i<data.data.length;i++){
+                    var row = data.data[i];
+                    Booking.push({
+                        "idTable": row.table.id,
+                        "day":row.date.split("T")[0],
+                        "time":row.timeBook.startTime
+                    })
+                }
+
+            }
+            console.log(Booking);
+            $('#khuAcontainer').html("");
+            $('#khuBcontainer').html("");
+            $('#khuCcontainer').html("");
+            $.ajax({
+                url: "/api/getTableByArea/A",
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success == true) {
+                        showTable("khuAcontainer", data);
+                    }
+                }, error: function () {
+                    swal("Fail", "Không có dữ liệu", "error");
+                }
+            });
+            $.ajax({
+                url: "/api/getTableByArea/B",
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success == true) {
+                        showTable("khuBcontainer", data);
+                    }
+                }, error: function () {
+                    swal("Fail", "Không có dữ liệu", "error");
+                }
+            });
+            $.ajax({
+                url: "/api/getTableByArea/C",
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success == true) {
+                        showTable("khuCcontainer", data);
+                    }
+                }, error: function () {
+                    swal("Fail", "Không có dữ liệu", "error");
+                }
+            });
+        }, error: function () {
+            swal("Fail", "Không có dữ liệu", "error");
+        }
+    });
     // $('#callDish').hide();
     // $('#showBill').hide();
-    $('#khuAcontainer').html("");
-    $('#khuBcontainer').html("");
-    $('#khuCcontainer').html("");
-    $.ajax({
-        url: "/api/getTableByArea/A",
-        type: "POST",
-        dataType: "json",
-        success: function (data) {
-            if (data.success == true) {
-                showTable("khuAcontainer", data);
-            }
-        }, error: function () {
-            swal("Fail", "Không có dữ liệu", "error");
-        }
-    });
-    $.ajax({
-        url: "/api/getTableByArea/B",
-        type: "POST",
-        dataType: "json",
-        success: function (data) {
-            if (data.success == true) {
-                showTable("khuBcontainer", data);
-            }
-        }, error: function () {
-            swal("Fail", "Không có dữ liệu", "error");
-        }
-    });
-    $.ajax({
-        url: "/api/getTableByArea/C",
-        type: "POST",
-        dataType: "json",
-        success: function (data) {
-            if (data.success == true) {
-                showTable("khuCcontainer", data);
-            }
-        }, error: function () {
-            swal("Fail", "Không có dữ liệu", "error");
-        }
-    });
+
+
+
     $.ajax({
         url: "/api/getAllCustomer",
         type: "POST",
@@ -94,12 +120,22 @@ function searchBooking() {
         },
         success: function (data) {
             var contentString = "";
-            console.log(data);
+            console.log(data.data);
+            console.log(data.data.id);
             if(data.data.length ==0){
                 swal("Fail","Không tìm thấy đặt bàn","error");
             }
+
             for (var i = 0; i < data.data.length; i++) {
                 var row = data.data[i];
+                var date = row.date.split("T");
+                var datetime = date[0].split("-");
+                var year = datetime[0];
+                var month = datetime[1];
+                var day = parseInt(datetime[2])+1;
+                if(month<10) month = month;
+                if(day<10) day = '0'+day;
+                var time = day+"-"+month+"-"+year;
                 if (row.description == null) {
                     var string = "";
                 } else string = row.description;
@@ -110,7 +146,8 @@ function searchBooking() {
                     + '<td>' + row.table.name + '</td>'
                     + '<td>' + row.table.type + '</td>'
                     + '<td>' + row.timeBook.startTime+' - '+row.timeBook.stopTime + '</td>'
-                    + '<td>' +
+                    + '<td>' + time + '</td>'+
+                    '<td>'+
                     '<button type="button" name="'+(row.id)+'" data-toggle="tooltip" title="Chọn" class="btn btn-info center-block mb-1" onclick="chooseTable(this.name)" style="padding:1px 1px 1px 1px; border-radius: 20px">Chọn</button></td>'
                     + '</tr>';
             }
@@ -333,22 +370,49 @@ function searchDishByType() {
 }
 
 function showTable(id, data) {
+    var currentdate = new Date();
+    var day = currentdate.getDate()-1;
+    if(day<10) day ='0'+day;
+    if(currentdate.getMonth()+1<10){
+        var month ='0'+(currentdate.getMonth()+1);
+    }
 
+    var today = currentdate.getFullYear()+'-' + month+'-'+day;
+    console.log(today);
+    var hour = currentdate.getHours()+1;
+    if(hour <10) hour = '0'+hour;
+
+    console.log(today +"----"+hour);
     var contentString = "";
     if (data.data != null) {
+        var check = true;
         for (var i = 0; i < data.data.length; i++) {
             var row = data.data[i];
+            check = true;
             contentString = contentString +
                 '<div class="col-2" style=" display: flex;flex-direction: column;align-items: center">\n';
-            if(row.status == 'free') {
-                contentString +='<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
-                    contentString += '<img src="global_assets/images/freetable.png" style="width: 50px;height: 50px">';
-            }
-            else if(row.status =='using') {
-                contentString +='<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">';
 
-                contentString += '<img src="global_assets/images/usingtable.png" style="width: 50px;height: 50px">';
+            for(var temp =0;temp<Booking.length;temp++){
+                if(row.id == Booking[temp].idTable){
+                    console.log(row.name+" "+Booking[temp].day+"------"+Booking[temp].time.split(':')[0]);
+                    if(today == Booking[temp].day&& hour >=Booking[temp].time.split(':')[0]){
+
+                        contentString +='<button disabled class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
+                        contentString += '<img src="global_assets/images/busytable.png" style="width: 50px;height: 50px">';
+                        check = false;
+                    }
+                }
             }
+if(check == true) {
+    if (row.status == 'free') {
+        contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
+        contentString += '<img src="global_assets/images/freetable.png" style="width: 50px;height: 50px">';
+    } else if (row.status == 'using') {
+        contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">';
+
+        contentString += '<img src="global_assets/images/usingtable.png" style="width: 50px;height: 50px">';
+    }
+}
             contentString = contentString + '</button>\n' +
                 '     <p>' + row.name + '</p>\n' +
                 '     <p>' + row.type + '</p>\n' +
@@ -465,35 +529,33 @@ function showuseddish(id, name) {
             if (data.success == true) {
                 showTableUsedDish(data);
             }
+            $.ajax({
+                url: "/getTableById",
+                type: "POST",
+                data: {
+                    "idTable": id
+                },
+                success: function (data) {
+                    console.log(data);
+                    if(data.data!= null){
+                        $('#idCustomerTable').html(data.data.id);
+                        $('#nameCustomerTable').html(data.data.name);
+                    }
+                    else {
+                        $('#idCustomerTable').html("");
+                        $('#nameCustomerTable').html("");
+                    }
+
+                }, error: function () {
+                    swal("Fail", "Không có dữ liệu", "error");
+                }
+            });
 
         }, error: function () {
             swal("Fail", "Không có dữ liệu", "error");
         }
     });
-    // $.ajax({
-    //     url: "/getTableById",
-    //     type: "POST",
-    //     data: {
-    //         "idTable": id
-    //     },
-    //     success: function (data) {
-    //         console.log(data);
-    //         if(data.data!= null){
-    //             $('#idCustomerTable').html(data.data.id);
-    //             $('#nameCustomerTable').html(data.data.name);
-    //         }
-    //         else {
-    //             $('#idCustomerTable').html("");
-    //             $('#nameCustomerTable').html("");
-    //         }
-    //         if (data.success == true) {
-    //             showTableUsedDish(data);
-    //         }
-    //
-    //     }, error: function () {
-    //         swal("Fail", "Không có dữ liệu", "error");
-    //     }
-    // });
+
 }
 
 function showTableUsedDish(data) {

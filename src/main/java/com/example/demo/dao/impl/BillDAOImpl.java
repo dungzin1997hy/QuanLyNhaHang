@@ -46,6 +46,19 @@ public class BillDAOImpl implements BillDAO {
     }
 
     @Override
+    public List<BillEntity> getBillByStaff(int id) {
+        try{
+            String sql ="Select u from BillEntity u where u.staffEntity.id = '"+id+"' order by u.time desc ";
+            Query query = entityManager.createQuery(sql);
+            List<BillEntity> billEntities = query.getResultList();
+            return billEntities;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public BillEntity addBill(BillEntity billEntity) {
         entityManager.persist(billEntity);
         return billEntity;

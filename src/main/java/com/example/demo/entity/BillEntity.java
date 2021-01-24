@@ -58,7 +58,9 @@ public class BillEntity {
     public Bill toBill(){
         Bill bill = new Bill();
         bill.setId(this.id);
-        bill.setNameTable(this.tableEntity.getName());
+        if(this.tableEntity!=null) {
+            bill.setNameTable(this.tableEntity.getName());
+        }
         bill.setPaymentType(this.paymentType);
         bill.setTotal(this.total);
         bill.setTime(this.time);

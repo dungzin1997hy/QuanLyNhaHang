@@ -10,6 +10,7 @@ import java.util.List;
 public interface BillDAO {
     List<BillEntity> getAllBill();
     List<BillEntity> getBillByCustomer(int id);
+    List<BillEntity> getBillByStaff(int id);
     BillEntity addBill(BillEntity billEntity);
 
     List<BillCount> getAllBillByDay(LocalDateTime startDate, LocalDateTime stopDate);

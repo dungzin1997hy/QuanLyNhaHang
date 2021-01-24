@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.UserDAO;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.model.Staff;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserDAO userDAO;
 
     @Override
-    public User getByUsername(String username) {
+    public Staff getByUsername(String username) {
         try {
             UserEntity userEntity = userDAO.getByUsername(username);
-            User user = new User();
-            user.setUsername(userEntity.getUsername());
-            user.setId(userEntity.getStaffEntity().getId());
-            user.setUrl(userEntity.getStaffEntity().getUrl());
-            user.setName(userEntity.getStaffEntity().getName());
-            return user;
+            Staff staff = new Staff();
+            staff.setUsername(userEntity.getUsername());
+            staff.setId(userEntity.getStaffEntity().getId());
+            staff.setUrlImage(userEntity.getStaffEntity().getUrl());
+            staff.setName(userEntity.getStaffEntity().getName());
+            return staff;
         } catch (Exception e) {
             return null;
         }

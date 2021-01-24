@@ -52,8 +52,8 @@ public class UrlAuthenSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
             }
             redirectStrategy.sendRedirect(request, response, targetUrl);
         }
-        if (roles.contains("ROLE_ACCOUNTANT")) {
-            targetUrl = "/home-accountant";
+        if (roles.contains("ROLE_WAITER")) {
+            targetUrl = "/home-waiter";
             if (response.isCommitted()) {
                 return;
             }

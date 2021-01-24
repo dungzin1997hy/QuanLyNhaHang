@@ -42,4 +42,20 @@ public class BillServiceImpl implements BillService {
             return null;
         }
     }
+
+    @Override
+    public List<Bill> getBillByStaff(int id) {
+        try{
+            List<BillEntity> billEntities = billDAO.getBillByStaff(id);
+            List<Bill> bills = new ArrayList<>();
+            System.out.println(billEntities.size());
+            for(BillEntity billEntity : billEntities){
+                bills.add(billEntity.toBill());
+            }
+            return bills;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

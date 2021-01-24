@@ -11,4 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class Customer extends Person{
+    public Customer(int id, String name, String email, String phoneNumber) {
+        super(id, name, email, phoneNumber);
+    }
 }

@@ -82,6 +82,7 @@ function showStaffTable() {
         type: "POST",
         dataType: "json",
         success: function (data) {
+            console.log(data);
             if (data.success == true) {
 
                 showTable(data);
@@ -567,9 +568,9 @@ function showTable(data) {
                 + '<td>' + row.cmnd + '</td>'
                 + '<td>' + row.email + '</td>'
                 + '<td>' + row.address + '</td>'
-                + '<td id="idRole" style="display: none">' + row.role.id + '</td>'
-                + '<td>' + row.role.brand + '</td>'
-                + '<td>' + row.user.username + '</td>'
+                + '<td id="idRole" style="display: none">' + row.role1.id + '</td>'
+                + '<td>' + row.role1.brand + '</td>'
+                + '<td>' + row.username + '</td>'
                 + '<td>' +
                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditStaffForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="fa fa-edit"></i></button>' +
                 '<a data-toggle="tooltip" title="Remove"><button onclick="deleteStaff()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'

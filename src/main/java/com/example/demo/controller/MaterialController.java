@@ -1,16 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
-import com.example.demo.dao.InputMaterialBillDAO;
-import com.example.demo.dao.InputMaterialDAO;
-import com.example.demo.dao.MaterialDAO;
-import com.example.demo.dao.StaffDAO;
+import com.example.demo.dao.*;
 import com.example.demo.entity.*;
 import com.example.demo.model.Dish;
 import com.example.demo.model.Material;
 import com.example.demo.service.MaterialService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -30,10 +29,18 @@ public class MaterialController {
     @Autowired
     InputMaterialBillDAO inputMaterialBillDAO;
     @Autowired
+    OutputMaterialBillDAO outputMaterialBillDAO;
+    @Autowired
+    OutputMaterialDAO outputMaterialDAO;
+    @Autowired
     StaffDAO staffDAO;
 
     @Autowired
     InputMaterialDAO inputMaterialDAO;
+
+    @Autowired
+    StockDAO stockDAO;
+
 
 
     @PostMapping("/api/getAllMaterial")
@@ -54,10 +61,11 @@ public class MaterialController {
                                            @RequestParam("price") Float price,
                                            @RequestParam("devices") String description,
                                            @RequestParam("unit") String unit){
+        StockEntity stockEntity = stockDAO.getStock(1);
         if(materialDAO.checkExistMaterial(nameMaterial) == true){
             return new ApiResponse<>(false,"","Tên nguyên liệu đã tồn tại");
         }
-        MaterialEntity materialEntity = new MaterialEntity(nameMaterial,price,unit,0,description);
+        MaterialEntity materialEntity = new MaterialEntity(nameMaterial,price,unit,0,description,stockEntity);
         materialDAO.addMaterial(materialEntity);
         return new ApiResponse<>(true,"Thêm nguyên liệu thành công","");
     }
@@ -69,7 +77,8 @@ public class MaterialController {
                                               @RequestParam("devices") String description,
                                               @RequestParam("amount") int amount,
                                               @RequestParam("unit") String unit){
-        MaterialEntity materialEntity = new MaterialEntity(id,name,price,unit,amount,description);
+        StockEntity stockEntity = stockDAO.getStock(1);
+        MaterialEntity materialEntity = new MaterialEntity(id,name,price,unit,amount,description,stockEntity);
         try{
             materialDAO.updateMaterial(materialEntity);
             return new ApiResponse<>(true,"Cập nhật nguyên liệu thành công","");
@@ -139,7 +148,7 @@ public class MaterialController {
     public ApiResponse<String> outputMaterial(@RequestBody MaterList materList){
 
         try {
-            InputMaterialBillEntity inputMaterialBillEntity = new InputMaterialBillEntity();
+            OutputMaterialBillEntity inputMaterialBillEntity = new OutputMaterialBillEntity();
 
             LocalDateTime now = LocalDateTime.now();
             inputMaterialBillEntity.setTime(now);
@@ -150,23 +159,23 @@ public class MaterialController {
             if(staffEntity!= null){
                 inputMaterialBillEntity.setStaffEntity(staffEntity);
             }
-            InputMaterialBillEntity inputMaterialBillEntity1 = inputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
+            OutputMaterialBillEntity inputMaterialBillEntity1 = outputMaterialBillDAO.addInputBill(inputMaterialBillEntity);
 
 
             for (Mater mater : materList.maters) {
                 if(mater.id == 0){
                     continue;
                 }
-                InputMaterialEntity inputMaterialEntity = new InputMaterialEntity();
+                OutputMaterialEntity inputMaterialEntity = new OutputMaterialEntity();
                 MaterialEntity materialEntity = materialDAO.getMaterialById(mater.getId());
                 int amount = materialEntity.getAmount();
                 materialEntity.setAmount(amount+mater.amount);
                 materialDAO.updateMaterial(materialEntity );
 
                 inputMaterialEntity.setMaterialEntity(materialEntity);
-                inputMaterialEntity.setInputMaterialBillEntity(inputMaterialBillEntity1);
+                inputMaterialEntity.setOutputMaterialBillEntity(inputMaterialBillEntity1);
                 inputMaterialEntity.setAmount(mater.amount);
-                inputMaterialDAO.addInputMaterial(inputMaterialEntity);
+                outputMaterialDAO.addOutputMaterial(inputMaterialEntity);
             }
 
             return new ApiResponse<>(true, "Lưu hoá đơn thành công", "");

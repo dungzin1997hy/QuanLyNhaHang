@@ -32,11 +32,11 @@ public class StaffServiceImpl implements StaffService {
             staff.setCmnd(staffEntity.getCmnd());
             staff.setAddress(staffEntity.getAddress());
             if(staffEntity.getRoleEntity()!= null) {
-                staff.setRole(staffEntity.getRoleEntity().toRole());
+                staff.setRole1(staffEntity.getRoleEntity().toRole());
             }
             User user = new User();
             user.setUsername(staffEntity.getUserEntity().getUsername());
-            staff.setUser(user);
+            staff.setUsername(staffEntity.getUserEntity().getUsername());
             staffs.add(staff);
         }
         return staffs;
@@ -56,11 +56,11 @@ public class StaffServiceImpl implements StaffService {
             staff.setCmnd(staffEntity.getCmnd());
             staff.setAddress(staffEntity.getAddress());
             if(staffEntity.getRoleEntity()!= null) {
-                staff.setRole(staffEntity.getRoleEntity().toRole());
+                staff.setRole1(staffEntity.getRoleEntity().toRole());
             }
             User user = new User();
             user.setUsername(staffEntity.getUserEntity().getUsername());
-            staff.setUser(user);
+            staff.setUsername(staffEntity.getUserEntity().getUsername());
             staffs.add(staff);
         }
         return staffs;
@@ -80,11 +80,11 @@ public class StaffServiceImpl implements StaffService {
             staff.setCmnd(staffEntity.getCmnd());
             staff.setAddress(staffEntity.getAddress());
             if(staffEntity.getRoleEntity()!= null) {
-                staff.setRole(staffEntity.getRoleEntity().toRole());
+                staff.setRole1(staffEntity.getRoleEntity().toRole());
             }
             User user = new User();
             user.setUsername(staffEntity.getUserEntity().getUsername());
-            staff.setUser(user);
+            staff.setUsername(staffEntity.getUserEntity().getUsername());
             staffs.add(staff);
         }
         return staffs;

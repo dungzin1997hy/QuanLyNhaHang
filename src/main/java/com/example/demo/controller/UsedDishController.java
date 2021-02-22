@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.config.ApiResponse;
 import com.example.demo.dao.UsedDishDAO;
+import com.example.demo.entity.UsedDishEntity;
 import com.example.demo.model.BillCount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +19,9 @@ public class UsedDishController {
     @Autowired
     UsedDishDAO usedDishDAO;
 
-        @PostMapping("/getUsedDishCount")
+    @PostMapping("/getUsedDishCount")
     public ApiResponse<List<String>> getUsedDishCount(@RequestParam("startDate") String startDate,
-                                                      @RequestParam("stopDate") String stopDate){
+                                                      @RequestParam("stopDate") String stopDate) {
         try {
             startDate = startDate + " 00:00";
             stopDate = stopDate + " 23:59";
@@ -31,6 +33,18 @@ public class UsedDishController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ApiResponse<>(false, null, "");
+        }
+    }
+
+    @PostMapping("/deleteUsedDish")
+    public ApiResponse<String> deleteUsedDish(@RequestParam("idUsedDish") int id){
+        try{
+            UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(id);
+            usedDishDAO.deleteUsedDish(usedDishEntity);
+            return new ApiResponse<>(true,"Xoá gọi món thành công","");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(false,"","Loi");
         }
     }
 }

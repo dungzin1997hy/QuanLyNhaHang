@@ -42,8 +42,10 @@ public class StaffController {
     private StaffService staffService;
     @Autowired
     RoleService roleService;
+
     @Autowired
     RoleDAO roleDAO;
+
     @Autowired
     private UserDAO userDAO;
     @Autowired

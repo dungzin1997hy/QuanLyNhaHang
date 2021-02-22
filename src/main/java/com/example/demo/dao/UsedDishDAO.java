@@ -15,6 +15,7 @@ public interface UsedDishDAO {
 
     List<String> getDishCount(LocalDateTime startDate,LocalDateTime stopDate,int idDish);
 
-    void updateTable(UsedDishEntity usedDishEntity);
+    void updateUsedDish(UsedDishEntity usedDishEntity);
     void addUsedDish(UsedDishEntity usedDishEntity);
+    void deleteUsedDish(UsedDishEntity usedDishEntity);
 }

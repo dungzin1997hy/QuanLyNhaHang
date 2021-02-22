@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -39,6 +40,8 @@ public class MaterialEntity {
     @OneToMany(mappedBy = "materialEntity")
     private List<InputMaterialEntity> inputMaterialEntities;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "materialEntity")
+    private List<DishMaterialEntity> list;
 
     @ManyToOne
     @JoinColumn(name = "stock")

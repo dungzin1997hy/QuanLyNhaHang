@@ -176,7 +176,7 @@ public class TableController {
             for (int i : listinteger.list) {
                 UsedDishEntity usedDishEntity = usedDishDAO.getUsedDishByID(i);
                 usedDishEntity.setBillEntity(billEntity1);
-                usedDishDAO.updateTable(usedDishEntity);
+                usedDishDAO.updateUsedDish(usedDishEntity);
             }
             return new ApiResponse<>(true, "Thanh toán thành công", "");
         } catch (Exception e) {
@@ -208,6 +208,7 @@ public class TableController {
                 UsedDishEntity usedDishEntity = new UsedDishEntity();
                 usedDishEntity.setTableEntity(tableEntity);
                 usedDishEntity.setAmount(Integer.parseInt(callDish.amount));
+                usedDishEntity.setStatus("Đã gọi");
                 DishEntity dishEntity = dishDAO.searchDishById(callDish.idDish);
                 usedDishEntity.setDishEntity(dishEntity);
                 LocalDateTime now = LocalDateTime.now();

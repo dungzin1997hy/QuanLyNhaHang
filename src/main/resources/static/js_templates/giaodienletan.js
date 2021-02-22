@@ -1,5 +1,6 @@
 var callDish = new Array(0);
 var Booking = new Array(0);
+
 function ready() {
     // $('#usedDish').hide();
     $.ajax({
@@ -8,14 +9,14 @@ function ready() {
         dataType: "json",
         success: function (data) {
             console.log(data);
-            Booking =[];
+            Booking = [];
             if (data.success == true) {
-                for(var i=0;i<data.data.length;i++){
+                for (var i = 0; i < data.data.length; i++) {
                     var row = data.data[i];
                     Booking.push({
                         "idTable": row.table.id,
-                        "day":row.date.split("T")[0],
-                        "time":row.timeBook.startTime
+                        "day": row.date.split("T")[0],
+                        "time": row.timeBook.startTime
                     })
                 }
 
@@ -68,7 +69,6 @@ function ready() {
     // $('#showBill').hide();
 
 
-
     $.ajax({
         url: "/api/getAllCustomer",
         type: "POST",
@@ -115,15 +115,15 @@ function searchBooking() {
         url: "/searchBookingByPhoneNumber",
         type: "POST",
         dataType: "json",
-        data:{
-            "phoneNumber" : phoneNumber
+        data: {
+            "phoneNumber": phoneNumber
         },
         success: function (data) {
             var contentString = "";
             console.log(data.data);
             console.log(data.data.id);
-            if(data.data.length ==0){
-                swal("Fail","Không tìm thấy đặt bàn","error");
+            if (data.data.length == 0) {
+                swal("Fail", "Không tìm thấy đặt bàn", "error");
             }
 
             for (var i = 0; i < data.data.length; i++) {
@@ -132,23 +132,23 @@ function searchBooking() {
                 var datetime = date[0].split("-");
                 var year = datetime[0];
                 var month = datetime[1];
-                var day = parseInt(datetime[2])+1;
-                if(month<10) month = month;
-                if(day<10) day = '0'+day;
-                var time = day+"-"+month+"-"+year;
+                var day = parseInt(datetime[2]) + 1;
+                if (month < 10) month = month;
+                if (day < 10) day = '0' + day;
+                var time = day + "-" + month + "-" + year;
                 if (row.description == null) {
                     var string = "";
                 } else string = row.description;
                 contentString = contentString
-                    + '<tr id="row'+(row.id)+'" role="row" class="odd">'
+                    + '<tr id="row' + (row.id) + '" role="row" class="odd">'
                     + '<td>' + (i + 1) + '</td>'
                     + '<td id="idTable" style="display: none">' + row.table.id + '</td>'
                     + '<td>' + row.table.name + '</td>'
                     + '<td>' + row.table.type + '</td>'
-                    + '<td>' + row.timeBook.startTime+' - '+row.timeBook.stopTime + '</td>'
-                    + '<td>' + time + '</td>'+
-                    '<td>'+
-                    '<button type="button" name="'+(row.id)+'" data-toggle="tooltip" title="Chọn" class="btn btn-info center-block mb-1" onclick="chooseTable(this.name)" style="padding:1px 1px 1px 1px; border-radius: 20px">Chọn</button></td>'
+                    + '<td>' + row.timeBook.startTime + ' - ' + row.timeBook.stopTime + '</td>'
+                    + '<td>' + time + '</td>' +
+                    '<td>' +
+                    '<button type="button" name="' + (row.id) + '" data-toggle="tooltip" title="Chọn" class="btn btn-info center-block mb-1" onclick="chooseTable(this.name)" style="padding:1px 1px 1px 1px; border-radius: 20px">Chọn</button></td>'
                     + '</tr>';
             }
             $("#bang_booking").html(contentString);
@@ -176,7 +176,7 @@ $(function () {
             phoneNumberAdd: {
                 required: "Vui lòng nhập số điện thoại",
             },
-            nameCus:{
+            nameCus: {
                 required: "Vui lòng nhập thông tin khách hàng"
             }
         },
@@ -201,13 +201,15 @@ $(function () {
         }
     });
 });
+
 function chooseTable(name) {
     var temp = $('#idban_booking').text();
-    $('#row'+temp).css({'background-color':'white'});
+    $('#row' + temp).css({'background-color': 'white'});
     $('#idban_booking').html(name);
-    console.log("id booking :"+ name);
-    $('#row'+name).css({'background-color':'red'});
+    console.log("id booking :" + name);
+    $('#row' + name).css({'background-color': 'red'});
 }
+
 function showCheckin() {
     console.log("show");
     $("#bang_booking").html("");
@@ -219,6 +221,7 @@ function showCheckin() {
 function closeEditForm() {
     $('.nav__checkin').hide();
 }
+
 function showCallDish() {
     var name = $('#nameTable').text();
     console.log(name);
@@ -371,18 +374,18 @@ function searchDishByType() {
 
 function showTable(id, data) {
     var currentdate = new Date();
-    var day = currentdate.getDate()-1;
-    if(day<10) day ='0'+day;
-    if(currentdate.getMonth()+1<10){
-        var month ='0'+(currentdate.getMonth()+1);
+    var day = currentdate.getDate() - 1;
+    if (day < 10) day = '0' + day;
+    if (currentdate.getMonth() + 1 < 10) {
+        var month = '0' + (currentdate.getMonth() + 1);
     }
 
-    var today = currentdate.getFullYear()+'-' + month+'-'+day;
+    var today = currentdate.getFullYear() + '-' + month + '-' + day;
     console.log(today);
-    var hour = currentdate.getHours()+1;
-    if(hour <10) hour = '0'+hour;
+    var hour = currentdate.getHours() + 1;
+    if (hour < 10) hour = '0' + hour;
 
-    console.log(today +"----"+hour);
+    console.log(today + "----" + hour);
     var contentString = "";
     if (data.data != null) {
         var check = true;
@@ -392,27 +395,27 @@ function showTable(id, data) {
             contentString = contentString +
                 '<div class="col-2" style=" display: flex;flex-direction: column;align-items: center">\n';
 
-            for(var temp =0;temp<Booking.length;temp++){
-                if(row.id == Booking[temp].idTable){
-                    console.log(row.name+" "+Booking[temp].day+"------"+Booking[temp].time.split(':')[0]);
-                    if(today == Booking[temp].day&& hour >=Booking[temp].time.split(':')[0]){
+            for (var temp = 0; temp < Booking.length; temp++) {
+                if (row.id == Booking[temp].idTable) {
+                    console.log(row.name + " " + Booking[temp].day + "------" + Booking[temp].time.split(':')[0]);
+                    if (today == Booking[temp].day && hour >= Booking[temp].time.split(':')[0]) {
 
-                        contentString +='<button disabled class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
+                        contentString += '<button disabled class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
                         contentString += '<img src="global_assets/images/busytable.png" style="width: 50px;height: 50px">';
                         check = false;
                     }
                 }
             }
-if(check == true) {
-    if (row.status == 'free') {
-        contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
-        contentString += '<img src="global_assets/images/freetable.png" style="width: 50px;height: 50px">';
-    } else if (row.status == 'using') {
-        contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">';
+            if (check == true) {
+                if (row.status == 'free') {
+                    contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showSetTable(this.id,this.name)">';
+                    contentString += '<img src="global_assets/images/freetable.png" style="width: 50px;height: 50px">';
+                } else if (row.status == 'using') {
+                    contentString += '<button class="btnTable" style="margin-top: 5px" id="' + row.id + '" name="' + row.name + '" onclick="showuseddish(this.id,this.name)">';
 
-        contentString += '<img src="global_assets/images/usingtable.png" style="width: 50px;height: 50px">';
-    }
-}
+                    contentString += '<img src="global_assets/images/usingtable.png" style="width: 50px;height: 50px">';
+                }
+            }
             contentString = contentString + '</button>\n' +
                 '     <p>' + row.name + '</p>\n' +
                 '     <p>' + row.type + '</p>\n' +
@@ -422,7 +425,8 @@ if(check == true) {
 
     $("#" + id).append(contentString);
 }
-function showSetTable(id,name) {
+
+function showSetTable(id, name) {
     $('#usedDish').hide();
     $('#callDish').hide();
     $('#showBill').hide();
@@ -450,7 +454,7 @@ function showSetTable(id,name) {
                         console.log(data);
                         swal("Done", data.data, "success");
                         ready();
-                       showuseddish(id,name);
+                        showuseddish(id, name);
                     }, error: function () {
                         swal("Lỗi", "Không xóa được", "warning");
                     }
@@ -458,6 +462,7 @@ function showSetTable(id,name) {
             }
         });
 }
+
 //gọi món xong
 function bookDish() {
     var value = new Array();
@@ -484,7 +489,7 @@ function bookDish() {
         }),
         success: function (data) {
             swal("Thành công", data.data, "success");
-            showuseddish(idTable,nameTable);
+            showuseddish(idTable, nameTable);
             var openRequest = indexedDB.open("fetchEvent", 1);
             openRequest.onsuccess = function (e) {
                 db = e.target.result;
@@ -537,11 +542,10 @@ function showuseddish(id, name) {
                 },
                 success: function (data) {
                     console.log(data);
-                    if(data.data!= null){
+                    if (data.data != null) {
                         $('#idCustomerTable').html(data.data.id);
                         $('#nameCustomerTable').html(data.data.name);
-                    }
-                    else {
+                    } else {
                         $('#idCustomerTable').html("");
                         $('#nameCustomerTable').html("");
                     }
@@ -559,8 +563,9 @@ function showuseddish(id, name) {
 }
 
 function showTableUsedDish(data) {
-
+    console.log(data);
     var contentString = "";
+    var contentString1 = "";
     var total = 0;
     if (data.data != null) {
 
@@ -581,7 +586,22 @@ function showTableUsedDish(data) {
                 + '<td>' + row.amount + '</td>'
                 + '<td>' + time[1] + '</td>'
                 + '<td>' + (row.dish.price * row.amount) + '</td>'
-            '</tr>';
+                + '<td>' + row.status + '</td>'
+                + '<td style="display: none">' + row.id + '</td>'
+                + '<td><a data-toggle="tooltip" title="Remove"><button onclick="deleteUsedDish()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                + '</tr>';
+
+            contentString1 =
+                contentString1+'<tr role="row" class="odd">'
+                // + '<td>' + (i + 1) + '</td>'
+                + '<td style="display: none">' + row.id + '</td>'
+                + '<td style="display: none">' + row.dish.id + '</td>'
+                + '<td class="nr">' + row.dish.name + '</td>'
+                + '<td>' + row.dish.price + '</td>'
+                + '<td>' + row.amount + '</td>'
+                + '<td>' + time[1] + '</td>'
+                + '<td>' + (row.dish.price * row.amount) + '</td>'
+                + '</tr>';
 
             total += (row.dish.price * row.amount);
         }
@@ -595,7 +615,25 @@ function showTableUsedDish(data) {
     $('#TotalBill').html(total);
 
     $('#useddishTable').html(contentString);
-    $('#useddishTableBill').html(contentString);
+    $('#useddishTableBill').html(contentString1);
+}
+
+function deleteUsedDish() {
+    console.log('click delete');
+    $('#useddishTable').find('tr').click(function () {
+        var idUsedDish = $(this).find('td').eq(7).text();
+        console.log(idUsedDish);
+        $.ajax({
+            url: "/deleteUsedDish",
+            type: "POST",
+            data: {
+                "idUsedDish": idUsedDish
+            },
+            success: function (data) {
+                swal("Done", data.data, "success");
+            }
+        })
+    });
 }
 
 function showBillForm() {
@@ -618,15 +656,15 @@ function showBillForm() {
     var second = currentdate.getSeconds();
     if (second < 10) second = "0" + second;
     var date = currentdate.getDate();
-    var month = currentdate.getMonth()+1;
+    var month = currentdate.getMonth() + 1;
     var year = currentdate.getFullYear();
 
-    if(date <10){
-        date = '0'+date;
+    if (date < 10) {
+        date = '0' + date;
     }
 
-    if(month <10){
-        month = '0'+month;
+    if (month < 10) {
+        month = '0' + month;
     }
     var datetime = hour + ":"
         + minute + ":"

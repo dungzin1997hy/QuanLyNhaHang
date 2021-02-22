@@ -40,6 +40,9 @@ public class DishEntity {
    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "dishEntity")
    private List<UsedDishEntity> usedDishEntities;
 
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "dishMaterialEntity")
+   private List<DishMaterialEntity> list;
+
     @PreRemove
     private void preRemove() {
         for (UsedDishEntity s : usedDishEntities) {

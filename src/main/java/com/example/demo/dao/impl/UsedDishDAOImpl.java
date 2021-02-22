@@ -85,12 +85,18 @@ public class UsedDishDAOImpl implements UsedDishDAO {
     }
 
     @Override
-    public void updateTable(UsedDishEntity usedDishEntity) {
+    public void updateUsedDish(UsedDishEntity usedDishEntity) {
         entityManager.merge(usedDishEntity);
     }
+
 
     @Override
     public void addUsedDish(UsedDishEntity usedDishEntity) {
         entityManager.persist(usedDishEntity);
+    }
+
+    @Override
+    public void deleteUsedDish(UsedDishEntity usedDishEntity) {
+        entityManager.remove(usedDishEntity);
     }
 }

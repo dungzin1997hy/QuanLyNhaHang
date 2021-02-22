@@ -40,6 +40,9 @@ public class UsedDishEntity {
     @Column(name ="amount")
     private int amount;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name ="time")
     private LocalDateTime time;
 
@@ -51,6 +54,9 @@ public class UsedDishEntity {
             usedDish.setDish(this.dishEntity.toDish());
         }
         usedDish.setAmount(this.amount);
+        if(this.status!= null){
+            usedDish.setStatus(this.status);
+        }
         usedDish.setTime(this.time);
        // usedDish.setTable(table);
         return usedDish;

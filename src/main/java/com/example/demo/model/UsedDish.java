@@ -15,5 +15,6 @@ public class UsedDish {
     private int amount;
     private Table table;
     private Dish dish;
+    private String status;
     private LocalDateTime time;
 }
